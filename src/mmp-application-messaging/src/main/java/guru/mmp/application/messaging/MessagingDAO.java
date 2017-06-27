@@ -24,7 +24,6 @@ import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,8 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -119,8 +118,8 @@ public class MessagingDAO
       statement.setObject(3, message.getDeviceId());
       statement.setObject(4, message.getTypeId());
       statement.setObject(5, message.getCorrelationId());
-      statement.setTimestamp(6, new Timestamp(message.getCreated().getTime()));
-      statement.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+      statement.setTimestamp(6, Timestamp.valueOf(message.getCreated()));
+      statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
       statement.setBytes(8, message.getData());
 
       if (statement.executeUpdate() != 1)
@@ -180,7 +179,7 @@ public class MessagingDAO
       statement.setString(4, description);
       statement.setString(5, detail);
       statement.setString(6, feedback);
-      statement.setTimestamp(7, new Timestamp(errorReport.getCreated().getTime()));
+      statement.setTimestamp(7, Timestamp.valueOf(errorReport.getCreated()));
       statement.setString(8, errorReport.getWho());
       statement.setObject(9, errorReport.getDeviceId());
       statement.setBytes(10, errorReport.getData());
@@ -215,7 +214,7 @@ public class MessagingDAO
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createMessageSQL))
     {
-      Date persisted = new Date();
+      LocalDateTime persisted = LocalDateTime.now();
 
       statement.setObject(1, message.getId());
       statement.setString(2, message.getUsername());
@@ -224,9 +223,9 @@ public class MessagingDAO
       statement.setObject(5, message.getCorrelationId());
       statement.setInt(6, message.getPriority().getCode());
       statement.setInt(7, message.getStatus().getCode());
-      statement.setTimestamp(8, new Timestamp(message.getCreated().getTime()));
-      statement.setTimestamp(9, new Timestamp(persisted.getTime()));
-      statement.setTimestamp(10, new Timestamp(message.getCreated().getTime()));
+      statement.setTimestamp(8, Timestamp.valueOf(message.getCreated()));
+      statement.setTimestamp(9, Timestamp.valueOf(persisted));
+      statement.setTimestamp(10, Timestamp.valueOf(message.getCreated()));
       statement.setInt(11, message.getSendAttempts());
       statement.setInt(12, message.getProcessAttempts());
       statement.setInt(13, message.getDownloadAttempts());
@@ -267,7 +266,7 @@ public class MessagingDAO
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createMessagePartSQL))
     {
-      Date persisted = new Date();
+      LocalDateTime persisted = LocalDateTime.now();
 
       statement.setObject(1, messagePart.getId());
       statement.setInt(2, messagePart.getPartNo());
@@ -275,14 +274,14 @@ public class MessagingDAO
       statement.setInt(4, messagePart.getSendAttempts());
       statement.setInt(5, messagePart.getDownloadAttempts());
       statement.setInt(6, messagePart.getStatus().getCode());
-      statement.setTimestamp(7, new Timestamp(persisted.getTime()));
+      statement.setTimestamp(7, Timestamp.valueOf(persisted));
       statement.setObject(8, messagePart.getMessageId());
       statement.setString(9, messagePart.getMessageUsername());
       statement.setObject(10, messagePart.getMessageDeviceId());
       statement.setObject(11, messagePart.getMessageTypeId());
       statement.setObject(12, messagePart.getMessageCorrelationId());
       statement.setInt(13, messagePart.getMessagePriority().getCode());
-      statement.setTimestamp(14, new Timestamp(messagePart.getMessageCreated().getTime()));
+      statement.setTimestamp(14, Timestamp.valueOf(messagePart.getMessageCreated()));
       statement.setString(15, messagePart.getMessageDataHash());
       statement.setString(16, messagePart.getMessageEncryptionIV());
       statement.setString(17, messagePart.getMessageChecksum());
@@ -360,8 +359,7 @@ public class MessagingDAO
   public void deleteMessagePartsForMessage(UUID messageId)
     throws DAOException
   {
-    String deleteMessagePartsForMessageSQL =
-        "DELETE FROM MESSAGING.MESSAGE_PARTS WHERE MSG_ID=?";
+    String deleteMessagePartsForMessageSQL = "DELETE FROM MESSAGING.MESSAGE_PARTS WHERE MSG_ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteMessagePartsForMessageSQL))
@@ -539,7 +537,7 @@ public class MessagingDAO
 
         for (MessagePart messagePart : messageParts)
         {
-          Timestamp updated = new Timestamp(System.currentTimeMillis());
+          LocalDateTime updated = LocalDateTime.now();
 
           messagePart.setStatus(MessagePart.Status.ASSEMBLING);
           messagePart.setLockName(lockName);
@@ -549,7 +547,7 @@ public class MessagingDAO
           {
             updateStatement.setInt(1, MessagePart.Status.ASSEMBLING.getCode());
             updateStatement.setString(2, lockName);
-            updateStatement.setTimestamp(3, updated);
+            updateStatement.setTimestamp(3, Timestamp.valueOf(updated));
             updateStatement.setObject(4, messagePart.getId());
 
             if (updateStatement.executeUpdate() != 1)
@@ -647,7 +645,7 @@ public class MessagingDAO
 
         for (MessagePart messagePart : messageParts)
         {
-          Timestamp updated = new Timestamp(System.currentTimeMillis());
+          LocalDateTime updated = LocalDateTime.now();
 
           messagePart.setStatus(MessagePart.Status.DOWNLOADING);
           messagePart.setLockName(lockName);
@@ -659,7 +657,7 @@ public class MessagingDAO
           {
             updateStatement.setInt(1, MessagePart.Status.DOWNLOADING.getCode());
             updateStatement.setString(2, lockName);
-            updateStatement.setTimestamp(3, updated);
+            updateStatement.setTimestamp(3, Timestamp.valueOf(updated));
             updateStatement.setObject(4, messagePart.getId());
 
             if (updateStatement.executeUpdate() != 1)
@@ -771,7 +769,7 @@ public class MessagingDAO
 
         for (Message message : messages)
         {
-          Timestamp updated = new Timestamp(System.currentTimeMillis());
+          LocalDateTime updated = LocalDateTime.now();
 
           message.setStatus(Message.Status.DOWNLOADING);
           message.setLockName(lockName);
@@ -783,7 +781,7 @@ public class MessagingDAO
           {
             updateStatement.setInt(1, Message.Status.DOWNLOADING.getCode());
             updateStatement.setString(2, lockName);
-            updateStatement.setTimestamp(3, updated);
+            updateStatement.setTimestamp(3, Timestamp.valueOf(updated));
             updateStatement.setObject(4, message.getId());
 
             if (updateStatement.executeUpdate() != 1)
@@ -891,7 +889,7 @@ public class MessagingDAO
         {
           if (rs.next())
           {
-            Timestamp updated = new Timestamp(System.currentTimeMillis());
+            LocalDateTime updated = LocalDateTime.now();
 
             message = buildMessageFromResultSet(rs);
 
@@ -903,7 +901,7 @@ public class MessagingDAO
             {
               updateStatement.setInt(1, Message.Status.PROCESSING.getCode());
               updateStatement.setString(2, lockName);
-              updateStatement.setTimestamp(3, updated);
+              updateStatement.setTimestamp(3, Timestamp.valueOf(updated));
               updateStatement.setObject(4, message.getId());
 
               if (updateStatement.executeUpdate() != 1)
@@ -974,10 +972,10 @@ public class MessagingDAO
       PreparedStatement statement = connection.prepareStatement(
           incrementMessageProcessingAttemptsSQL))
     {
-      Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+      LocalDateTime currentTime = LocalDateTime.now();
 
-      statement.setTimestamp(1, currentTime);
-      statement.setTimestamp(2, currentTime);
+      statement.setTimestamp(1, Timestamp.valueOf(currentTime));
+      statement.setTimestamp(2, Timestamp.valueOf(currentTime));
       statement.setObject(3, message.getId());
 
       if (statement.executeUpdate() != 1)
@@ -1307,9 +1305,9 @@ public class MessagingDAO
   {
     byte[] data = rs.getBytes(10);
 
-    return new ErrorReport(UUID.fromString(rs.getString(1)), UUID.fromString(rs.getString(2)), rs.getInt(3),
-        rs.getString(4), rs.getString(5), rs.getString(6), rs.getTimestamp(7), rs.getString(8),
-        UUID.fromString(rs.getString(9)),
+    return new ErrorReport(UUID.fromString(rs.getString(1)), UUID.fromString(rs.getString(2)),
+        rs.getInt(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getTimestamp(7)
+        .toLocalDateTime(), rs.getString(8), UUID.fromString(rs.getString(9)),
         (data == null)
         ? new byte[0]
         : data);
@@ -1325,29 +1323,42 @@ public class MessagingDAO
       applicationName = "Unknown";
     }
 
-    return new ErrorReportSummary(UUID.fromString(rs.getString(1)), UUID.fromString(rs.getString(2)), applicationName,
-        rs.getInt(4), rs.getTimestamp(5), rs.getString(6), UUID.fromString(rs.getString(7)));
+    return new ErrorReportSummary(UUID.fromString(rs.getString(1)), UUID.fromString(rs.getString(
+        2)), applicationName, rs.getInt(4), rs.getTimestamp(5).toLocalDateTime(), rs.getString(6),
+        UUID.fromString(rs.getString(7)));
   }
 
   private Message buildMessageFromResultSet(ResultSet rs)
     throws SQLException
   {
-    return new Message(UUID.fromString(rs.getString(1)), rs.getString(2), UUID.fromString(rs.getString(3)),
-        UUID.fromString(rs.getString(4)), UUID.fromString(rs.getString(5)), Priority.fromCode(rs.getInt(6)),
-        Status.fromCode(rs.getInt(7)), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10),
-        rs.getInt(11), rs.getInt(12), rs.getInt(13), rs.getString(14), rs.getTimestamp(15),
-        rs.getBytes(16), "", "");
+    return new Message(UUID.fromString(rs.getString(1)), rs.getString(2), UUID.fromString(
+        rs.getString(3)), UUID.fromString(rs.getString(4)), UUID.fromString(rs.getString(5)),
+        Priority.fromCode(rs.getInt(6)), Status.fromCode(rs.getInt(7)), (rs.getTimestamp(8) == null)
+        ? null
+        : rs.getTimestamp(8).toLocalDateTime(), (rs.getTimestamp(9) == null)
+        ? null
+        : rs.getTimestamp(9).toLocalDateTime(), (rs.getTimestamp(10) == null)
+        ? null
+        : rs.getTimestamp(10).toLocalDateTime(), rs.getInt(11), rs.getInt(12), rs.getInt(13),
+            rs.getString(14), (rs.getTimestamp(15) == null)
+        ? null
+        : rs.getTimestamp(15).toLocalDateTime(), rs.getBytes(16), "", "");
   }
 
   private MessagePart buildMessagePartFromResultSet(ResultSet rs)
     throws SQLException
   {
-    return new MessagePart(UUID.fromString(rs.getString(1)), rs.getInt(2), rs.getInt(3), rs.getInt(4),
-        rs.getInt(5), MessagePart.Status.fromCode(rs.getInt(6)), rs.getTimestamp(7),
-        rs.getTimestamp(8), UUID.fromString(rs.getString(9)), rs.getString(10), UUID.fromString(rs.getString(11)),
-        UUID.fromString(rs.getString(12)), UUID.fromString(rs.getString(13)), Priority.fromCode(rs.getInt(14)),
-        rs.getTimestamp(15), rs.getString(16), rs.getString(17), rs.getString(18), rs.getString(
-        19), rs.getBytes(20));
+    return new MessagePart(UUID.fromString(rs.getString(1)), rs.getInt(2), rs.getInt(3), rs.getInt(
+        4), rs.getInt(5), MessagePart.Status.fromCode(rs.getInt(6)), (rs.getTimestamp(7) == null)
+        ? null
+        : rs.getTimestamp(7).toLocalDateTime(), (rs.getTimestamp(8) == null)
+        ? null
+        : rs.getTimestamp(8).toLocalDateTime(), UUID.fromString(rs.getString(9)), rs.getString(10),
+            UUID.fromString(rs.getString(11)), UUID.fromString(rs.getString(12)), UUID.fromString(
+            rs.getString(13)), Priority.fromCode(rs.getInt(14)), (rs.getTimestamp(15) == null)
+        ? null
+        : rs.getTimestamp(15).toLocalDateTime(), rs.getString(16), rs.getString(17), rs.getString(
+            18), rs.getString(19), rs.getBytes(20));
   }
 
 ///**

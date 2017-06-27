@@ -27,6 +27,9 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
 
@@ -93,7 +96,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   /**
    * The date and time the error report was created.
    */
-  private Date when;
+  private LocalDateTime when;
 
   /**
    * The username identifying the user associated with the error report.
@@ -126,7 +129,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * @param data               the data associated with the error report e.g. the application XML
    */
   public SubmitErrorReportRequestData(UUID id, UUID applicationId, int applicationVersion,
-      String description, String detail, String feedback, Date when, String who, UUID deviceId,
+      String description, String detail, String feedback, LocalDateTime when, String who, UUID deviceId,
       byte[] data)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
@@ -190,7 +193,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
     {
       try
       {
-        this.when = ISO8601.toDate(whenValue);
+        this.when = ISO8601.toLocalDateTime(whenValue);
       }
       catch (Throwable e)
       {
@@ -200,7 +203,8 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
     }
     else
     {
-      this.when = new Date(Long.parseLong(whenValue));
+      this.when = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(
+        whenValue)), ZoneId.systemDefault());
     }
 
     this.who = rootElement.getChildText("Who");
@@ -299,7 +303,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the date and time the error report was created
    */
-  public Date getWhen()
+  public LocalDateTime getWhen()
   {
     return when;
   }
@@ -334,7 +338,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
     rootElement.addContent(new Element("Feedback", StringUtil.notNull(feedback)));
     rootElement.addContent(new Element("When", (when == null)
         ? ISO8601.now()
-        : ISO8601.fromDate(when)));
+        : ISO8601.fromLocalDateTime(when)));
     rootElement.addContent(new Element("Who", StringUtil.notNull(who)));
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
     rootElement.addContent(new Element("Data", (data != null)

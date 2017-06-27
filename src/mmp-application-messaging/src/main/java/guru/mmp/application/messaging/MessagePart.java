@@ -23,7 +23,7 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -74,7 +74,7 @@ public class MessagePart
   /**
    * The date and time the original message was created.
    */
-  private Date messageCreated;
+  private LocalDateTime messageCreated;
 
   /**
    * The hash of the data for the original message.
@@ -121,7 +121,7 @@ public class MessagePart
   /**
    * The date and time the message part was persisted.
    */
-  private Date persisted;
+  private LocalDateTime persisted;
 
   /**
    * The number of times that the sending of the message part was attempted.
@@ -141,7 +141,7 @@ public class MessagePart
   /**
    * The date and time the message part was last updated.
    */
-  private Date updated;
+  private LocalDateTime updated;
 
   /**
    * Constructs a new <code>MessagePart</code>.
@@ -178,7 +178,7 @@ public class MessagePart
 
     try
     {
-      this.messageCreated = ISO8601.toDate(messageCreatedAttributeValue);
+      this.messageCreated = ISO8601.toLocalDateTime(messageCreatedAttributeValue);
     }
     catch (Throwable e)
     {
@@ -221,7 +221,7 @@ public class MessagePart
    */
   public MessagePart(int partNo, int totalParts, UUID messageId, String messageUsername,
       UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId, Message
-      .Priority messagePriority, Date messageCreated, String messageDataHash,
+      .Priority messagePriority, LocalDateTime messageCreated, String messageDataHash,
       String messageEncryptionIV, String messageChecksum, byte[] data)
   {
     this.id = UUID.randomUUID();
@@ -279,9 +279,9 @@ public class MessagePart
    * @param data                 the binary data for the message part
    */
   public MessagePart(UUID id, int partNo, int totalParts, int sendAttempts, int downloadAttempts,
-      Status status, Date persisted, Date updated, UUID messageId, String messageUsername,
-      UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId, Message
-      .Priority messagePriority, Date messageCreated, String messageDataHash,
+      Status status, LocalDateTime persisted, LocalDateTime updated, UUID messageId,
+      String messageUsername, UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
+      Message.Priority messagePriority, LocalDateTime messageCreated, String messageDataHash,
       String messageEncryptionIV, String messageChecksum, String lockName, byte[] data)
   {
     this.id = id;
@@ -489,7 +489,7 @@ public class MessagePart
    *
    * @return the date and time the original message was created
    */
-  public Date getMessageCreated()
+  public LocalDateTime getMessageCreated()
   {
     return messageCreated;
   }
@@ -586,7 +586,7 @@ public class MessagePart
    *
    * @return the date and time the message part was persisted
    */
-  public Date getPersisted()
+  public LocalDateTime getPersisted()
   {
     return persisted;
   }
@@ -626,7 +626,7 @@ public class MessagePart
    *
    * @return the date and time the message part was last updated
    */
-  public Date getUpdated()
+  public LocalDateTime getUpdated()
   {
     return updated;
   }
@@ -709,7 +709,7 @@ public class MessagePart
    *
    * @param messageCreated the date and time the original message was created
    */
-  public void setMessageCreated(Date messageCreated)
+  public void setMessageCreated(LocalDateTime messageCreated)
   {
     this.messageCreated = messageCreated;
   }
@@ -807,7 +807,7 @@ public class MessagePart
    *
    * @param persisted the date and time the message part was persisted
    */
-  public void setPersisted(Date persisted)
+  public void setPersisted(LocalDateTime persisted)
   {
     this.persisted = persisted;
   }
@@ -848,7 +848,7 @@ public class MessagePart
    *
    * @param updated the date and time the message part was last updated
    */
-  public void setUpdated(Date updated)
+  public void setUpdated(LocalDateTime updated)
   {
     this.updated = updated;
   }
@@ -872,7 +872,7 @@ public class MessagePart
 
     if (persisted != null)
     {
-      buffer.append(" persisted=\"").append(ISO8601.fromDate(persisted)).append("\"");
+      buffer.append(" persisted=\"").append(ISO8601.fromLocalDateTime(persisted)).append("\"");
     }
     else
     {
@@ -885,7 +885,8 @@ public class MessagePart
     buffer.append(" messageTypeId=\"").append(messageTypeId).append("\"");
     buffer.append(" messageCorrelationId=\"").append(messageCorrelationId).append("\"");
     buffer.append(" messagePriority=\"").append(messagePriority).append("\"");
-    buffer.append(" messageCreated=\"").append(ISO8601.fromDate(messageCreated)).append("\"");
+    buffer.append(" messageCreated=\"").append(ISO8601.fromLocalDateTime(messageCreated)).append(
+        "\"");
     buffer.append(" messageDataHash=\"").append(messageDataHash).append("\"");
     buffer.append(" messageEncryptionIV=\"").append(messageEncryptionIV).append("\"");
     buffer.append(" messageChecksum=\"").append(messageChecksum).append("\"");
@@ -915,7 +916,7 @@ public class MessagePart
     rootElement.setAttribute("messageTypeId", messageTypeId.toString());
     rootElement.setAttribute("messageCorrelationId", messageCorrelationId.toString());
     rootElement.setAttribute("messagePriority", Integer.toString(messagePriority.getCode()));
-    rootElement.setAttribute("messageCreated", ISO8601.fromDate(messageCreated));
+    rootElement.setAttribute("messageCreated", ISO8601.fromLocalDateTime(messageCreated));
     rootElement.setAttribute("messageDataHash", messageDataHash);
     rootElement.setAttribute("messageEncryptionIV", messageEncryptionIV);
     rootElement.setAttribute("messageChecksum", messageChecksum);

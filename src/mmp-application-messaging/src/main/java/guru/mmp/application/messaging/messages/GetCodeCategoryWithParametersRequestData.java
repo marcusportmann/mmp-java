@@ -26,7 +26,13 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
-import java.util.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -55,7 +61,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
   /**
    * The date and time the code category was last retrieved.
    */
-  private Date lastRetrieved;
+  private LocalDateTime lastRetrieved;
 
   /**
    * The parameters.
@@ -87,7 +93,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
    *                             category is current
    */
-  public GetCodeCategoryWithParametersRequestData(UUID id, Date lastRetrieved, Map<String,
+  public GetCodeCategoryWithParametersRequestData(UUID id, LocalDateTime lastRetrieved, Map<String,
       String> parameters, boolean returnCodesIfCurrent)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
@@ -131,7 +137,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
     {
       try
       {
-        this.lastRetrieved = ISO8601.toDate(lastRetrievedValue);
+        this.lastRetrieved = ISO8601.toLocalDateTime(lastRetrievedValue);
       }
       catch (Throwable e)
       {
@@ -141,7 +147,8 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
     }
     else
     {
-      this.lastRetrieved = new Date(Long.parseLong(lastRetrievedValue));
+      this.lastRetrieved = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(
+          lastRetrievedValue)), ZoneId.systemDefault());
     }
 
     this.returnCodesIfCurrent = Boolean.parseBoolean(rootElement.getChildText(
@@ -179,7 +186,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    *
    * @return the date and time the code category was last retrieved
    */
-  public Date getLastRetrieved()
+  public LocalDateTime getLastRetrieved()
   {
     return lastRetrieved;
   }
@@ -222,7 +229,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
     rootElement.addContent(new Element("LastRetrieved",
         (lastRetrieved == null)
         ? ISO8601.now()
-        : ISO8601.fromDate(lastRetrieved)));
+        : ISO8601.fromLocalDateTime(lastRetrieved)));
     rootElement.addContent(new Element("ReturnCodesIfCurrent", String.valueOf(
         returnCodesIfCurrent)));
 

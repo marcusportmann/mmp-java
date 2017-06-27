@@ -19,7 +19,7 @@ package guru.mmp.application.messaging;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -53,7 +53,7 @@ public class ErrorReportSummary
   /**
    * The date and time the error report was created.
    */
-  private Date created;
+  private LocalDateTime created;
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the device the error report
@@ -86,7 +86,7 @@ public class ErrorReportSummary
    *                           the device the error report originated from
    */
   ErrorReportSummary(UUID id, UUID applicationId, String applicationName, int applicationVersion,
-      Date created, String who, UUID deviceId)
+      LocalDateTime created, String who, UUID deviceId)
   {
     this.id = id;
     this.applicationId = applicationId;
@@ -134,7 +134,7 @@ public class ErrorReportSummary
    *
    * @return the date and time the error report was created
    */
-  public Date getCreated()
+  public LocalDateTime getCreated()
   {
     return created;
   }
@@ -208,7 +208,7 @@ public class ErrorReportSummary
    *
    * @param created the date and time the error report was created
    */
-  public void setCreated(Date created)
+  public void setCreated(LocalDateTime created)
   {
     this.created = created;
   }

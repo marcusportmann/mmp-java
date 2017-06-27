@@ -24,7 +24,7 @@ import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.util.Base64;
 import org.junit.Test;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -47,16 +47,16 @@ public class PojoTest
   private static final UUID MESSAGE_CORRELATION_ID = UUID.randomUUID();
   private static final Message.Priority MESSAGE_PRIORITY = Message.Priority.HIGH;
   private static final Message.Status MESSAGE_STATUS = Message.Status.INITIALISED;
-  private static final Date MESSAGE_CREATED = new Date(0);
-  private static final Date MESSAGE_PERSISTED = new Date(10000);
-  private static final Date MESSAGE_UPDATED = new Date(80000);
-  private static final Date MESSAGE_PART_PERSISTED = new Date(10000);
-  private static final Date MESSAGE_PART_UPDATED = new Date(80000);
+  private static final LocalDateTime MESSAGE_CREATED = LocalDateTime.now();
+  private static final LocalDateTime MESSAGE_PERSISTED = LocalDateTime.now();
+  private static final LocalDateTime MESSAGE_UPDATED = LocalDateTime.now();
+  private static final LocalDateTime MESSAGE_PART_PERSISTED = LocalDateTime.now();
+  private static final LocalDateTime MESSAGE_PART_UPDATED = LocalDateTime.now();
   private static final int SEND_ATTEMPTS = 1;
   private static final int PROCESS_ATTEMPTS = 2;
   private static final int DOWNLOAD_ATTEMPTS = 3;
   private static final String LOCK_NAME = "Lock Name";
-  private static final Date LAST_PROCESSED = new Date();
+  private static final LocalDateTime LAST_PROCESSED = LocalDateTime.now();
   private static final String MESSAGE_DATA_HASH = "DataHash";
   private static final byte[] MESSAGE_DATA = "Message Data".getBytes();
   private static final byte[] MESSAGE_PART_DATA = "Message Part Data".getBytes();

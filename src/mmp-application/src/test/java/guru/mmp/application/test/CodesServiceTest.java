@@ -31,8 +31,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -206,7 +206,7 @@ public class CodesServiceTest
     codeCategory.setIsEndPointSecure(true);
     codeCategory.setIsCacheable(true);
     codeCategory.setCacheExpiry(777);
-    codeCategory.setUpdated(new Date());
+    codeCategory.setUpdated(LocalDateTime.now());
 
     codesService.updateCodeCategory(codeCategory);
 

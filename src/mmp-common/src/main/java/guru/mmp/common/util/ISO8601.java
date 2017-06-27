@@ -19,10 +19,10 @@ package guru.mmp.common.util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * The <code>ISO8601</code> class provides a helper clas for handling ISO 8601 strings of the
@@ -32,43 +32,26 @@ import java.util.GregorianCalendar;
  */
 public final class ISO8601
 {
-  private static final ThreadLocal<SimpleDateFormat> threadLocalSimpleDateFormat =
-      new ThreadLocal<SimpleDateFormat>()
+  private static final ThreadLocal<DateTimeFormatter> threadLocalDateTimeFormatter =
+      new ThreadLocal<DateTimeFormatter>()
   {
     @Override
-    protected SimpleDateFormat initialValue()
+    protected DateTimeFormatter initialValue()
     {
-      return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+      return DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"));
     }
   };
 
   /**
-   * Transform the <code>Calendar</code> instance into an ISO 8601 string.
+   * Transform the <code>LocalDateTime</code> instance into an ISO 8601 string.
    *
-   * @param calendar the <code>Calendar</code> instance to transform into an ISO 8601 string
+   * @param localDateTime the <code>LocalDateTime</code> instance to transform into an ISO 8601 string
    *
-   * @return the ISO 8601 string for the <code>Calendar</code> instance
+   * @return the ISO 8601 string for the <code>LocalDateTime</code> instance
    */
-  public static String fromCalendar(Calendar calendar)
+  public static String fromLocalDateTime(LocalDateTime localDateTime)
   {
-    Date date = calendar.getTime();
-    String formatted = threadLocalSimpleDateFormat.get().format(date);
-
-    return formatted.substring(0, 22) + ":" + formatted.substring(22);
-  }
-
-  /**
-   * Transform the <code>Date</code> instance into an ISO 8601 string.
-   *
-   * @param date the <code>Date</code> instance to transform into an ISO 8601 string
-   *
-   * @return the ISO 8601 string for the <code>Date</code> instance
-   */
-  public static String fromDate(Date date)
-  {
-    String formatted = threadLocalSimpleDateFormat.get().format(date);
-
-    return formatted.substring(0, 22) + ":" + formatted.substring(22);
+    return localDateTime.atZone(ZoneId.systemDefault()).format(threadLocalDateTimeFormatter.get());
   }
 
   /**
@@ -78,63 +61,22 @@ public final class ISO8601
    */
   public static String now()
   {
-    return fromCalendar(GregorianCalendar.getInstance());
+    return fromLocalDateTime(LocalDateTime.now());
   }
 
   /**
-   * Transform ISO 8601 string into a <code>Calendar</code> instance.
+   * Transform ISO 8601 string into a <code>LocalDateTime</code> instance.
    *
    * @param iso8601string the ISO 8601 string to transform
    *
-   * @return the ISO 8601 string for the <code>Calendar</code> instance
+   * @return the ISO 8601 string for the <code>LocalDateTime</code> instance
    *
    * @throws ParseException
    */
-  public static Calendar toCalendar(String iso8601string)
+  public static LocalDateTime toLocalDateTime(String iso8601string)
     throws ParseException
   {
-    Calendar calendar = GregorianCalendar.getInstance();
-    String s = iso8601string.replace("Z", "+00:00");
-
-    try
-    {
-      s = s.substring(0, 22) + s.substring(23);
-    }
-    catch (IndexOutOfBoundsException e)
-    {
-      throw new ParseException("Invalid length", 0);
-    }
-
-    Date date = threadLocalSimpleDateFormat.get().parse(s);
-
-    calendar.setTime(date);
-
-    return calendar;
-  }
-
-  /**
-   * Transform ISO 8601 string into a <code>Date</code> instance.
-   *
-   * @param iso8601string the ISO 8601 string to transform
-   *
-   * @return the ISO 8601 string for the <code>Date</code> instance
-   *
-   * @throws ParseException
-   */
-  public static Date toDate(String iso8601string)
-    throws ParseException
-  {
-    String s = iso8601string.replace("Z", "+00:00");
-
-    try
-    {
-      s = s.substring(0, 22) + s.substring(23);
-    }
-    catch (IndexOutOfBoundsException e)
-    {
-      throw new ParseException("Invalid length", 0);
-    }
-
-    return threadLocalSimpleDateFormat.get().parse(s);
+    return ZonedDateTime.parse(iso8601string, threadLocalDateTimeFormatter.get())
+        .withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
   }
 }

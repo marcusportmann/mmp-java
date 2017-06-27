@@ -36,6 +36,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -166,7 +167,7 @@ public class SystemMessageTest
     throws Exception
   {
     CodeCategory testStandardCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Standard Code Category", ISO8601.toDate("2016-05-03T19:14:00+02:00"));
+        "Test Standard Code Category", LocalDateTime.now());
 
     if (testStandardCodeCategory != null)
     {
@@ -186,7 +187,8 @@ public class SystemMessageTest
       }
 
       GetCodeCategoryRequestData requestData = new GetCodeCategoryRequestData(
-          testStandardCodeCategory.getId(), new Date(0), true);
+          testStandardCodeCategory.getId(), LocalDateTime.now(), true);
+
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
@@ -236,15 +238,14 @@ public class SystemMessageTest
     }
 
     CodeCategory testCustomCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Custom Code Category", "Test Custom Code Data", ISO8601.toDate(
-        "2016-05-03T19:14:00+02:00"));
+        "Test Custom Code Category", "Test Custom Code Data", LocalDateTime.now());
 
     if (testCustomCodeCategory != null)
     {
       codesService.createCodeCategory(testCustomCodeCategory);
 
       GetCodeCategoryRequestData requestData = new GetCodeCategoryRequestData(
-          testCustomCodeCategory.getId(), new Date(0), true);
+          testCustomCodeCategory.getId(), LocalDateTime.now(), true);
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
@@ -281,7 +282,7 @@ public class SystemMessageTest
     parameters.put("Parameter Name 2", "Parameter Value 2");
 
     CodeCategory testStandardCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Standard Code Category", ISO8601.toDate("2016-05-03T19:14:00+02:00"));
+        "Test Standard Code Category", LocalDateTime.now());
 
     if (testStandardCodeCategory != null)
     {
@@ -301,8 +302,8 @@ public class SystemMessageTest
       }
 
       GetCodeCategoryWithParametersRequestData requestData =
-          new GetCodeCategoryWithParametersRequestData(testStandardCodeCategory.getId(), new Date(
-          0), parameters, true);
+          new GetCodeCategoryWithParametersRequestData(testStandardCodeCategory.getId(),
+          ISO8601.toLocalDateTime("2017-06-27T07:34:59Z"), parameters, true);
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
@@ -352,16 +353,15 @@ public class SystemMessageTest
     }
 
     CodeCategory testCustomCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Custom Code Category", "Test Custom Code Data", ISO8601.toDate(
-        "2016-05-03T19:14:00+02:00"));
+        "Test Custom Code Category", "Test Custom Code Data", LocalDateTime.now());
 
     if (testCustomCodeCategory != null)
     {
       codesService.createCodeCategory(testCustomCodeCategory);
 
       GetCodeCategoryWithParametersRequestData requestData =
-          new GetCodeCategoryWithParametersRequestData(testCustomCodeCategory.getId(), new Date(0),
-          parameters, true);
+          new GetCodeCategoryWithParametersRequestData(testCustomCodeCategory.getId(), LocalDateTime
+          .now(), parameters, true);
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
@@ -393,8 +393,8 @@ public class SystemMessageTest
     throws Exception
   {
     SubmitErrorReportRequestData requestData = new SubmitErrorReportRequestData(UUID.randomUUID(),
-        UUID.randomUUID(), 1, "Test Description", "Test Detail", "Test Feedback", new Date(),
-        "Administrator", UUID.randomUUID(), "Test Data".getBytes());
+        UUID.randomUUID(), 1, "Test Description", "Test Detail", "Test Feedback",
+        LocalDateTime.now(), "Administrator", UUID.randomUUID(), "Test Data".getBytes());
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 

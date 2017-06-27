@@ -25,8 +25,10 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -66,7 +68,7 @@ public class CodeCategoryData
   /**
    * The date and time the code category was last updated.
    */
-  private Date lastUpdated;
+  private LocalDateTime lastUpdated;
 
   /**
    * The name of the code category.
@@ -145,7 +147,7 @@ public class CodeCategoryData
     {
       try
       {
-        this.lastUpdated = ISO8601.toDate(lastUpdatedValue);
+        this.lastUpdated = ISO8601.toLocalDateTime(lastUpdatedValue);
       }
       catch (Throwable e)
       {
@@ -155,7 +157,8 @@ public class CodeCategoryData
     }
     else
     {
-      this.lastUpdated = new Date(Long.parseLong(lastUpdatedValue));
+      this.lastUpdated = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(
+          lastUpdatedValue)), ZoneId.systemDefault());
     }
 
     if (element.hasChild("CodeData"))
@@ -294,7 +297,7 @@ public class CodeCategoryData
    *
    * @return the date and time the code category was last updated
    */
-  public Date getLastUpdated()
+  public LocalDateTime getLastUpdated()
   {
     return lastUpdated;
   }
@@ -322,7 +325,8 @@ public class CodeCategoryData
     buffer.append("CodeCategory {");
     buffer.append("id=\"").append(getId()).append("\", ");
     buffer.append("name=\"").append(getName()).append("\", ");
-    buffer.append("lastUpdated=\"").append(ISO8601.fromDate(getLastUpdated())).append("\", ");
+    buffer.append("lastUpdated=\"").append(ISO8601.fromLocalDateTime(getLastUpdated())).append(
+        "\", ");
     buffer.append("codeData=\"").append((getCodeData() != null)
         ? getCodeData().length
         : 0).append(" bytes of custom code data\"");
@@ -378,7 +382,7 @@ public class CodeCategoryData
     codeCategoryElement.addContent(new Element("LastUpdated",
         (lastUpdated == null)
         ? ISO8601.now()
-        : ISO8601.fromDate(lastUpdated)));
+        : ISO8601.fromLocalDateTime(lastUpdated)));
 
     if (codeData != null)
     {

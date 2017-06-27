@@ -18,7 +18,7 @@ package guru.mmp.application.codes;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -189,7 +189,7 @@ public interface ICodesService
    * @return the code provider code category including the <b>Standard</b> codes and/or
    *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
    */
-  CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+  CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, LocalDateTime lastRetrieved,
       boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
@@ -210,7 +210,7 @@ public interface ICodesService
    *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
    */
   CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
-      String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
+      String> parameters, LocalDateTime lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**
@@ -255,7 +255,7 @@ public interface ICodesService
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
    *         code data
    */
-  CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+  CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, LocalDateTime lastRetrieved,
       boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
@@ -275,7 +275,7 @@ public interface ICodesService
    *         code data
    */
   CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
-      String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
+      String> parameters, LocalDateTime lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**

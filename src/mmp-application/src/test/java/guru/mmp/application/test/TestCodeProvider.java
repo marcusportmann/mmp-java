@@ -23,7 +23,7 @@ import guru.mmp.application.codes.CodeProviderConfig;
 import guru.mmp.application.codes.CodeProviderException;
 import guru.mmp.application.codes.ICodeProvider;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -58,7 +58,7 @@ public class TestCodeProvider
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
    */
   @Override
-  public CodeCategory getCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+  public CodeCategory getCodeCategory(CodeCategory codeCategory, LocalDateTime lastRetrieved,
       boolean returnCodesIfCurrent)
     throws CodeProviderException
   {
@@ -80,7 +80,7 @@ public class TestCodeProvider
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
    */
   public CodeCategory getCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
-      String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
+      String> parameters, LocalDateTime lastRetrieved, boolean returnCodesIfCurrent)
     throws CodeProviderException
   {
     try

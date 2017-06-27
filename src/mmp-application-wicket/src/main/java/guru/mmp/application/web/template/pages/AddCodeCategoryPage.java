@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -84,7 +84,7 @@ class AddCodeCategoryPage extends TemplateWebPage
         {
           try
           {
-            Date created = new Date();
+            LocalDateTime created = LocalDateTime.now();
 
             CodeCategory codeCategory = addForm.getModelObject();
 

@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -182,7 +183,7 @@ public class CodesDAO
   {
     String createCachedCodeCategorySQL =
         "INSERT INTO CODES.CACHED_CODE_CATEGORIES (ID, CODE_DATA, LAST_UPDATED, CACHED) "
-     + "VALUES (?, ?, ?, ?)";
+        + "VALUES (?, ?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createCachedCodeCategorySQL))
@@ -192,8 +193,8 @@ public class CodesDAO
           (cachedCodeCategory.getCodeData() != null)
           ? cachedCodeCategory.getCodeData().getBytes("UTF-8")
           : null);
-      statement.setTimestamp(3, new Timestamp(cachedCodeCategory.getLastUpdated().getTime()));
-      statement.setTimestamp(4, new Timestamp(cachedCodeCategory.getCached().getTime()));
+      statement.setTimestamp(3, Timestamp.valueOf(cachedCodeCategory.getLastUpdated()));
+      statement.setTimestamp(4, Timestamp.valueOf(cachedCodeCategory.getCached()));
 
       if (statement.executeUpdate() != 1)
       {
@@ -292,15 +293,15 @@ public class CodesDAO
 
       if (codeCategory.getUpdated() == null)
       {
-        Timestamp updated = new Timestamp(System.currentTimeMillis());
+        LocalDateTime updated = LocalDateTime.now();
 
-        statement.setTimestamp(9, updated);
+        statement.setTimestamp(9, Timestamp.valueOf(updated));
 
         codeCategory.setUpdated(updated);
       }
       else
       {
-        statement.setTimestamp(9, new Timestamp(codeCategory.getUpdated().getTime()));
+        statement.setTimestamp(9, Timestamp.valueOf(codeCategory.getUpdated()));
       }
 
       if (statement.executeUpdate() != 1)
@@ -328,8 +329,7 @@ public class CodesDAO
   public void deleteCachedCodeCategory(UUID id)
     throws DAOException
   {
-    String deleteCachedCodeCategorySQL =
-        "DELETE FROM CODES.CACHED_CODE_CATEGORIES WHERE ID=?";
+    String deleteCachedCodeCategorySQL = "DELETE FROM CODES.CACHED_CODE_CATEGORIES WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCachedCodeCategorySQL))
@@ -823,7 +823,7 @@ public class CodesDAO
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateCodeCategorySQL))
     {
-      Date updated = new Date();
+      LocalDateTime updated = LocalDateTime.now();
 
       statement.setInt(1, codeCategory.getCategoryType().getCode());
       statement.setString(2, codeCategory.getName());
@@ -844,7 +844,7 @@ public class CodesDAO
         statement.setInt(7, codeCategory.getCacheExpiry());
       }
 
-      statement.setTimestamp(8, new Timestamp(updated.getTime()));
+      statement.setTimestamp(8, Timestamp.valueOf(updated));
       statement.setObject(9, codeCategory.getId());
 
       if (statement.executeUpdate() != 1)
@@ -871,7 +871,7 @@ public class CodesDAO
     return new CachedCodeCategory(UUID.fromString(rs.getString(1)),
         (rs.getBytes(2) != null)
         ? new String(rs.getBytes(2), "UTF-8")
-        : null, rs.getTimestamp(3), rs.getTimestamp(4));
+        : null, rs.getTimestamp(3).toLocalDateTime(), rs.getTimestamp(4).toLocalDateTime());
   }
 
   private Date getCachedCodeCategoryCached(Connection connection, UUID id)
@@ -907,7 +907,8 @@ public class CodesDAO
   private Code getCode(ResultSet rs)
     throws SQLException
   {
-    return new Code(rs.getString(1), UUID.fromString(rs.getString(2)), rs.getString(3), rs.getString(4));
+    return new Code(rs.getString(1), UUID.fromString(rs.getString(2)), rs.getString(3),
+        rs.getString(4));
   }
 
   private CodeCategory getCodeCategory(ResultSet rs)
@@ -917,14 +918,14 @@ public class CodesDAO
 
     boolean cacheExpiryIsNull = rs.wasNull();
 
-    return new CodeCategory(UUID.fromString(rs.getString(1)), CodeCategoryType.fromCode(rs.getInt(2)),
-        rs.getString(3),
+    return new CodeCategory(UUID.fromString(rs.getString(1)), CodeCategoryType.fromCode(rs.getInt(
+        2)), rs.getString(3),
         (rs.getBytes(4) != null)
         ? new String(rs.getBytes(4), "UTF-8")
         : null, rs.getString(5), rs.getBoolean(6), rs.getBoolean(7),
         cacheExpiryIsNull
         ? null
-        : cacheExpiry, rs.getTimestamp(9));
+        : cacheExpiry, rs.getTimestamp(9).toLocalDateTime());
   }
 
   private Integer getCodeCategoryCacheExpiry(Connection connection, UUID id)
@@ -975,11 +976,11 @@ public class CodesDAO
 
     boolean cacheExpiryIsNull = rs.wasNull();
 
-    return new CodeCategory(UUID.fromString(rs.getString(1)), CodeCategoryType.fromCode(rs.getInt(2)),
-        rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getBoolean(6),
+    return new CodeCategory(UUID.fromString(rs.getString(1)), CodeCategoryType.fromCode(rs.getInt(
+        2)), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getBoolean(6),
         cacheExpiryIsNull
         ? null
-        : cacheExpiry, rs.getTimestamp(8));
+        : cacheExpiry, rs.getTimestamp(8).toLocalDateTime());
   }
 
   private List<Code> getCodesForCodeCategory(Connection connection, UUID id)

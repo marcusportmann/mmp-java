@@ -2,8 +2,8 @@
 package guru.mmp.service.codes.ws;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -67,7 +67,7 @@ public class CodeCategory
     @XmlElement(name = "LastUpdated", required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected Calendar lastUpdated;
+    protected LocalDateTime lastUpdated;
     @XmlElement(name = "Codes", required = true)
     protected List<Code> codes;
     @XmlElement(name = "CodeData", required = true, nillable = true)
@@ -153,7 +153,7 @@ public class CodeCategory
      *     {@link String }
      *     
      */
-    public Calendar getLastUpdated() {
+    public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
@@ -165,7 +165,7 @@ public class CodeCategory
      *     {@link String }
      *     
      */
-    public void setLastUpdated(Calendar value) {
+    public void setLastUpdated(LocalDateTime value) {
         this.lastUpdated = value;
     }
 

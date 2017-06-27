@@ -18,7 +18,6 @@ package guru.mmp.application.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.util.DateUtil;
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
@@ -38,6 +37,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.ws.BindingProvider;
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -412,8 +412,8 @@ public class CodesService
    * @return the code provider code category including the <b>Standard</b> codes and/or
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
    */
-  public CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
-      boolean returnCodesIfCurrent)
+  public CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory,
+      LocalDateTime lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
@@ -455,7 +455,7 @@ public class CodesService
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
    */
   public CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory,
-      Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
+      Map<String, String> parameters, LocalDateTime lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
@@ -555,7 +555,7 @@ public class CodesService
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
    * code data
    */
-  public CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+  public CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, LocalDateTime lastRetrieved,
       boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
@@ -635,7 +635,7 @@ public class CodesService
    * code data
    */
   public CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
-      String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
+      String> parameters, LocalDateTime lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
@@ -783,7 +783,7 @@ public class CodesService
 
       // Create the cached code category
       CachedCodeCategory cachedCodeCategory = new CachedCodeCategory(codeCategory.getId(),
-          codeCategory.getCodeData(), codeCategory.getUpdated(), new Date());
+          codeCategory.getCodeData(), codeCategory.getUpdated(), LocalDateTime.now());
 
       createCachedCodeCategory(cachedCodeCategory);
 
@@ -804,7 +804,7 @@ public class CodesService
   }
 
   private CodeCategory getRemoteWebServiceCodeCategory(CodeCategory codeCategory,
-      Date lastRetrieved, boolean returnCodesIfCurrent)
+      LocalDateTime lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
@@ -825,10 +825,9 @@ public class CodesService
           codeCategory.getEndPoint());
 
       guru.mmp.service.codes.ws.CodeCategory remoteCodeCategory = codesService.getCodeCategory(
-          codeCategory.getId().toString(), DateUtil.toCalendar(lastRetrieved),
-          returnCodesIfCurrent);
+          codeCategory.getId().toString(), lastRetrieved, returnCodesIfCurrent);
 
-      codeCategory.setUpdated(DateUtil.toDate(remoteCodeCategory.getLastUpdated()));
+      codeCategory.setUpdated(remoteCodeCategory.getLastUpdated());
 
       List<Code> codes = remoteCodeCategory.getCodes().stream().map(remoteCode -> new Code(
           remoteCode.getId(), codeCategory.getId(), remoteCode.getName(), remoteCode.getValue()))
@@ -848,7 +847,7 @@ public class CodesService
   }
 
   private CodeCategory getRemoteWebServiceCodeCategoryWithParameters(CodeCategory codeCategory,
-      Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
+      Map<String, String> parameters, LocalDateTime lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
@@ -884,9 +883,9 @@ public class CodesService
 
       guru.mmp.service.codes.ws.CodeCategory remoteCodeCategory =
           codesService.getCodeCategoryWithParameters(codeCategory.getId().toString(), wsParameters,
-          DateUtil.toCalendar(lastRetrieved), returnCodesIfCurrent);
+          lastRetrieved, returnCodesIfCurrent);
 
-      codeCategory.setUpdated(DateUtil.toDate(remoteCodeCategory.getLastUpdated()));
+      codeCategory.setUpdated(remoteCodeCategory.getLastUpdated());
 
       List<Code> codes = remoteCodeCategory.getCodes().stream().map(remoteCode -> new Code(
           remoteCode.getId(), codeCategory.getId(), remoteCode.getName(), remoteCode.getValue()))

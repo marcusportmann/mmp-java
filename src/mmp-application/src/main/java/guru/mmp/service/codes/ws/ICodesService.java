@@ -1,7 +1,7 @@
 
 package guru.mmp.service.codes.ws;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -44,7 +44,7 @@ public interface ICodesService {
         @WebParam(name = "id", targetNamespace = "http://ws.codes.service.mmp.guru")
         String id,
         @WebParam(name = "lastRetrieved", targetNamespace = "http://ws.codes.service.mmp.guru")
-        Calendar lastRetrieved,
+        LocalDateTime lastRetrieved,
         @WebParam(name = "returnCodesIfCurrent", targetNamespace = "http://ws.codes.service.mmp.guru")
         boolean returnCodesIfCurrent)
         throws CodesServiceFault
@@ -70,7 +70,7 @@ public interface ICodesService {
         @WebParam(name = "parameters", targetNamespace = "http://ws.codes.service.mmp.guru")
         List<Parameter> parameters,
         @WebParam(name = "lastRetrieved", targetNamespace = "http://ws.codes.service.mmp.guru")
-        Calendar lastRetrieved,
+        LocalDateTime lastRetrieved,
         @WebParam(name = "returnCodesIfCurrent", targetNamespace = "http://ws.codes.service.mmp.guru")
         boolean returnCodesIfCurrent)
         throws CodesServiceFault

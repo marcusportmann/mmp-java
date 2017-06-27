@@ -19,7 +19,7 @@ package guru.mmp.application.codes;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,7 +81,7 @@ public class CodeCategory
   /**
    * The date and time the code category was updated.
    */
-  private Date updated;
+  private LocalDateTime updated;
 
   /**
    * Constructs a new <code>CodeCategory</code>.
@@ -96,7 +96,7 @@ public class CodeCategory
    * @param name    the name of the code category
    * @param updated the date and time the code category was updated
    */
-  public CodeCategory(UUID id, String name, Date updated)
+  public CodeCategory(UUID id, String name, LocalDateTime updated)
   {
     this.id = id;
     this.categoryType = CodeCategoryType.LOCAL_STANDARD;
@@ -113,7 +113,7 @@ public class CodeCategory
    * @param codeData the custom code data for the code category
    * @param updated  the date and time the code category was updated
    */
-  public CodeCategory(UUID id, String name, String codeData, Date updated)
+  public CodeCategory(UUID id, String name, String codeData, LocalDateTime updated)
   {
     this.id = id;
     this.categoryType = CodeCategoryType.LOCAL_CUSTOM;
@@ -138,7 +138,7 @@ public class CodeCategory
    * @param updated          the date and time the code category was updated
    */
   public CodeCategory(UUID id, CodeCategoryType categoryType, String name, String endPoint,
-      boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry, Date updated)
+      boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry, LocalDateTime updated)
   {
     this.id = id;
     this.categoryType = categoryType;
@@ -169,7 +169,7 @@ public class CodeCategory
    */
   public CodeCategory(UUID id, CodeCategoryType categoryType, String name, String codeData,
       String endPoint, boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry,
-      Date updated)
+      LocalDateTime updated)
   {
     this.id = id;
     this.categoryType = categoryType;
@@ -282,7 +282,7 @@ public class CodeCategory
    *
    * @return the date and time the code category was updated
    */
-  public Date getUpdated()
+  public LocalDateTime getUpdated()
   {
     return updated;
   }
@@ -387,7 +387,7 @@ public class CodeCategory
    *
    * @param updated the date and time the code category was updated
    */
-  public void setUpdated(Date updated)
+  public void setUpdated(LocalDateTime updated)
   {
     this.updated = updated;
   }

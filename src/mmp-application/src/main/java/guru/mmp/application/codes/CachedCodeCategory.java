@@ -19,7 +19,7 @@ package guru.mmp.application.codes;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +36,7 @@ class CachedCodeCategory
   /**
    * The date and time the code category was cached.
    */
-  private Date cached;
+  private LocalDateTime cached;
 
   /**
    * The custom code data for the cached code category.
@@ -56,7 +56,7 @@ class CachedCodeCategory
   /**
    * The date and time the cached code category was last updated.
    */
-  private Date lastUpdated;
+  private LocalDateTime lastUpdated;
 
   /**
    * Constructs a new <code>CachedCodeCategory</code>.
@@ -73,7 +73,7 @@ class CachedCodeCategory
    * @param lastUpdated the date and time the cached code category was last updated
    * @param cached      the date and time the code category was cached
    */
-  CachedCodeCategory(UUID id, String codeData, Date lastUpdated, Date cached)
+  CachedCodeCategory(UUID id, String codeData, LocalDateTime lastUpdated, LocalDateTime cached)
   {
     this.id = id;
     this.codeData = codeData;
@@ -142,7 +142,7 @@ class CachedCodeCategory
    * @param lastUpdated the date and time the cached code category was last updated
    */
   @SuppressWarnings("unused")
-  public void setLastUpdated(Date lastUpdated)
+  public void setLastUpdated(LocalDateTime lastUpdated)
   {
     this.lastUpdated = lastUpdated;
   }
@@ -152,7 +152,7 @@ class CachedCodeCategory
    *
    * @return the date and time the code category was cached
    */
-  Date getCached()
+  LocalDateTime getCached()
   {
     return cached;
   }
@@ -172,7 +172,7 @@ class CachedCodeCategory
    *
    * @return the date and time the cached code category was last updated
    */
-  Date getLastUpdated()
+  LocalDateTime getLastUpdated()
   {
     return lastUpdated;
   }

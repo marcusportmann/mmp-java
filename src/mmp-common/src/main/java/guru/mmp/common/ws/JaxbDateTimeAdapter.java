@@ -20,7 +20,7 @@ package guru.mmp.common.ws;
 
 import guru.mmp.common.util.ISO8601;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -33,30 +33,30 @@ import java.util.Calendar;
 public class JaxbDateTimeAdapter
 {
   /**
-   * Marshals the <code>java.util.Calendar</code> value as an ISO8601 string.
+   * Marshals the <code>java.time.LocalDateTime</code> value as an ISO8601 string.
    *
    * @param value the value to marshal
    *
-   * @return the <code>java.util.Calendar</code> value as an ISO8601 string
+   * @return the <code>java.time.LocalDateTime</code> value as an ISO8601 string
    */
-  public static String marshal(Calendar value)
+  public static String marshal(LocalDateTime value)
   {
     if (value == null)
     {
       return null;
     }
 
-    return ISO8601.fromCalendar(value);
+    return ISO8601.fromLocalDateTime(value);
   }
 
   /**
-   * Unmarshals the ISO8601 string value as a <code>java.util.Calendar</code>.
+   * Unmarshals the ISO8601 string value as a <code>java.time.LocalDateTime</code>.
    *
    * @param value the ISO8601 string value
    *
-   * @return the ISO8601 string value as a <code>java.util.Calendar</code>
+   * @return the ISO8601 string value as a <code>java.time.LocalDateTime</code>
    */
-  public static Calendar unmarshal(String value)
+  public static LocalDateTime unmarshal(String value)
   {
     if (value == null)
     {
@@ -65,7 +65,7 @@ public class JaxbDateTimeAdapter
 
     try
     {
-      return ISO8601.toCalendar(value);
+      return ISO8601.toLocalDateTime(value);
     }
     catch (Throwable e)
     {

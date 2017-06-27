@@ -24,7 +24,7 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -52,7 +52,7 @@ public class Message
   /**
    * The date and time the message was created.
    */
-  private Date created;
+  private LocalDateTime created;
 
   /**
    * The data for the message.
@@ -96,7 +96,7 @@ public class Message
   /**
    * The date and time the last attempt was made to process the message.
    */
-  private Date lastProcessed;
+  private LocalDateTime lastProcessed;
 
   /**
    * The name of the entity that has locked this message for processing or <code>null</code> if
@@ -107,7 +107,7 @@ public class Message
   /**
    * The date and time the message was persisted.
    */
-  private Date persisted;
+  private LocalDateTime persisted;
 
   /**
    * The message priority. Messages with a higher priority value are processed before messages with
@@ -138,7 +138,7 @@ public class Message
   /**
    * The date and time the message was updated.
    */
-  private Date updated;
+  private LocalDateTime updated;
 
   /**
    * The username identifying the user associated with the message.
@@ -175,7 +175,7 @@ public class Message
 
     try
     {
-      this.created = ISO8601.toDate(createdAttributeValue);
+      this.created = ISO8601.toLocalDateTime(createdAttributeValue);
     }
     catch (Throwable e)
     {
@@ -214,7 +214,7 @@ public class Message
     this.data = data;
     this.dataHash = "";
     this.encryptionIV = "";
-    this.created = new Date();
+    this.created = LocalDateTime.now();
     this.sendAttempts = 0;
     this.processAttempts = 0;
     this.downloadAttempts = 0;
@@ -254,7 +254,7 @@ public class Message
     }
 
     this.encryptionIV = encryptionIV;
-    this.created = new Date();
+    this.created = LocalDateTime.now();
     this.sendAttempts = 0;
     this.processAttempts = 0;
     this.downloadAttempts = 0;
@@ -288,9 +288,10 @@ public class Message
    * @param encryptionIV     the base-64 encoded initialisation vector for the encryption scheme
    */
   public Message(UUID id, String username, UUID deviceId, UUID typeId, UUID correlationId,
-      Priority priority, Status status, Date created, Date persisted, Date updated,
-      int sendAttempts, int processAttempts, int downloadAttempts, String lockName,
-      Date lastProcessed, byte[] data, String dataHash, String encryptionIV)
+      Priority priority, Status status, LocalDateTime created, LocalDateTime persisted,
+      LocalDateTime updated, int sendAttempts, int processAttempts, int downloadAttempts,
+      String lockName, LocalDateTime lastProcessed, byte[] data, String dataHash,
+      String encryptionIV)
   {
     this.id = id;
     this.username = username;
@@ -525,7 +526,7 @@ public class Message
    *
    * @return the date and time the message was created
    */
-  public Date getCreated()
+  public LocalDateTime getCreated()
   {
     return created;
   }
@@ -597,7 +598,7 @@ public class Message
    *
    * @return the date and time the last attempt was made to process the message
    */
-  public Date getLastProcessed()
+  public LocalDateTime getLastProcessed()
   {
     return lastProcessed;
   }
@@ -619,7 +620,7 @@ public class Message
    *
    * @return the date and time the message was persisted
    */
-  public Date getPersisted()
+  public LocalDateTime getPersisted()
   {
     return persisted;
   }
@@ -682,7 +683,7 @@ public class Message
    *
    * @return the date and time the message was updated
    */
-  public Date getUpdated()
+  public LocalDateTime getUpdated()
   {
     return updated;
   }
@@ -736,7 +737,7 @@ public class Message
    *
    * @param created the date and time the message was created
    */
-  public void setCreated(Date created)
+  public void setCreated(LocalDateTime created)
   {
     this.created = created;
   }
@@ -820,7 +821,7 @@ public class Message
    *
    * @param lastProcessed the date and time the last attempt was made to process the message
    */
-  public void setLastProcessed(Date lastProcessed)
+  public void setLastProcessed(LocalDateTime lastProcessed)
   {
     this.lastProcessed = lastProcessed;
   }
@@ -842,7 +843,7 @@ public class Message
    *
    * @param persisted the date and time the message was persisted
    */
-  public void setPersisted(Date persisted)
+  public void setPersisted(LocalDateTime persisted)
   {
     this.persisted = persisted;
   }
@@ -905,7 +906,7 @@ public class Message
    *
    * @param updated the date and time the message was updated
    */
-  public void setUpdated(Date updated)
+  public void setUpdated(LocalDateTime updated)
   {
     this.updated = updated;
   }
@@ -937,11 +938,11 @@ public class Message
     buffer.append(" correlationId=\"").append(correlationId).append("\"");
     buffer.append(" priority=\"").append(priority).append("\"");
     buffer.append(" status=\"").append(status).append("\"");
-    buffer.append(" created=\"").append(ISO8601.fromDate(created)).append("\"");
+    buffer.append(" created=\"").append(ISO8601.fromLocalDateTime(created)).append("\"");
 
     if (persisted != null)
     {
-      buffer.append(" persisted=\"").append(ISO8601.fromDate(persisted)).append("\"");
+      buffer.append(" persisted=\"").append(ISO8601.fromLocalDateTime(persisted)).append("\"");
     }
     else
     {
@@ -950,7 +951,7 @@ public class Message
 
     if (updated != null)
     {
-      buffer.append(" updated=\"").append(ISO8601.fromDate(updated)).append("\"");
+      buffer.append(" updated=\"").append(ISO8601.fromLocalDateTime(updated)).append("\"");
     }
     else
     {
@@ -972,7 +973,8 @@ public class Message
 
     if (lastProcessed != null)
     {
-      buffer.append(" lastProcessed=\"").append(ISO8601.fromDate(lastProcessed)).append("\"");
+      buffer.append(" lastProcessed=\"").append(ISO8601.fromLocalDateTime(lastProcessed)).append(
+          "\"");
     }
     else
     {
@@ -1009,7 +1011,7 @@ public class Message
     rootElement.setAttribute("typeId", typeId.toString());
     rootElement.setAttribute("correlationId", correlationId.toString());
     rootElement.setAttribute("priority", Integer.toString(priority.getCode()));
-    rootElement.setAttribute("created", ISO8601.fromDate(created));
+    rootElement.setAttribute("created", ISO8601.fromLocalDateTime(created));
     rootElement.setAttribute("sendAttempts", Integer.toString(sendAttempts));
     rootElement.setAttribute("processAttempts", Integer.toString(processAttempts));
     rootElement.setAttribute("downloadAttempts", Integer.toString(downloadAttempts));

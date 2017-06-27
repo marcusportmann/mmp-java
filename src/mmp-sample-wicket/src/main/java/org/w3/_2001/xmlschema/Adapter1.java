@@ -1,19 +1,19 @@
 
 package org.w3._2001.xmlschema;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class Adapter1
-    extends XmlAdapter<String, Calendar>
+    extends XmlAdapter<String, LocalDateTime>
 {
 
 
-    public Calendar unmarshal(String value) {
+    public LocalDateTime unmarshal(String value) {
         return (guru.mmp.common.ws.JaxbDateTimeAdapter.unmarshal(value));
     }
 
-    public String marshal(Calendar value) {
+    public String marshal(LocalDateTime value) {
         return (guru.mmp.common.ws.JaxbDateTimeAdapter.marshal(value));
     }
 

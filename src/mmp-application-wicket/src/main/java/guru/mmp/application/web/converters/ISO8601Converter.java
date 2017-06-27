@@ -22,6 +22,7 @@ import guru.mmp.common.util.ISO8601;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Locale;
 
@@ -33,15 +34,15 @@ import java.util.Locale;
  * @author Marcus Portmann
  */
 public class ISO8601Converter
-  implements IConverter<Date>
+  implements IConverter<LocalDateTime>
 {
   @Override
-  public Date convertToObject(String value, Locale locale)
+  public LocalDateTime convertToObject(String value, Locale locale)
     throws ConversionException
   {
     try
     {
-      return ISO8601.toDate(value);
+      return ISO8601.toLocalDateTime(value);
     }
     catch (Throwable e)
     {
@@ -51,15 +52,15 @@ public class ISO8601Converter
   }
 
   @Override
-  public String convertToString(Date value, Locale locale)
+  public String convertToString(LocalDateTime value, Locale locale)
   {
     if (value == null)
     {
       return "N/A";
     }
-    else if (value instanceof Date)
+    else if (value instanceof LocalDateTime)
     {
-      return ISO8601.fromDate(value);
+      return ISO8601.fromLocalDateTime(value);
     }
     else
     {
