@@ -23,6 +23,26 @@ application:
       type: JKS
       path: classpath:META-INF/localhost.jks
       password: Password1
+
+  cacheCluster:
+    enabled: false
+    port: 15000
+    name: test-cluster
+    password:
+    members:
+    caches:
+      - cache:
+        name: test-cache
+        maxSizePolicy: PER_NODE
+        maxSize: 10000
+        inMemoryFormat: OBJECT
+        evictionPolicy: LRU
+        statisticsEnabled: true
+        maxIdleSeconds: 300
+        backupCount: 0
+        asyncBackupCount: 0
+        readBackupData: false
+
 ---
 spring:
     profiles: development

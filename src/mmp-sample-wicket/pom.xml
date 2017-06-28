@@ -55,6 +55,10 @@
     </dependency>
 
     <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.microsoft.sqlserver</groupId>
       <artifactId>mssql-jdbc</artifactId>
     </dependency>

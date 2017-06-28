@@ -23,6 +23,7 @@
     <cxf.version>3.1.11</cxf.version>
     <groovy.version>2.4.11</groovy.version>
     <h2.version>1.4.195</h2.version>
+    <hazelcast.version>3.8.2</hazelcast.version>
     <httpclient.version>4.5.2</httpclient.version>
     <hibernate.version>5.2.10.Final</hibernate.version>
     <jackson.version>2.8.9</jackson.version>
@@ -58,6 +59,11 @@
         <groupId>com.fasterxml.jackson.dataformat</groupId>
         <artifactId>jackson-dataformat-xml</artifactId>
         <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.hazelcast</groupId>
+        <artifactId>hazelcast</artifactId>
+        <version>${hazelcast.version}</version>
       </dependency>
       <dependency>
         <groupId>com.microsoft.sqlserver</groupId>

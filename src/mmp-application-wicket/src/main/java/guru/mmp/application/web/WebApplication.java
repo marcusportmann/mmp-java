@@ -71,6 +71,7 @@ import org.springframework.util.StringUtils;
 import org.xnio.Options;
 import org.xnio.SslClientAuthMode;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -906,64 +907,21 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
     {
       setRequestCycleProvider(new WebSphereAbsoluteUrlRequestCycleProvider());
     }
-
-    if (configuration.getCacheCluster() != null)
-    {
-      initCacheCluster();
-    }
-  }
-
-  /**
-   * Creates and returns a new instance of <code>IConverterLocator</code>.
-   *
-   * @return a new <code>IConverterLocator</code> instance
-   */
-  @Override
-  protected IConverterLocator newConverterLocator()
-  {
-    ConverterLocator converterLocator = new ConverterLocator();
-
-    converterLocator.set(Date.class,
-        new DateConverter()
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public DateFormat getDateFormat(Locale ignore)
-          {
-            return new SimpleDateFormat("yyyy-MM-dd");
-          }
-        });
-
-    converterLocator.set(UUID.class,
-        new IConverter<Object>()
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public Object convertToObject(String value, Locale locale)
-              throws ConversionException
-          {
-            return UUID.fromString(value);
-          }
-
-          @Override
-          public String convertToString(Object value, Locale locale)
-          {
-            return value.toString();
-          }
-        });
-
-    return converterLocator;
   }
 
   /**
    * Initialise the distributed in-memory cache cluster using reflection.
    */
-  private void initCacheCluster()
+  @PostConstruct
+  protected void initCacheCluster()
   {
     ApplicationConfiguration.CacheClusterConfiguration cacheClusterConfiguration =
         configuration.getCacheCluster();
+
+    if (cacheClusterConfiguration == null)
+    {
+      return;
+    }
 
     if (!cacheClusterConfiguration.getEnabled())
     {
@@ -1187,6 +1145,50 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
           "Failed to initialise the distributed in-memory cache cluster ("
           + cacheClusterConfiguration.getName() + ")", e);
     }
+  }
+
+  /**
+   * Creates and returns a new instance of <code>IConverterLocator</code>.
+   *
+   * @return a new <code>IConverterLocator</code> instance
+   */
+  @Override
+  protected IConverterLocator newConverterLocator()
+  {
+    ConverterLocator converterLocator = new ConverterLocator();
+
+    converterLocator.set(Date.class,
+        new DateConverter()
+        {
+          private static final long serialVersionUID = 1000000;
+
+          @Override
+          public DateFormat getDateFormat(Locale ignore)
+          {
+            return new SimpleDateFormat("yyyy-MM-dd");
+          }
+        });
+
+    converterLocator.set(UUID.class,
+        new IConverter<Object>()
+        {
+          private static final long serialVersionUID = 1000000;
+
+          @Override
+          public Object convertToObject(String value, Locale locale)
+              throws ConversionException
+          {
+            return UUID.fromString(value);
+          }
+
+          @Override
+          public String convertToString(Object value, Locale locale)
+          {
+            return value.toString();
+          }
+        });
+
+    return converterLocator;
   }
 
   /**
