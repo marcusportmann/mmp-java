@@ -58,6 +58,7 @@ import org.springframework.util.StringUtils;
 import org.xnio.Options;
 import org.xnio.SslClientAuthMode;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -790,10 +791,16 @@ public abstract class Application
   /**
    * Initialise the distributed in-memory cache cluster using reflection.
    */
-  private void initCacheCluster()
+  @PostConstruct
+  protected void initCacheCluster()
   {
     ApplicationConfiguration.CacheClusterConfiguration cacheClusterConfiguration =
         configuration.getCacheCluster();
+
+    if (cacheClusterConfiguration == null)
+    {
+      return;
+    }
 
     if (!cacheClusterConfiguration.getEnabled())
     {

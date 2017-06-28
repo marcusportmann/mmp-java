@@ -906,6 +906,11 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
     {
       setRequestCycleProvider(new WebSphereAbsoluteUrlRequestCycleProvider());
     }
+
+    if (configuration.getCacheCluster() != null)
+    {
+      initCacheCluster();
+    }
   }
 
   /**
