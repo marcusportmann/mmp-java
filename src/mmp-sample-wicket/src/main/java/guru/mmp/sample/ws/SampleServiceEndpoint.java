@@ -16,11 +16,9 @@
 
 package guru.mmp.sample.ws;
 
-//~--- non-JDK imports --------------------------------------------------------
+//~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SampleServiceEndpoint</code> class implements the Sample Service.
@@ -35,8 +33,16 @@ public class SampleServiceEndpoint
 
   @Override
   public String getVersion()
-    throws SampleServiceFault
+    throws ServiceUnavailableFault
   {
-    return sampleService.getVersion();
+    try
+    {
+      return sampleService.getVersion();
+    }
+    catch (Throwable e)
+    {
+      throw new ServiceUnavailableFault("Failed to retrieve the version",
+          SampleServiceTranslator.translate(e), e);
+    }
   }
 }

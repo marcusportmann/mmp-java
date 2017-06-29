@@ -21,14 +21,15 @@
       <!-- ===================================================================================== -->
       <!-- Service(s) Faults                                                                     -->
       <!-- ===================================================================================== -->
-      <xs:complexType name="SampleServiceFaultInfo">
+      <xs:complexType name="FaultInfo">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Detail" nillable="true" type="xs:string" /> 
-          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" /> 
+          <xs:element minOccurs="1" name="Detail" nillable="true" type="xs:string" /> 
+          <xs:element minOccurs="1" name="Message" nillable="true" type="xs:string" /> 
         </xs:sequence>
       </xs:complexType>
-      <xs:element name="SampleServiceFaultInfo" nillable="true" 
-          type="interface:SampleServiceFaultInfo"/>
+      
+      <xs:element name="ServiceUnavailableFaultInfo" nillable="true" 
+          type="interface:FaultInfo"/>
 
       <!-- ===================================================================================== -->
       <!-- Service(s) Enumerations                                                               -->
@@ -100,10 +101,10 @@
   <!-- ========================================================================================= -->
   <!-- Service(s) Fault Messages                                                                 -->
   <!-- ========================================================================================= -->
-  <wsdl:message name="SampleServiceFault">
-    <wsdl:part element="interface:SampleServiceFaultInfo" name="fault"/>
+  <wsdl:message name="ServiceUnavailableFault">
+    <wsdl:part element="interface:ServiceUnavailableFaultInfo" name="fault"/>
   </wsdl:message>
-  
+
   <!-- ========================================================================================= -->
   <!-- Service(s) Operation Messages                                                             -->
   <!-- ========================================================================================= -->
@@ -134,14 +135,14 @@
     <wsdl:operation name="GetSampleData">
       <wsdl:input message="interface:GetSampleDataInputMessage" /> 
       <wsdl:output message="interface:GetSampleDataOutputMessage" /> 
-      <wsdl:fault name="SampleServiceFault" message="interface:SampleServiceFault" />
+      <wsdl:fault name="ServiceUnavailableFault" message="interface:ServiceUnavailableFault" />
     </wsdl:operation>
     -->
 
     <wsdl:operation name="GetVersion">
       <wsdl:input message="interface:GetVersionInputMessage" /> 
       <wsdl:output message="interface:GetVersionOutputMessage" /> 
-      <wsdl:fault name="SampleServiceFault" message="interface:SampleServiceFault" />
+      <wsdl:fault name="ServiceUnavailableFault" message="interface:ServiceUnavailableFault" />
     </wsdl:operation>
 
   </wsdl:portType>
@@ -161,8 +162,8 @@
       <wsdl:output>
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SampleServiceFault">
-        <soap:fault name="SampleServiceFault" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableFault">
+        <soap:fault name="ServiceUnavailableFault" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
     -->
@@ -175,8 +176,8 @@
       <wsdl:output>
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="SampleServiceFault">
-        <soap:fault name="SampleServiceFault" use="literal"/>
+      <wsdl:fault name="ServiceUnavailableFault">
+        <soap:fault name="ServiceUnavailableFault" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
 

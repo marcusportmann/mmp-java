@@ -24,15 +24,21 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _SampleServiceFaultInfo_QNAME = new QName("http://ws.sample.mmp.guru", "SampleServiceFaultInfo");
-    private final static QName _SampleServiceFaultInfoMessage_QNAME = new QName("http://ws.sample.mmp.guru", "Message");
-    private final static QName _SampleServiceFaultInfoDetail_QNAME = new QName("http://ws.sample.mmp.guru", "Detail");
+    private final static QName _ServiceUnavailableFaultInfo_QNAME = new QName("http://ws.sample.mmp.guru", "ServiceUnavailableFaultInfo");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: guru.mmp.sample.ws
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link FaultInfo }
+     * 
+     */
+    public FaultInfo createFaultInfo() {
+        return new FaultInfo();
     }
 
     /**
@@ -44,14 +50,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SampleServiceFaultInfo }
-     * 
-     */
-    public SampleServiceFaultInfo createSampleServiceFaultInfo() {
-        return new SampleServiceFaultInfo();
-    }
-
-    /**
      * Create an instance of {@link GetVersionResponse }
      * 
      */
@@ -60,30 +58,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SampleServiceFaultInfo }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link FaultInfo }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.sample.mmp.guru", name = "SampleServiceFaultInfo")
-    public JAXBElement<SampleServiceFaultInfo> createSampleServiceFaultInfo(SampleServiceFaultInfo value) {
-        return new JAXBElement<SampleServiceFaultInfo>(_SampleServiceFaultInfo_QNAME, SampleServiceFaultInfo.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ws.sample.mmp.guru", name = "Message", scope = SampleServiceFaultInfo.class)
-    public JAXBElement<String> createSampleServiceFaultInfoMessage(String value) {
-        return new JAXBElement<String>(_SampleServiceFaultInfoMessage_QNAME, String.class, SampleServiceFaultInfo.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ws.sample.mmp.guru", name = "Detail", scope = SampleServiceFaultInfo.class)
-    public JAXBElement<String> createSampleServiceFaultInfoDetail(String value) {
-        return new JAXBElement<String>(_SampleServiceFaultInfoDetail_QNAME, String.class, SampleServiceFaultInfo.class, value);
+    @XmlElementDecl(namespace = "http://ws.sample.mmp.guru", name = "ServiceUnavailableFaultInfo")
+    public JAXBElement<FaultInfo> createServiceUnavailableFaultInfo(FaultInfo value) {
+        return new JAXBElement<FaultInfo>(_ServiceUnavailableFaultInfo_QNAME, FaultInfo.class, null, value);
     }
 
 }

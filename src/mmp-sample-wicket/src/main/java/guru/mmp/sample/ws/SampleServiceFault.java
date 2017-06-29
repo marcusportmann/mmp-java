@@ -10,7 +10,7 @@ import javax.xml.ws.WebFault;
  * Generated source version: 2.2
  * 
  */
-@WebFault(name = "SampleServiceFaultInfo", targetNamespace = "http://ws.sample.mmp.guru")
+@WebFault(name = "FaultInfo", targetNamespace = "http://ws.sample.mmp.guru")
 public class SampleServiceFault
     extends Exception
 {
@@ -19,14 +19,14 @@ public class SampleServiceFault
      * Java type that goes as soapenv:Fault detail element.
      * 
      */
-    private SampleServiceFaultInfo faultInfo;
+    private FaultInfo faultInfo;
 
     /**
      * 
      * @param faultInfo
      * @param message
      */
-    public SampleServiceFault(String message, SampleServiceFaultInfo faultInfo) {
+    public SampleServiceFault(String message, FaultInfo faultInfo) {
         super(message);
         this.faultInfo = faultInfo;
     }
@@ -37,7 +37,7 @@ public class SampleServiceFault
      * @param cause
      * @param message
      */
-    public SampleServiceFault(String message, SampleServiceFaultInfo faultInfo, Throwable cause) {
+    public SampleServiceFault(String message, FaultInfo faultInfo, Throwable cause) {
         super(message, cause);
         this.faultInfo = faultInfo;
     }
@@ -45,9 +45,9 @@ public class SampleServiceFault
     /**
      * 
      * @return
-     *     returns fault bean: guru.mmp.sample.ws.SampleServiceFaultInfo
+     *     returns fault bean: guru.mmp.sample.ws.FaultInfo
      */
-    public SampleServiceFaultInfo getFaultInfo() {
+    public FaultInfo getFaultInfo() {
         return faultInfo;
     }
 

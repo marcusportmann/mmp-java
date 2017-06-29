@@ -28,14 +28,14 @@ public interface ISampleService {
      * 
      * @return
      *     returns java.lang.String
-     * @throws SampleServiceFault
+     * @throws ServiceUnavailableFault
      */
     @WebMethod(operationName = "GetVersion", action = "http://ws.sample.mmp.guru/ISampleService/GetVersion")
     @WebResult(name = "out", targetNamespace = "http://ws.sample.mmp.guru")
     @RequestWrapper(localName = "GetVersion", targetNamespace = "http://ws.sample.mmp.guru", className = "guru.mmp.sample.ws.GetVersion")
     @ResponseWrapper(localName = "GetVersionResponse", targetNamespace = "http://ws.sample.mmp.guru", className = "guru.mmp.sample.ws.GetVersionResponse")
     public String getVersion()
-        throws SampleServiceFault
+        throws ServiceUnavailableFault
     ;
 
 }
