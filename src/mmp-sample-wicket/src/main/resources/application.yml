@@ -13,7 +13,7 @@ application:
     maxPoolSize: 10
 
   mutualSSL:
-    enabled: false
+    enabled: true
     keyStore:
       type: JKS
       path: classpath:META-INF/localhost.jks

@@ -19,9 +19,11 @@ package guru.mmp.sample.client;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.security.context.ApplicationSecurityContext;
+import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.ws.security.WebServiceClientSecurityHelper;
 import guru.mmp.sample.ws.ISampleService;
 import guru.mmp.sample.ws.SampleService;
+import guru.mmp.sample.ws.ServiceUnavailableFault;
 
 /**
  * The <code>SampleClient</code> class implements the Sample Web Service client.
@@ -58,6 +60,25 @@ public class SampleClient
           SampleService.class, ISampleService.class, SAMPLE_SERVICE_WSDL, SAMPLE_SERVICE_ENDPOINT);
 
       System.out.println("sampleService.getVersion() = " + sampleService.getVersion());
+    }
+    catch (ServiceUnavailableFault e)
+    {
+      System.out.println("[ERROR] " + e.getMessage());
+      e.printStackTrace(System.out);
+
+      System.out.println();
+
+      if (!StringUtil.isNullOrEmpty(e.getFaultInfo().getMessage()))
+      {
+        System.out.println(e.getFaultInfo().getMessage());
+      }
+
+      System.out.println();
+
+      if (!StringUtil.isNullOrEmpty(e.getFaultInfo().getDetail()))
+      {
+        System.out.println(e.getFaultInfo().getDetail());
+      }
     }
     catch (Throwable e)
     {

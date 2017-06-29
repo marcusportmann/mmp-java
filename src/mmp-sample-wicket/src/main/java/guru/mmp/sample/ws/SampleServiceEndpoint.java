@@ -37,6 +37,9 @@ public class SampleServiceEndpoint
   {
     try
     {
+      if (true)
+        throw new RuntimeException("Testing 1.. 2.. 3..");
+
       return sampleService.getVersion();
     }
     catch (Throwable e)
