@@ -141,6 +141,7 @@
     <module>mmp-common-ws</module>
 
     <module>mmp-application</module>
+    <module>mmp-application-cache</module>
     <module>mmp-application-messaging</module>
     <module>mmp-application-reporting</module>
     <module>mmp-application-scheduler</module>
