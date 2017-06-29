@@ -66,17 +66,15 @@ public class SampleClient
       System.out.println("[ERROR] " + e.getMessage());
       e.printStackTrace(System.out);
 
-      System.out.println();
-
       if (!StringUtil.isNullOrEmpty(e.getFaultInfo().getMessage()))
       {
+        System.out.println();
         System.out.println(e.getFaultInfo().getMessage());
       }
 
-      System.out.println();
-
       if (!StringUtil.isNullOrEmpty(e.getFaultInfo().getDetail()))
       {
+        System.out.println();
         System.out.println(e.getFaultInfo().getDetail());
       }
     }
