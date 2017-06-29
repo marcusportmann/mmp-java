@@ -24,6 +24,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _InvalidArgumentFaultInfo_QNAME = new QName("http://ws.sample.mmp.guru", "InvalidArgumentFaultInfo");
     private final static QName _ServiceUnavailableFaultInfo_QNAME = new QName("http://ws.sample.mmp.guru", "ServiceUnavailableFaultInfo");
 
     /**
@@ -55,6 +56,15 @@ public class ObjectFactory {
      */
     public GetVersionResponse createGetVersionResponse() {
         return new GetVersionResponse();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FaultInfo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.sample.mmp.guru", name = "InvalidArgumentFaultInfo")
+    public JAXBElement<FaultInfo> createInvalidArgumentFaultInfo(FaultInfo value) {
+        return new JAXBElement<FaultInfo>(_InvalidArgumentFaultInfo_QNAME, FaultInfo.class, null, value);
     }
 
     /**

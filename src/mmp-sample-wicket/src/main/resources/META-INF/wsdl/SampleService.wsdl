@@ -27,6 +27,9 @@
           <xs:element minOccurs="1" name="Message" nillable="true" type="xs:string" /> 
         </xs:sequence>
       </xs:complexType>
+
+      <xs:element name="InvalidArgumentFaultInfo" nillable="true"
+                  type="interface:FaultInfo"/>
       
       <xs:element name="ServiceUnavailableFaultInfo" nillable="true" 
           type="interface:FaultInfo"/>

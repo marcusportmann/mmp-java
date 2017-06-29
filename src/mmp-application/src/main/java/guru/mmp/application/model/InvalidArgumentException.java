@@ -25,28 +25,39 @@ package guru.mmp.application.model;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class InvalidArgumentException
-  extends Exception
+public class InvalidArgumentException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The name of the invalid argument.
+   */
+  private String name;
+
+  /**
    * Constructs a new <code>InvalidArgumentException</code> with <code>null</code> as its
    * message.
+   *
+   * @param name the name of the invalid argument
    */
-  public InvalidArgumentException()
+  public InvalidArgumentException(String name)
   {
     super();
+
+    this.name = name;
   }
 
   /**
    * Constructs a new <code>InvalidArgumentException</code> with the specified message.
    *
+   * @param name    the name of the invalid argument
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public InvalidArgumentException(String message)
+  public InvalidArgumentException(String name, String message)
   {
     super(message);
+
+    this.name = name;
   }
 
   /**
@@ -54,23 +65,39 @@ public class InvalidArgumentException
    * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
    * class and message of cause).
    *
+   * @param name  the name of the invalid argument
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
    *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public InvalidArgumentException(Throwable cause)
+  public InvalidArgumentException(String name, Throwable cause)
   {
     super(cause);
+
+    this.name = name;
   }
 
   /**
    * Constructs a new <code>InvalidArgumentException</code> with the specified message and cause.
    *
+   * @param name    the name of the invalid argument
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public InvalidArgumentException(String message, Throwable cause)
+  public InvalidArgumentException(String name, String message, Throwable cause)
   {
     super(message, cause);
+
+    this.name = name;
+  }
+
+  /**
+   * Returns the name of the invalid argument.
+   *
+   * @return the name of the invalid argument
+   */
+  public String getName()
+  {
+    return name;
   }
 }

@@ -28,6 +28,9 @@
         </xs:sequence>
       </xs:complexType>
 
+      <xs:element name="InvalidArgumentFaultInfo" nillable="true"
+                  type="interface:FaultInfo"/>
+
       <xs:element name="ServiceUnavailableFaultInfo" nillable="true"
                   type="interface:FaultInfo"/>
       
