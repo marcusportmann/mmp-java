@@ -30,7 +30,7 @@
 
       <xs:element name="InvalidArgumentFaultInfo" nillable="true"
                   type="interface:FaultInfo"/>
-      
+
       <xs:element name="ServiceUnavailableFaultInfo" nillable="true" 
           type="interface:FaultInfo"/>
 
@@ -104,6 +104,10 @@
   <!-- ========================================================================================= -->
   <!-- Service(s) Fault Messages                                                                 -->
   <!-- ========================================================================================= -->
+  <wsdl:message name="InvalidArgumentFault">
+    <wsdl:part element="interface:InvalidArgumentFaultInfo" name="fault"/>
+  </wsdl:message>
+
   <wsdl:message name="ServiceUnavailableFault">
     <wsdl:part element="interface:ServiceUnavailableFaultInfo" name="fault"/>
   </wsdl:message>

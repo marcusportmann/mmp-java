@@ -24,12 +24,12 @@ application:
       path: classpath:META-INF/localhost.jks
       password: Password1
 
-  cacheCluster:
-    enabled: false
-    port: 15000
-    name: test-cluster
-    password:
-    members:
+  cacheManager:
+    cluster:
+      port: 15000
+      name: test-cluster
+      password: YROTLEYO6Z05WAXbCuK4
+      members:
     caches:
       - cache:
         name: test-cache

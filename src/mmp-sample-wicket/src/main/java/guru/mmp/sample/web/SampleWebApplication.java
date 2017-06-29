@@ -18,6 +18,8 @@ package guru.mmp.sample.web;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.cache.CacheManager;
+import guru.mmp.application.cache.CacheManagerException;
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -57,8 +59,7 @@ import java.util.UUID;
  */
 @Component("webApplication")
 @ComponentScan(basePackages = { "guru.mmp.sample" }, lazyInit = true)
-public class SampleWebApplication
-  extends TemplateWebApplication
+public class SampleWebApplication extends TemplateWebApplication
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleWebApplication.class);
@@ -69,7 +70,7 @@ public class SampleWebApplication
 
   /* Sample Configuration */
   @Inject
-  private SampleConfiguration sampleConfiguration;
+  private SampleConfiguration configuration;
 
   /**
    * Constructs a new <code>SampleWebApplication</code>.
@@ -126,6 +127,18 @@ public class SampleWebApplication
   public Class<? extends Page> getSecureHomePage()
   {
     return DashboardPage.class;
+  }
+
+  /**
+   * Returns the in-memory distributed cache manager.
+   *
+   * @return the in-memory distributed cache manager
+   */
+  @Bean
+  protected CacheManager cacheManager()
+    throws CacheManagerException
+  {
+    return new CacheManager(configuration.getCacheManager());
   }
 
   /**

@@ -19,6 +19,7 @@ package guru.mmp.sample;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.ApplicationConfiguration;
+import guru.mmp.application.cache.CacheManagerConfiguration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -30,4 +31,30 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Primary
-public class SampleConfiguration extends ApplicationConfiguration {}
+public class SampleConfiguration extends ApplicationConfiguration
+{
+  /**
+   * The in-memory distributed cache manager configuration.
+   */
+  private CacheManagerConfiguration cacheManager;
+
+  /**
+   * Returns the in-memory distributed cache manager configuration.
+   *
+   * @return in-memory distributed cache manager configuration
+   */
+  public CacheManagerConfiguration getCacheManager()
+  {
+    return cacheManager;
+  }
+
+  /**
+   * Set the in-memory distributed cache manager configuration.
+   *
+   * @param cacheCluster the in-memory distributed cache manager configuration
+   */
+  public void setCacheManager(CacheManagerConfiguration cacheCluster)
+  {
+    this.cacheManager = cacheCluster;
+  }
+}
