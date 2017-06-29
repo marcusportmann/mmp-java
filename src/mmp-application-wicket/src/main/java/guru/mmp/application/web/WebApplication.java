@@ -129,6 +129,11 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   Map<String, Map> caches = new ConcurrentHashMap<>();
 
   /**
+   * The paths for the unsecured web services.
+   */
+  private List<String> unsecuredWebServices = new ArrayList<>();
+
+  /**
    * The Spring application context.
    */
   @Inject
@@ -182,9 +187,23 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
               {
                 if (configuration.isMutualSSLEnabled())
                 {
-                  String requestPath = httpServerExchange.getRequestPath().toLowerCase();
+                  String requestPath = httpServerExchange.getRequestPath();
 
-                  if (requestPath.startsWith("/api/") || requestPath.startsWith("/service/"))
+                  // Check if this is an unsecured web service
+                  for (String unsecuredWebService : unsecuredWebServices)
+                  {
+                    if (requestPath.startsWith(unsecuredWebService))
+                    {
+                      wrappedHttpHandler.handleRequest(httpServerExchange);
+
+                      return;
+                    }
+                  }
+
+                  if ((configuration.getMutualSSL().getSecureAPIs() && requestPath.startsWith(
+                      "/api/"))
+                      || (configuration.getMutualSSL().getSecureWebServices()
+                          && requestPath.startsWith("/service/")))
                   {
                     SSLSessionInfo sslSessionInfo = httpServerExchange.getConnection()
                         .getSslSessionInfo();
@@ -194,14 +213,14 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
                       if (requestPath.startsWith("/api/"))
                       {
                         logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
-                            + ") is attempting to access the secure API ("
-                            + httpServerExchange.getRequestPath() + ") insecurely");
+                            + ") is attempting to access the secure API (" + requestPath
+                            + ") insecurely");
                       }
                       else if (requestPath.startsWith("/service/"))
                       {
                         logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
-                            + ") is attempting to access the secure web service ("
-                            + httpServerExchange.getRequestPath() + ") insecurely");
+                            + ") is attempting to access the secure web service (" + requestPath
+                            + ") insecurely");
                       }
 
                       httpServerExchange.setStatusCode(403);
@@ -223,8 +242,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
                             logger.debug("The remote client ("
                                 + httpServerExchange.getSourceAddress() + ") with certificate ("
                                 + certificates[0].getSubjectDN()
-                                + ") is attempting to access the secure API ("
-                                + httpServerExchange.getRequestPath() + ")");
+                                + ") is attempting to access the secure API (" + requestPath + ")");
                           }
                           else if (requestPath.startsWith("/service/"))
                           {
@@ -232,7 +250,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
                                 + httpServerExchange.getSourceAddress() + ") with certificate ("
                                 + certificates[0].getSubjectDN()
                                 + ") is attempting to access the secure web service ("
-                                + httpServerExchange.getRequestPath() + ")");
+                                + requestPath + ")");
                           }
                         }
                       }
@@ -621,7 +639,28 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    */
   protected Endpoint createWebServiceEndpoint(String name, Object implementation, String pathToWsdl)
   {
-    return createWebServiceEndpoint(name, implementation, pathToWsdl, null);
+    return createWebServiceEndpoint(name, implementation, pathToWsdl, null, true);
+  }
+
+  /**
+   * Create the web service endpoint.
+   * <p/>
+   * Requires the Apache CXF framework to have been initialised by adding the
+   * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b> and <b>org.apache.cxf:cxf-rt-transports-http</b>
+   * Maven dependencies to the project.
+   *
+   * @param name           the web service name
+   * @param implementation the web service implementation
+   * @param pathToWsdl     the path to the web service WSDL
+   * @param isSecured      <code>true</code> if the web service must be secured using mutual SSL or
+   *                       <code>false</code> if the web service can be invoked insecurely
+   *
+   * @return the web service endpoint
+   */
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation,
+      String pathToWsdl, boolean isSecured)
+  {
+    return createWebServiceEndpoint(name, implementation, pathToWsdl, null, isSecured);
   }
 
   /**
@@ -640,6 +679,28 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    */
   protected Endpoint createWebServiceEndpoint(String name, Object implementation,
       String pathToWsdl, List<Handler> handlers)
+  {
+    return createWebServiceEndpoint(name, implementation, pathToWsdl, handlers, true);
+  }
+
+  /**
+   * Create the web service endpoint.
+   * <p/>
+   * Requires the Apache CXF framework to have been initialised by adding the
+   * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b> and <b>org.apache.cxf:cxf-rt-transports-http</b>
+   * Maven dependencies to the project.
+   *
+   * @param name           the web service name
+   * @param implementation the web service implementation
+   * @param pathToWsdl     the path to the web service WSDL
+   * @param handlers       the JAX-WS web service handlers for the web service
+   * @param isSecured      <code>true</code> if the web service must be secured using mutual SSL or
+   *                       <code>false</code> if the web service can be invoked insecurely
+   *
+   * @return the web service endpoint
+   */
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation,
+      String pathToWsdl, List<Handler> handlers, boolean isSecured)
   {
     try
     {
@@ -675,6 +736,11 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
       }
 
       applicationContext.getAutowireCapableBeanFactory().autowireBean(implementation);
+
+      if (!isSecured)
+      {
+        unsecuredWebServices.add("/service/" + name);
+      }
 
       return endpoint;
     }

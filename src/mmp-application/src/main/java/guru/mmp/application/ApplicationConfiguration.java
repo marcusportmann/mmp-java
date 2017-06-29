@@ -785,6 +785,16 @@ public class ApplicationConfiguration
   public static class MutualSSLConfiguration
   {
     /**
+     * Should APIs be secured using mutual SSL.
+     */
+    private boolean secureAPIs = true;
+
+    /**
+     * Should web services be secured using mutual SSL.
+     */
+    private boolean secureWebServices = true;
+
+    /**
      * The configuration for the mutual SSL key store for the application.
      */
     private KeyStoreConfiguration keyStore;
@@ -821,6 +831,28 @@ public class ApplicationConfiguration
     }
 
     /**
+     * Returns whether APIs should be secured using mutual SSL.
+     *
+     * @return <code>true</code> if APIs should be secured using mutual SSL or <code>false</code>
+     *         otherwise
+     */
+    public boolean getSecureAPIs()
+    {
+      return secureAPIs;
+    }
+
+    /**
+     * Returns whether web services should be secured using mutual SSL.
+     *
+     * @return <code>true</code> if web services should be secured using mutual SSL or
+     *         <code>false</code> otherwise
+     */
+    public boolean getSecureWebServices()
+    {
+      return secureWebServices;
+    }
+
+    /**
      * Returns the configuration for the mutual SSL trust store for the application.
      *
      * @return the configuration for the mutual SSL trust store for the application
@@ -849,6 +881,29 @@ public class ApplicationConfiguration
     public void setKeyStore(KeyStoreConfiguration keyStore)
     {
       this.keyStore = keyStore;
+    }
+
+    /**
+     * Set whether APIs should be secured using mutual SSL.
+     *
+     * @param secureAPIs <code>true</code> if APIs should be secured using mutual SSL or
+     *                   <code>false</code> otherwise
+     */
+    public void setSecureAPIs(boolean secureAPIs)
+    {
+      this.secureAPIs = secureAPIs;
+    }
+
+    /**
+     * Set whether web services should be secured using mutual SSL.
+     *
+     * @param secureWebServices <code>true</code> if web services should be secured using mutual
+     *                          SSL or <code>false</code> otherwise
+     */
+
+    public void setSecureWebServices(boolean secureWebServices)
+    {
+      this.secureWebServices = secureWebServices;
     }
 
     /**
