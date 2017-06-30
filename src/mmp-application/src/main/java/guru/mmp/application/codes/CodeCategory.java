@@ -186,7 +186,7 @@ public class CodeCategory
    * Returns the time in seconds after which the cached code data for the remote code category will
    * expire.
    *
-   * @return the the time in seconds after which the cached code data for the remote code category
+   * @return the time in seconds after which the cached code data for the remote code category
    *         will expire
    */
   public Integer getCacheExpiry()

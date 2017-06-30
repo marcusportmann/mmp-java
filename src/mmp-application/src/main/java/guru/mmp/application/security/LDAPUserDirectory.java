@@ -427,7 +427,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to initialise the the user directory (%s): %s", userDirectoryId, e.getMessage()),
+          "Failed to initialise the user directory (%s): %s", userDirectoryId, e.getMessage()),
           e);
     }
   }

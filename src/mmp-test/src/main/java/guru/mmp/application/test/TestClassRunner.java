@@ -32,7 +32,7 @@ import java.util.Map;
 
 /**
  * The <code>TestClassRunner</code> class implements the JUnit runner that provides support for
- * JUnit test classes that test the capabilities provided by the the <b>mmp-java (Open Source Java
+ * JUnit test classes that test the capabilities provided by the <b>mmp-java (Open Source Java
  * and JEE Development Framework)</b>.
  *
  * @author Marcus Portmann

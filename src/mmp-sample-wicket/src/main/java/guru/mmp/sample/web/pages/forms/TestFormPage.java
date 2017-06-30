@@ -167,7 +167,7 @@ public class TestFormPage extends TemplateWebPage
   /**
    * Returns the favourite pet options e.g. Dog, Cat, etc.
    *
-   * @return the the favourite pet options e.g. Dog, Cat, etc
+   * @return the favourite pet options e.g. Dog, Cat, etc
    */
   public static List<String> getFavouritePetOptions()
   {

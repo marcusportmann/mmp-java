@@ -22,10 +22,7 @@ import guru.mmp.common.security.context.ApplicationSecurityContext;
 import guru.mmp.common.util.MutualSSLSocketFactory;
 import guru.mmp.common.util.NoTrustSSLSocketFactory;
 
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.*;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
@@ -34,6 +31,7 @@ import javax.xml.ws.handler.HandlerResolver;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
@@ -73,12 +71,6 @@ public class WebServiceClientSecurityHelper
   private static Method apacheCxfTlsParametersBaseSetKeyManagersMethod;
   private static Method apacheCxfTlsParametersBaseSetTrustManagersMethod;
   private static Class apacheCxfClientClass;
-
-  /**
-   * The socket factory used to connect to a web service securely using Mutual SSL
-   * authentication that has been initialised using the <code>ApplicationSecurityContext</code>.
-   */
-  private static MutualSSLSocketFactory mutualSSLSocketFactory;
 
   /**
    * The socket factory used to connect to a web service using SSL without validating the server
@@ -221,6 +213,35 @@ public class WebServiceClientSecurityHelper
       String wsdlResourcePath, String serviceEndpoint)
     throws WebServiceClientSecurityException
   {
+    ApplicationSecurityContext applicationSecurityContext = ApplicationSecurityContext.getContext();
+
+    return getMutualSSLServiceProxy(serviceClass, serviceInterface, wsdlResourcePath,
+        serviceEndpoint, applicationSecurityContext.getKeyStore(),
+        applicationSecurityContext.getKeyStorePassword(), applicationSecurityContext.getKeyStore(),
+        false);
+  }
+
+  /**
+   * Returns the secure web service proxy for the web service that has been secured with
+   * transport level security using SSL client authentication.
+   *
+   * @param serviceClass     the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint  the URL giving the web service endpoint
+   * @param <T>              the Java interface for the web service
+   *
+   * @return the secure web service proxy for the web service that has been secured with
+   *         transport level security using SSL client authentication
+   *
+   * @throws WebServiceClientSecurityException
+   */
+  @SuppressWarnings("unchecked")
+  public static <T> T getMutualSSLServiceProxy(Class<?> serviceClass, Class<T> serviceInterface,
+      String wsdlResourcePath, String serviceEndpoint, KeyStore keyStore, String keyStorePassword,
+      KeyStore trustStore, boolean disableServerTrustChecking)
+    throws WebServiceClientSecurityException
+  {
     try
     {
       // First attempt to retrieve the web service client from the cache
@@ -250,9 +271,11 @@ public class WebServiceClientSecurityHelper
        * NOTE: We use two different properties here because different JDKs seem to use the
        *       different property values.
        */
-      requestContext.put(JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY, getMutualSSLSocketFactory());
-      requestContext.put(JAX_WS_INTERNAL_PROPERTIES_SSL_SOCKET_FACTORY,
-          getMutualSSLSocketFactory());
+      SSLSocketFactory mutualSSLSocketFactory = new MutualSSLSocketFactory(keyStore,
+          keyStorePassword, trustStore, disableServerTrustChecking);
+
+      requestContext.put(JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY, mutualSSLSocketFactory);
+      requestContext.put(JAX_WS_INTERNAL_PROPERTIES_SSL_SOCKET_FACTORY, mutualSSLSocketFactory);
 
       bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
           serviceEndpoint);
@@ -356,8 +379,7 @@ public class WebServiceClientSecurityHelper
             KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
                 KeyManagerFactory.getDefaultAlgorithm());
 
-            keyManagerFactory.init(ApplicationSecurityContext.getContext().getKeyStore(),
-                ApplicationSecurityContext.getContext().getKeyStorePassword().toCharArray());
+            keyManagerFactory.init(keyStore, keyStorePassword.toCharArray());
 
             /*
              * Invoke the setKeyManagers method on the
@@ -366,36 +388,54 @@ public class WebServiceClientSecurityHelper
             apacheCxfTlsParametersBaseSetKeyManagersMethod.invoke(tlsClientParametersObject,
                 new Object[] { keyManagerFactory.getKeyManagers() });
 
-            // Create a trust manager that does not validate certificate chains
-            TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager()
+            if (disableServerTrustChecking)
             {
-              public void checkClientTrusted(X509Certificate[] chain, String authType)
-                throws CertificateException
+              // Create a trust manager that does not validate certificate chains
+              TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager()
               {
-                // Skip client verification step
-              }
+                public void checkClientTrusted(X509Certificate[] chain, String authType)
+                  throws CertificateException
+                {
+                  // Skip client verification step
+                }
 
-              public void checkServerTrusted(X509Certificate[] chain, String authType)
-                throws CertificateException
-              {
-                /*
-                 * TODO: Verify the server certificate using the keystore associated with the
-                 *       application security context.
-                 */
-              }
+                public void checkServerTrusted(X509Certificate[] chain, String authType)
+                  throws CertificateException
+                {
+                  /*
+                   * TODO: Verify the server certificate using the keystore associated with the
+                   *       application security context.
+                   */
+                }
 
-              public X509Certificate[] getAcceptedIssuers()
-              {
-                return new X509Certificate[0];
-              }
-            } };
+                public X509Certificate[] getAcceptedIssuers()
+                {
+                  return new X509Certificate[0];
+                }
+              } };
 
-            /*
-             * Invoke the setTrustManagers method on the
-             * org.apache.cxf.configuration.jsse.TLSParameterBase class
-             */
-            apacheCxfTlsParametersBaseSetTrustManagersMethod.invoke(tlsClientParametersObject,
-                new Object[] { trustAllCerts });
+              /*
+               * Invoke the setTrustManagers method on the
+               * org.apache.cxf.configuration.jsse.TLSParameterBase class
+               */
+              apacheCxfTlsParametersBaseSetTrustManagersMethod.invoke(tlsClientParametersObject,
+                  new Object[] { trustAllCerts });
+            }
+            else
+            {
+              TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                  TrustManagerFactory.getDefaultAlgorithm());
+
+              trustManagerFactory.init(trustStore);
+
+              /*
+               * Invoke the setTrustManagers method on the
+               * org.apache.cxf.configuration.jsse.TLSParameterBase class
+               */
+              apacheCxfTlsParametersBaseSetTrustManagersMethod.invoke(tlsClientParametersObject,
+                  new Object[] { trustManagerFactory.getTrustManagers() });
+
+            }
 
             // Invoke the setTlsClientParameters on the org.apache.cxf.transport.http.HTTPConduit
             apacheCxfHttpConduitSetTlsClientParametersMethod.invoke(httpConduitObject,
@@ -877,43 +917,43 @@ public class WebServiceClientSecurityHelper
     }
   }
 
-  /**
-   * Returns the socket factory used to connect to a web service securely using Mutual SSL
-   * authentication that has been initialised using the <code>ApplicationSecurityContext</code>.
-   *
-   * @return the the socket factory used to connect to a web service securely using Mutual SSL
-   *         authentication that has been initialised using the
-   *         <code>ApplicationSecurityContext</code>
-   */
-  private static SSLSocketFactory getMutualSSLSocketFactory()
-  {
-    try
-    {
-      if (mutualSSLSocketFactory == null)
-      {
-        if (!ApplicationSecurityContext.getContext().isInitialised())
-        {
-          throw new RuntimeException("The ApplicationSecurityContext is not initialised");
-        }
-
-        mutualSSLSocketFactory = new MutualSSLSocketFactory(ApplicationSecurityContext.getContext()
-            .getKeyStore(), ApplicationSecurityContext.getContext().getKeyStorePassword(),
-            ApplicationSecurityContext.getContext().getKeyStore(), false);
-      }
-
-      return mutualSSLSocketFactory;
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to initialise the MutualSSL socket factory", e);
-    }
-  }
+///**
+// * Returns the socket factory used to connect to a web service securely using Mutual SSL
+// * authentication that has been initialised using the <code>ApplicationSecurityContext</code>.
+// *
+// * @return the socket factory used to connect to a web service securely using Mutual SSL
+// *         authentication that has been initialised using the
+// *         <code>ApplicationSecurityContext</code>
+// */
+//private static SSLSocketFactory getMutualSSLSocketFactory()
+//{
+//  try
+//  {
+//    if (mutualSSLSocketFactory == null)
+//    {
+//      if (!ApplicationSecurityContext.getContext().isInitialised())
+//      {
+//        throw new RuntimeException("The ApplicationSecurityContext is not initialised");
+//      }
+//
+//      mutualSSLSocketFactory = new MutualSSLSocketFactory(ApplicationSecurityContext.getContext()
+//          .getKeyStore(), ApplicationSecurityContext.getContext().getKeyStorePassword(),
+//          ApplicationSecurityContext.getContext().getKeyStore(), false);
+//    }
+//
+//    return mutualSSLSocketFactory;
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new RuntimeException("Failed to initialise the MutualSSL socket factory", e);
+//  }
+//}
 
   /**
    * Returns the socket factory used to connect to a web service using SSL without validating the
    * server certificate.
    *
-   * @return the the socket factory used to connect to a web service using SSL without validating
+   * @return the socket factory used to connect to a web service using SSL without validating
    *         the server certificate
    */
   private static SSLSocketFactory getNoTrustSSLSocketFactory()

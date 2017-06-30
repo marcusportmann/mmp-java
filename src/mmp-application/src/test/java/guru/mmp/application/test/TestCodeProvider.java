@@ -49,7 +49,7 @@ public class TestCodeProvider
    *
    * @param codeCategory         the code provider code category
    * @param lastRetrieved        the date and time the code category was last retrieved
-   * @param returnCodesIfCurrent should the the <b>Standard</b> codes and/or <b>Custom</b> code
+   * @param returnCodesIfCurrent should the <b>Standard</b> codes and/or <b>Custom</b> code
    *                             data be retrieved even if the code category has not been
    *                             updated after the date and time specified by the
    *                             <code>lastRetrieved</code> parameter
@@ -71,7 +71,7 @@ public class TestCodeProvider
    * @param codeCategory         the code provider code category
    * @param parameters           the parameters
    * @param lastRetrieved        the date and time the code category was last retrieved
-   * @param returnCodesIfCurrent should the the <b>Standard</b> codes and/or <b>Custom</b> code
+   * @param returnCodesIfCurrent should the <b>Standard</b> codes and/or <b>Custom</b> code
    *                             data be retrieved even if the code category has not been
    *                             updated after the date and time specified by the
    *                             <code>lastRetrieved</code> parameter

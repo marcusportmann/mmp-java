@@ -288,9 +288,9 @@ public class User
   }
 
   /**
-   * Set the the phone number for the user.
+   * Set the phone number for the user.
    *
-   * @param phoneNumber the the phone number for the user
+   * @param phoneNumber the phone number for the user
    */
   public void setPhoneNumber(String phoneNumber)
   {
