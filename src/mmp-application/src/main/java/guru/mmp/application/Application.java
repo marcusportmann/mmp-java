@@ -20,6 +20,7 @@ package guru.mmp.application;
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.application.web.WebApplicationException;
+import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.StringUtil;
 import io.undertow.Undertow;
@@ -40,8 +41,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -70,14 +69,12 @@ import javax.sql.DataSource;
 import javax.sql.XADataSource;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.handler.Handler;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.SecureRandom;
-import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -215,7 +212,7 @@ public abstract class Application
 
                   try
                   {
-                    keyStore = loadKeyStore(keyStoreConfiguration.getPath(),
+                    keyStore = CryptoUtils.loadKeyStore(keyStoreConfiguration.getPath(),
                         keyStoreConfiguration.getAlias(), keyStoreConfiguration.getPassword(),
                         keyStoreConfiguration.getType());
                   }
@@ -249,7 +246,7 @@ public abstract class Application
 
                     try
                     {
-                      trustStore = loadTrustStore(trustStoreConfiguration.getPath(),
+                      trustStore = CryptoUtils.loadTrustStore(trustStoreConfiguration.getPath(),
                           trustStoreConfiguration.getPassword(), trustStoreConfiguration.getType());
                     }
                     catch (Throwable e)
@@ -772,156 +769,5 @@ public abstract class Application
     packagesToScan.add("guru.mmp.application");
 
     return packagesToScan;
-  }
-
-  /**
-   * Loads a key store.
-   *
-   * @param path     the path to the key store
-   * @param alias    the alias for the key pair in the key store
-   * @param password the key store password
-   * @param type     the type of key store e.g. JKS, PKCS12, etc
-   *
-   * @return the key store that was loaded
-   *
-   * @throws GeneralSecurityException
-   */
-  private KeyStore loadKeyStore(String path, String alias, String password, String type)
-    throws GeneralSecurityException
-  {
-    KeyStore ks;
-
-    logger.info("Loading the application key (" + alias + ") from the key store (" + path + ")");
-
-    InputStream input = null;
-
-    try
-    {
-      PathMatchingResourcePatternResolver resourceLoader =
-          new PathMatchingResourcePatternResolver();
-
-      Resource keyStoreResource = resourceLoader.getResource(path);
-
-      if (!keyStoreResource.exists())
-      {
-        throw new GeneralSecurityException("The application key store (" + path
-            + ") could not be found");
-      }
-
-      ks = KeyStore.getInstance(type);
-
-      input = keyStoreResource.getInputStream();
-
-      ks.load(input,
-          ((password == null) || (password.length() == 0))
-          ? new char[0]
-          : password.toCharArray());
-
-      // Attempt to retrieve the private key for the application from the key store
-      privateKey = ks.getKey(alias, password.toCharArray());
-
-      if (privateKey == null)
-      {
-        throw new GeneralSecurityException("A private key for the application with alias (" + alias
-            + ") could not be found in the key store (" + path + ")");
-      }
-
-      // Attempt to retrieve the certificate for the application from the key store
-      Certificate tmpCertificate = ks.getCertificate(alias);
-
-      if (tmpCertificate == null)
-      {
-        throw new GeneralSecurityException("A certificate for the application with alias (" + alias
-            + ") could not be found in the key store (" + path + ")");
-      }
-
-      if (!(tmpCertificate instanceof X509Certificate))
-      {
-        throw new GeneralSecurityException("The certificate for the application with alias ("
-            + alias + ") is not an X509 certificate");
-      }
-
-      certificate = (X509Certificate) tmpCertificate;
-
-      return ks;
-    }
-    catch (Throwable e)
-    {
-      throw new GeneralSecurityException("Failed to load and query the application key store ("
-          + path + ")", e);
-    }
-    finally
-    {
-      try
-      {
-        if (input != null)
-        {
-          input.close();
-        }
-      }
-      catch (Throwable ignored) {}
-    }
-  }
-
-  /**
-   * Loads the trust store.
-   *
-   * @param path     the path to the trust store
-   * @param password the trust store password
-   * @param type     the type of trust store e.g. JKS, PKCS12, etc
-   *
-   * @return the trust store that was loaded
-   *
-   * @throws GeneralSecurityException
-   */
-  private KeyStore loadTrustStore(String path, String password, String type)
-    throws GeneralSecurityException
-  {
-    KeyStore ks;
-
-    logger.info("Loading the trust store (" + path + ")");
-
-    InputStream input = null;
-
-    try
-    {
-      PathMatchingResourcePatternResolver resourceLoader =
-          new PathMatchingResourcePatternResolver();
-
-      Resource trustStoreResource = resourceLoader.getResource(path);
-
-      if (!trustStoreResource.exists())
-      {
-        throw new GeneralSecurityException("The application trust store (" + path
-            + ") could not be found");
-      }
-
-      ks = KeyStore.getInstance(type);
-
-      input = trustStoreResource.getInputStream();
-
-      ks.load(input,
-          ((password == null) || (password.length() == 0))
-          ? new char[0]
-          : password.toCharArray());
-
-      return ks;
-    }
-    catch (Throwable e)
-    {
-      throw new GeneralSecurityException("Failed to load and query the application trust store ("
-          + path + ")", e);
-    }
-    finally
-    {
-      try
-      {
-        if (input != null)
-        {
-          input.close();
-        }
-      }
-      catch (Throwable ignored) {}
-    }
   }
 }

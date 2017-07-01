@@ -32,8 +32,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "out"
 })
-@XmlRootElement(name = "GetVersionResponse")
-public class GetVersionResponse
+@XmlRootElement(name = "GetVersionOutput")
+public class GetVersionOutput
     implements Serializable
 {
 

@@ -33,7 +33,7 @@
 
       <xs:element name="ServiceUnavailableFaultInfo" nillable="true"
                   type="interface:FaultInfo"/>
-      
+
       <!-- ===================================================================================== -->
       <!-- Service(s) Enumerations                                                               -->
       <!-- ===================================================================================== -->
@@ -75,7 +75,7 @@
         </xs:complexType>
       </xs:element>
 
-      <xs:element name="GetSampleDataResponse">
+      <xs:element name="GetSampleDataOutput">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="SampleData" maxOccurs="unbounded" type="interface:SampleData" />
@@ -89,7 +89,7 @@
           <xs:sequence/>
         </xs:complexType>
       </xs:element>
-      <xs:element name="GetVersionResponse">
+      <xs:element name="GetVersionOutput">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="out" type="xs:string" />
@@ -120,7 +120,7 @@
     <wsdl:part name="parameters" element="interface:GetSampleData" />
   </wsdl:message>
   <wsdl:message name="GetSampleDataOutputMessage">
-    <wsdl:part name="parameters" element="interface:GetSampleDataResponse" />
+    <wsdl:part name="parameters" element="interface:GetSampleDataOutput" />
   </wsdl:message>
   -->
 
@@ -128,7 +128,7 @@
     <wsdl:part name="parameters" element="interface:GetVersion" />
   </wsdl:message>
   <wsdl:message name="GetVersionOutputMessage">
-    <wsdl:part name="parameters" element="interface:GetVersionResponse" />
+    <wsdl:part name="parameters" element="interface:GetVersionOutput" />
   </wsdl:message>
 
   <!-- ========================================================================================= -->

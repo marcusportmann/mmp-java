@@ -51,11 +51,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersionResponse }
+     * Create an instance of {@link GetVersionOutput }
      * 
      */
-    public GetVersionResponse createGetVersionResponse() {
-        return new GetVersionResponse();
+    public GetVersionOutput createGetVersionOutput() {
+        return new GetVersionOutput();
     }
 
     /**

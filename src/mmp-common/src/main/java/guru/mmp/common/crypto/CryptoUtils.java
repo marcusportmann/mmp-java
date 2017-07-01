@@ -16,12 +16,18 @@
 
 package guru.mmp.common.crypto;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+
+import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.SecureRandom;
+import java.security.*;
+import java.security.cert.X509Certificate;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CryptUtils</code> class provides cryptography related utility functions.
@@ -77,6 +83,202 @@ public class CryptoUtils
     String randomPassword = new BigInteger(130, secureRandom).toString(32);
 
     return CryptoUtils.passwordToAESKey(randomPassword, UUID.randomUUID().toString());
+  }
+
+  /**
+   * Load a key store.
+   *
+   * @param path     the path to the key store
+   * @param password the key store password
+   * @param type     the type of key store e.g. JKS, PKCS12, etc
+   *
+   * @return the key store that was loaded
+   *
+   * @throws GeneralSecurityException
+   */
+  public static KeyStore loadKeyStore(String path, String password, String type)
+    throws GeneralSecurityException
+  {
+    InputStream input = null;
+
+    try
+    {
+      PathMatchingResourcePatternResolver resourceLoader =
+          new PathMatchingResourcePatternResolver();
+
+      Resource keyStoreResource = resourceLoader.getResource(path);
+
+      if (!keyStoreResource.exists())
+      {
+        throw new GeneralSecurityException("The key store (" + path + ") could not be found");
+      }
+
+      KeyStore ks = KeyStore.getInstance(type);
+
+      input = keyStoreResource.getInputStream();
+
+      ks.load(input,
+          ((password == null) || (password.length() == 0))
+          ? new char[0]
+          : password.toCharArray());
+
+      return ks;
+    }
+    catch (Throwable e)
+    {
+      throw new GeneralSecurityException("Failed to load the key store (" + path + ")", e);
+    }
+    finally
+    {
+      try
+      {
+        if (input != null)
+        {
+          input.close();
+        }
+      }
+      catch (Throwable ignored) {}
+    }
+  }
+
+  /**
+   * Load a key store and query it to confirm a key pair with the specified alias is present.
+   *
+   * @param path     the path to the key store
+   * @param alias    the alias for the key pair in the key store that should be retrieved
+   * @param password the key store password
+   * @param type     the type of key store e.g. JKS, PKCS12, etc
+   *
+   * @return the key store that was loaded
+   *
+   * @throws GeneralSecurityException
+   */
+  public static KeyStore loadKeyStore(String path, String alias, String password, String type)
+    throws GeneralSecurityException
+  {
+    InputStream input = null;
+
+    try
+    {
+      PathMatchingResourcePatternResolver resourceLoader =
+          new PathMatchingResourcePatternResolver();
+
+      Resource keyStoreResource = resourceLoader.getResource(path);
+
+      if (!keyStoreResource.exists())
+      {
+        throw new GeneralSecurityException("The key store (" + path + ") could not be found");
+      }
+
+      KeyStore ks = KeyStore.getInstance(type);
+
+      input = keyStoreResource.getInputStream();
+
+      ks.load(input,
+          ((password == null) || (password.length() == 0))
+          ? new char[0]
+          : password.toCharArray());
+
+      // Attempt to retrieve the private key from the key store
+      Key privateKey = ks.getKey(alias, password.toCharArray());
+
+      if (privateKey == null)
+      {
+        throw new GeneralSecurityException("A private key with alias (" + alias
+            + ") could not be found in the key store (" + path + ")");
+      }
+
+      // Attempt to retrieve the certificate from the key store
+      java.security.cert.Certificate certificate = ks.getCertificate(alias);
+
+      if (certificate == null)
+      {
+        throw new GeneralSecurityException("A certificate with alias (" + alias
+            + ") could not be found in the key store (" + path + ")");
+      }
+
+      if (!(certificate instanceof X509Certificate))
+      {
+        throw new GeneralSecurityException("The certificate with alias (" + alias
+            + ") is not an X509 certificate");
+      }
+
+      return ks;
+    }
+    catch (Throwable e)
+    {
+      throw new GeneralSecurityException("Failed to load and query the key store (" + path + ")",
+          e);
+    }
+    finally
+    {
+      try
+      {
+        if (input != null)
+        {
+          input.close();
+        }
+      }
+      catch (Throwable ignored) {}
+    }
+  }
+
+  /**
+   * Load the trust store.
+   *
+   * @param path     the path to the trust store
+   * @param password the trust store password
+   * @param type     the type of trust store e.g. JKS, PKCS12, etc
+   *
+   * @return the trust store that was loaded
+   *
+   * @throws GeneralSecurityException
+   */
+  public static KeyStore loadTrustStore(String path, String password, String type)
+    throws GeneralSecurityException
+  {
+    KeyStore ks;
+
+    InputStream input = null;
+
+    try
+    {
+      PathMatchingResourcePatternResolver resourceLoader =
+          new PathMatchingResourcePatternResolver();
+
+      Resource trustStoreResource = resourceLoader.getResource(path);
+
+      if (!trustStoreResource.exists())
+      {
+        throw new GeneralSecurityException("The trust store (" + path + ") could not be found");
+      }
+
+      ks = KeyStore.getInstance(type);
+
+      input = trustStoreResource.getInputStream();
+
+      ks.load(input,
+          ((password == null) || (password.length() == 0))
+          ? new char[0]
+          : password.toCharArray());
+
+      return ks;
+    }
+    catch (Throwable e)
+    {
+      throw new GeneralSecurityException("Failed to load the trust store (" + path + ")", e);
+    }
+    finally
+    {
+      try
+      {
+        if (input != null)
+        {
+          input.close();
+        }
+      }
+      catch (Throwable ignored) {}
+    }
   }
 
   /**
