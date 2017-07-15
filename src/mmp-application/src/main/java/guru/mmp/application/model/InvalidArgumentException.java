@@ -16,6 +16,9 @@
 
 package guru.mmp.application.model;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  * The <code>InvalidArgumentException</code> exception is thrown to indicate an error condition
  * as a result of an invalid argument.
@@ -25,6 +28,7 @@ package guru.mmp.application.model;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid argument")
 public class InvalidArgumentException extends Exception
 {
   private static final long serialVersionUID = 1000000;

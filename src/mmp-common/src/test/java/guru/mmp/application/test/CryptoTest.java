@@ -37,6 +37,8 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * The <code>CryptoTest</code> class.
+ *
+ * @author Marcus Portmann
  */
 public class CryptoTest
 {

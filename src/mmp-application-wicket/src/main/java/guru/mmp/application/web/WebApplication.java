@@ -114,6 +114,11 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WebApplication.class);
 
+  static
+  {
+    System.setProperty("com.atomikos.icatch.registered", "true");
+  }
+
   /**
    * The mutual SSL HTTP listener port.
    */
@@ -430,6 +435,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
           case "Microsoft SQL Server":
 
             jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
+            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
 
             break;
 

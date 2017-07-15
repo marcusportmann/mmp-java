@@ -24,6 +24,11 @@ import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.StringUtil;
 import io.undertow.Undertow;
+import io.undertow.server.HandlerWrapper;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.HttpServerExchange;
+import io.undertow.server.SSLSessionInfo;
+import io.undertow.util.Headers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -33,6 +38,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.embedded.undertow.UndertowBuilderCustomizer;
+import org.springframework.boot.context.embedded.undertow.UndertowDeploymentInfoCustomizer;
 import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
@@ -108,6 +114,11 @@ public abstract class Application
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
+  static
+  {
+    System.setProperty("com.atomikos.icatch.registered", "true");
+  }
+
   /**
    * The mutual SSL HTTP listener port.
    */
@@ -117,6 +128,11 @@ public abstract class Application
    * The distributed in-memory caches.
    */
   Map<String, Map> caches = new ConcurrentHashMap<>();
+
+  /**
+   * The paths for the unsecured web services.
+   */
+  private List<String> unsecuredWebServices = new ArrayList<>();
 
   /**
    * The Spring application context.
@@ -156,6 +172,98 @@ public abstract class Application
   public UndertowEmbeddedServletContainerFactory embeddedServletContainerFactory()
   {
     UndertowEmbeddedServletContainerFactory factory = new UndertowEmbeddedServletContainerFactory();
+
+    factory.addDeploymentInfoCustomizers(
+        (UndertowDeploymentInfoCustomizer) deploymentInfo -> deploymentInfo.addInitialHandlerChainWrapper(
+        new HandlerWrapper()
+        {
+          @Override
+          public HttpHandler wrap(HttpHandler wrappedHttpHandler)
+          {
+            return new HttpHandler()
+            {
+              @Override
+              public void handleRequest(HttpServerExchange httpServerExchange)
+                  throws Exception
+              {
+                if (configuration.isMutualSSLEnabled())
+                {
+                  String requestPath = httpServerExchange.getRequestPath();
+
+                  // Check if this is an unsecured web service
+                  for (String unsecuredWebService : unsecuredWebServices)
+                  {
+                    if (requestPath.startsWith(unsecuredWebService))
+                    {
+                      wrappedHttpHandler.handleRequest(httpServerExchange);
+
+                      return;
+                    }
+                  }
+
+                  if ((configuration.getMutualSSL().getSecureAPIs() && requestPath.startsWith(
+                      "/api/"))
+                      || (configuration.getMutualSSL().getSecureWebServices()
+                          && requestPath.startsWith("/service/")))
+                  {
+                    SSLSessionInfo sslSessionInfo = httpServerExchange.getConnection()
+                        .getSslSessionInfo();
+
+                    if (sslSessionInfo == null)
+                    {
+                      if (requestPath.startsWith("/api/"))
+                      {
+                        logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
+                            + ") is attempting to access the secure API (" + requestPath
+                            + ") insecurely");
+                      }
+                      else if (requestPath.startsWith("/service/"))
+                      {
+                        logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
+                            + ") is attempting to access the secure web service (" + requestPath
+                            + ") insecurely");
+                      }
+
+                      httpServerExchange.setStatusCode(403);
+                      httpServerExchange.getResponseHeaders().put(Headers.CONTENT_TYPE,
+                          "text/plain");
+                      httpServerExchange.getResponseSender().send("Access Denied");
+                    }
+                    else
+                    {
+                      if (logger.isDebugEnabled())
+                      {
+                        javax.security.cert.X509Certificate[] certificates =
+                            sslSessionInfo.getPeerCertificateChain();
+
+                        if ((certificates != null) && (certificates.length > 0))
+                        {
+                          if (requestPath.startsWith("/api/"))
+                          {
+                            logger.debug("The remote client ("
+                                + httpServerExchange.getSourceAddress() + ") with certificate ("
+                                + certificates[0].getSubjectDN()
+                                + ") is attempting to access the secure API (" + requestPath + ")");
+                          }
+                          else if (requestPath.startsWith("/service/"))
+                          {
+                            logger.debug("The remote client ("
+                                + httpServerExchange.getSourceAddress() + ") with certificate ("
+                                + certificates[0].getSubjectDN()
+                                + ") is attempting to access the secure web service ("
+                                + requestPath + ")");
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+
+                wrappedHttpHandler.handleRequest(httpServerExchange);
+              }
+            };
+          }
+        }));
 
     if ((configuration.getMutualSSL() != null) && (configuration.getMutualSSL().getEnabled()))
     {
@@ -327,6 +435,7 @@ public abstract class Application
           case "Microsoft SQL Server":
 
             jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
+            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
 
             break;
 
@@ -511,7 +620,28 @@ public abstract class Application
    */
   protected Endpoint createWebServiceEndpoint(String name, Object implementation, String pathToWsdl)
   {
-    return createWebServiceEndpoint(name, implementation, pathToWsdl, null);
+    return createWebServiceEndpoint(name, implementation, pathToWsdl, null, true);
+  }
+
+  /**
+   * Create the web service endpoint.
+   * <p/>
+   * Requires the Apache CXF framework to have been initialised by adding the
+   * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b> and <b>org.apache.cxf:cxf-rt-transports-http</b>
+   * Maven dependencies to the project.
+   *
+   * @param name           the web service name
+   * @param implementation the web service implementation
+   * @param pathToWsdl     the path to the web service WSDL
+   * @param isSecured      <code>true</code> if the web service must be secured using mutual SSL or
+   *                       <code>false</code> if the web service can be invoked insecurely
+   *
+   * @return the web service endpoint
+   */
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation,
+      String pathToWsdl, boolean isSecured)
+  {
+    return createWebServiceEndpoint(name, implementation, pathToWsdl, null, isSecured);
   }
 
   /**
@@ -530,6 +660,28 @@ public abstract class Application
    */
   protected Endpoint createWebServiceEndpoint(String name, Object implementation,
       String pathToWsdl, List<Handler> handlers)
+  {
+    return createWebServiceEndpoint(name, implementation, pathToWsdl, handlers, true);
+  }
+
+  /**
+   * Create the web service endpoint.
+   * <p/>
+   * Requires the Apache CXF framework to have been initialised by adding the
+   * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b> and <b>org.apache.cxf:cxf-rt-transports-http</b>
+   * Maven dependencies to the project.
+   *
+   * @param name           the web service name
+   * @param implementation the web service implementation
+   * @param pathToWsdl     the path to the web service WSDL
+   * @param handlers       the JAX-WS web service handlers for the web service
+   * @param isSecured      <code>true</code> if the web service must be secured using mutual SSL or
+   *                       <code>false</code> if the web service can be invoked insecurely
+   *
+   * @return the web service endpoint
+   */
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation,
+      String pathToWsdl, List<Handler> handlers, boolean isSecured)
   {
     try
     {
@@ -565,6 +717,11 @@ public abstract class Application
       }
 
       applicationContext.getAutowireCapableBeanFactory().autowireBean(implementation);
+
+      if (!isSecured)
+      {
+        unsecuredWebServices.add("/service/" + name);
+      }
 
       return endpoint;
     }

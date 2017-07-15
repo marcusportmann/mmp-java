@@ -29,10 +29,22 @@
       </xs:complexType>
 
       <xs:element name="InvalidArgumentFaultInfo" nillable="true"
-                  type="interface:FaultInfo"/>
+                  type="interface:FaultInfo">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">
+            One or more of the specified arguments is invalid.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
 
       <xs:element name="ServiceUnavailableFaultInfo" nillable="true"
-                  type="interface:FaultInfo"/>
+                  type="interface:FaultInfo">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">
+            A critical system error has occurred and the service is unable to process the request at this time.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
 
       <!-- ===================================================================================== -->
       <!-- Service(s) Enumerations                                                               -->
@@ -92,7 +104,13 @@
       <xs:element name="GetVersionOutput">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="out" type="xs:string" />
+            <xs:element name="out" type="xs:string">
+              <xs:annotation>
+                <xs:documentation xml:lang="en">
+                  The version of the service.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
           </xs:sequence>
         </xs:complexType>
       </xs:element>

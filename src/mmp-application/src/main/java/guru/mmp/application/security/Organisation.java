@@ -18,6 +18,8 @@ package guru.mmp.application.security;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -38,6 +40,7 @@ public class Organisation
    */
   @Id
   @Column(name = "ID", nullable = false)
+  @Type(type = "uuid-char")
   private UUID id;
 
   /**

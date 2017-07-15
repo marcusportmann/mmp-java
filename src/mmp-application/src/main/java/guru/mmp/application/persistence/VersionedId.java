@@ -18,12 +18,12 @@ package guru.mmp.application.persistence;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.Serializable;
-
-import java.util.UUID;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * The <code>VersionedId</code> class is a JPA embeddable class that stores a composite key with
@@ -40,8 +40,9 @@ public class VersionedId
   /**
    * The Universally Unique Identifier (UUID) component of the versioned ID.
    */
-  @Column(name = "ID", nullable = false, length = 40)
-  private String id;
+  @Column(name = "ID", nullable = false)
+  @Type(type = "uuid-char")
+  private UUID id;
 
   /**
    * The version component of the versioned ID.
@@ -54,7 +55,7 @@ public class VersionedId
    */
   public VersionedId()
   {
-    this.id = UUID.randomUUID().toString();
+    this.id = UUID.randomUUID();
     this.version = 1;
   }
 
@@ -64,7 +65,7 @@ public class VersionedId
    * @param id      the Universally Unique Identifier (UUID) component of the versioned ID
    * @param version the version component of the versioned ID
    */
-  public VersionedId(String id, int version)
+  public VersionedId(UUID id, int version)
   {
     this.id = id;
     this.version = version;
@@ -123,7 +124,7 @@ public class VersionedId
    *
    * @return the Universally Unique Identifier (UUID) component of the versioned ID
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -147,8 +148,8 @@ public class VersionedId
   public int hashCode()
   {
     return ((id == null)
-        ? 0
-        : id.hashCode()) + version;
+      ? 0
+      : id.hashCode()) + version;
   }
 
   /**
@@ -156,7 +157,7 @@ public class VersionedId
    *
    * @param id the Universally Unique Identifier (UUID) component of the versioned ID
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
