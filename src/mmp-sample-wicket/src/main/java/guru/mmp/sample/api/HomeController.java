@@ -74,7 +74,7 @@ public class HomeController
    *
    * @return the version
    */
-  @RequestMapping(value = "/version", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(value = "/version", method = RequestMethod.GET)
   public String version()
   {
     return sampleService.getVersion();

@@ -41,6 +41,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -58,6 +63,7 @@ import java.util.UUID;
  */
 @Component("webApplication")
 @ComponentScan(basePackages = { "guru.mmp.sample" }, lazyInit = true)
+@EnableSwagger2
 public class Application
   extends TemplateWebApplication
 {
@@ -235,5 +241,17 @@ public class Application
     {
       throw new WebApplicationException("Failed to initialise the Sample application data", e);
     }
+  }
+
+  /**
+   * Returns the Spring bean for the Springfox Swagger 2 documentation generation component.
+   *
+   * @return the Spring bean for the Springfox Swagger 2 documentation generation component
+   */
+  @Bean
+  public Docket api()
+  {
+    return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
+      .paths(PathSelectors.any()).build().useDefaultResponseMessages(false);
   }
 }

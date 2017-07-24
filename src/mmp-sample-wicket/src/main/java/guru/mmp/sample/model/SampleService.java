@@ -21,9 +21,11 @@ package guru.mmp.sample.model;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.validation.Validator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,6 +46,12 @@ public class SampleService
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
+
+  /**
+   * The JSR 303 Bean Validation validator.
+   */
+  @Inject
+  private Validator validator;
 
   /**
    * Add the data.

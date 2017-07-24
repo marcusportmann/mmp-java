@@ -20,10 +20,13 @@ package guru.mmp.sample.test;
 
 import guru.mmp.application.test.TestConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import javax.validation.Validator;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -40,6 +43,17 @@ import java.util.List;
         type = FilterType.ANNOTATION))
 public class SampleTestConfiguration extends TestConfiguration
 {
+  /**
+   * Returns the local validator factory bean that provides support for JSR 303 Bean Validation.
+   *
+   * @return the local validator factory bean that provides support for JSR 303 Bean Validation
+   */
+  @Bean
+  public Validator localValidatorFactoryBean()
+  {
+    return new LocalValidatorFactoryBean();
+  }
+
   /**
    * Returns the paths to the resources on the classpath that contain the SQL statements used to
    * initialise the in-memory application database.

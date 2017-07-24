@@ -67,6 +67,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.xnio.Options;
 import org.xnio.SslClientAuthMode;
 
@@ -114,15 +115,15 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WebApplication.class);
 
-  static
-  {
-    System.setProperty("com.atomikos.icatch.registered", "true");
-  }
-
   /**
    * The mutual SSL HTTP listener port.
    */
   private static int MUTUAL_SSL_HTTP_LISTENER_PORT = 8443;
+
+  static
+  {
+    System.setProperty("com.atomikos.icatch.registered", "true");
+  }
 
   /**
    * The distributed in-memory caches.
@@ -550,6 +551,17 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
     jackson2ObjectMapperBuilder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 
     return jackson2ObjectMapperBuilder;
+  }
+
+  /**
+   * Returns the local validator factory bean that provides support for JSR 303 Bean Validation.
+   *
+   * @return the local validator factory bean that provides support for JSR 303 Bean Validation
+   */
+  @Bean
+  public javax.validation.Validator localValidatorFactoryBean()
+  {
+    return new LocalValidatorFactoryBean();
   }
 
   /**
