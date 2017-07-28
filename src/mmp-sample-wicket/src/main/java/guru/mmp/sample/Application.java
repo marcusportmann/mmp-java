@@ -27,12 +27,12 @@ import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.common.util.ResourceUtil;
+import guru.mmp.sample.api.SampleServiceController;
 import guru.mmp.sample.web.pages.DashboardPage;
 import guru.mmp.sample.web.pages.HomePage;
 import guru.mmp.sample.web.pages.dialogs.TestExtensibleDialogImplementationPage;
 import guru.mmp.sample.web.pages.dialogs.TestExtensibleFormDialogImplementationPage;
 import guru.mmp.sample.web.pages.forms.TestFormPage;
-import guru.mmp.sample.ws.SampleServiceEndpoint;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.slf4j.Logger;
@@ -64,8 +64,7 @@ import java.util.UUID;
 @Component("webApplication")
 @ComponentScan(basePackages = { "guru.mmp.sample" }, lazyInit = true)
 @EnableSwagger2
-public class Application
-  extends TemplateWebApplication
+public class Application extends TemplateWebApplication
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Application.class);
@@ -91,6 +90,18 @@ public class Application
   public static void main(String[] args)
   {
     SpringApplication.run(Application.class, args);
+  }
+
+  /**
+   * Returns the Spring bean for the Springfox Swagger 2 documentation generation component.
+   *
+   * @return the Spring bean for the Springfox Swagger 2 documentation generation component
+   */
+  @Bean
+  public Docket api()
+  {
+    return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
+        .paths(PathSelectors.any()).build().useDefaultResponseMessages(false);
   }
 
   /**
@@ -206,6 +217,17 @@ public class Application
   }
 
   /**
+   * Returns the Spring bean for the Sample Service controller.
+   *
+   * @return the Spring bean for the Sample Service controller
+   */
+  @Bean
+  protected SampleServiceController sampleServiceController()
+  {
+    return new SampleServiceController();
+  }
+
+  /**
    * Returns the Spring bean for the Sample Service web service.
    *
    * @return the Spring bean for the Sample Service web service
@@ -213,8 +235,7 @@ public class Application
   @Bean
   protected Endpoint sampleServiceEndpont()
   {
-    return createWebServiceEndpoint("SampleService", new SampleServiceEndpoint(),
-        "SampleService.wsdl");
+    return createWebServiceEndpoint("SampleService", sampleServiceController());
   }
 
   /**
@@ -241,17 +262,5 @@ public class Application
     {
       throw new WebApplicationException("Failed to initialise the Sample application data", e);
     }
-  }
-
-  /**
-   * Returns the Spring bean for the Springfox Swagger 2 documentation generation component.
-   *
-   * @return the Spring bean for the Springfox Swagger 2 documentation generation component
-   */
-  @Bean
-  public Docket api()
-  {
-    return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
-      .paths(PathSelectors.any()).build().useDefaultResponseMessages(false);
   }
 }

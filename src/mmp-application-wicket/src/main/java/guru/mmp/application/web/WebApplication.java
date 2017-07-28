@@ -647,13 +647,12 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    *
    * @param name           the web service name
    * @param implementation the web service implementation
-   * @param pathToWsdl     the path to the web service WSDL
    *
    * @return the web service endpoint
    */
-  protected Endpoint createWebServiceEndpoint(String name, Object implementation, String pathToWsdl)
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation)
   {
-    return createWebServiceEndpoint(name, implementation, pathToWsdl, null, true);
+    return createWebServiceEndpoint(name, implementation, null, true);
   }
 
   /**
@@ -665,16 +664,14 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    *
    * @param name           the web service name
    * @param implementation the web service implementation
-   * @param pathToWsdl     the path to the web service WSDL
    * @param isSecured      <code>true</code> if the web service must be secured using mutual SSL or
    *                       <code>false</code> if the web service can be invoked insecurely
    *
    * @return the web service endpoint
    */
-  protected Endpoint createWebServiceEndpoint(String name, Object implementation,
-      String pathToWsdl, boolean isSecured)
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation, boolean isSecured)
   {
-    return createWebServiceEndpoint(name, implementation, pathToWsdl, null, isSecured);
+    return createWebServiceEndpoint(name, implementation, null, isSecured);
   }
 
   /**
@@ -686,15 +683,14 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    *
    * @param name           the web service name
    * @param implementation the web service implementation
-   * @param pathToWsdl     the path to the web service WSDL
    * @param handlers       the JAX-WS web service handlers for the web service
    *
    * @return the web service endpoint
    */
   protected Endpoint createWebServiceEndpoint(String name, Object implementation,
-      String pathToWsdl, List<Handler> handlers)
+      List<Handler> handlers)
   {
-    return createWebServiceEndpoint(name, implementation, pathToWsdl, handlers, true);
+    return createWebServiceEndpoint(name, implementation, handlers, true);
   }
 
   /**
@@ -706,7 +702,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    *
    * @param name           the web service name
    * @param implementation the web service implementation
-   * @param pathToWsdl     the path to the web service WSDL
    * @param handlers       the JAX-WS web service handlers for the web service
    * @param isSecured      <code>true</code> if the web service must be secured using mutual SSL or
    *                       <code>false</code> if the web service can be invoked insecurely
@@ -714,7 +709,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    * @return the web service endpoint
    */
   protected Endpoint createWebServiceEndpoint(String name, Object implementation,
-      String pathToWsdl, List<Handler> handlers, boolean isSecured)
+      List<Handler> handlers, boolean isSecured)
   {
     try
     {
@@ -737,10 +732,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
       Method publishMethod = endpointImplClass.getMethod("publish", String.class);
 
       publishMethod.invoke(endpoint, "/" + name);
-
-      Method setWsdlLocationMethod = endpointImplClass.getMethod("setWsdlLocation", String.class);
-
-      setWsdlLocationMethod.invoke(endpoint, pathToWsdl);
 
       if (handlers != null)
       {

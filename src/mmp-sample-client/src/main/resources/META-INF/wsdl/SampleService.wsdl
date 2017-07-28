@@ -1,220 +1,145 @@
-<?xml version="1.0" encoding="utf-8" ?>
-
-<wsdl:definitions name="SampleService" targetNamespace="http://ws.sample.mmp.guru"
-                  xmlns:interface="http://ws.sample.mmp.guru"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
-                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-
-  <!-- ========================================================================================= -->
-  <!-- Service(s) Types                                                                          -->
-  <!-- ========================================================================================= -->
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://sample.service.mmp.guru" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="SampleService" targetNamespace="http://sample.service.mmp.guru">
   <wsdl:types>
-
-    <xs:schema elementFormDefault="qualified"
-               targetNamespace="http://ws.sample.mmp.guru"
-               xmlns:interface="http://ws.sample.mmp.guru"
-               xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
-      <!-- ===================================================================================== -->
-      <!-- Service(s) Faults                                                                     -->
-      <!-- ===================================================================================== -->
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://sample.service.mmp.guru" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://sample.service.mmp.guru">
+      <xs:element name="GetData" type="tns:GetData"/>
+      <xs:element name="GetDataResponse" type="tns:GetDataResponse"/>
+      <xs:element name="GetVersion" type="tns:GetVersion"/>
+      <xs:element name="GetVersionResponse" type="tns:GetVersionResponse"/>
+      <xs:element name="TestExceptionHandling" type="tns:TestExceptionHandling"/>
+      <xs:element name="TestExceptionHandlingResponse" type="tns:TestExceptionHandlingResponse"/>
+      <xs:complexType name="GetData">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="GetDataResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Data" type="tns:Data"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Data">
+        <xs:sequence>
+          <xs:element name="Id" type="xs:long"/>
+          <xs:element name="Name" type="xs:string"/>
+          <xs:element minOccurs="0" name="StringValue" type="xs:string"/>
+          <xs:element minOccurs="0" name="IntegerValue" type="xs:int"/>
+          <xs:element minOccurs="0" name="DateValue" type="xs:date"/>
+          <xs:element minOccurs="0" name="TimestampValue" type="xs:dateTime"/>
+        </xs:sequence>
+      </xs:complexType>
       <xs:complexType name="FaultInfo">
         <xs:sequence>
-          <xs:element minOccurs="1" name="Detail" nillable="true" type="xs:string" />
-          <xs:element minOccurs="1" name="Message" nillable="true" type="xs:string" />
+          <xs:element name="When" type="xs:dateTime"/>
+          <xs:element name="Message" type="xs:string"/>
+          <xs:element name="Detail" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
-
-      <xs:element name="InvalidArgumentFaultInfo" nillable="true"
-                  type="interface:FaultInfo">
-        <xs:annotation>
-          <xs:documentation xml:lang="en">
-            One or more of the specified arguments is invalid.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-
-      <xs:element name="ServiceUnavailableFaultInfo" nillable="true"
-                  type="interface:FaultInfo">
-        <xs:annotation>
-          <xs:documentation xml:lang="en">
-            A critical system error has occurred and the service is unable to process the request at this time.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-
-      <!-- ===================================================================================== -->
-      <!-- Service(s) Enumerations                                                               -->
-      <!-- ===================================================================================== -->
-      <!--
-      <xs:simpleType name="SampleType">
-          <xs:restriction base="xs:string">
-          <xs:enumeration value="Value1" />
-          <xs:enumeration value="Value2" />
-          <xs:enumeration value="Value3" />
-          <xs:enumeration value="Value4" />
-        </xs:restriction>
-      </xs:simpleType>
-      -->
-
-      <!-- ===================================================================================== -->
-      <!-- Service(s) Custom Types                                                               -->
-      <!-- ===================================================================================== -->
-      <!--
-      <xs:complexType name="SampleData">
+      <xs:complexType name="GetVersion">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="GetVersionResponse">
         <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Name" type="xs:string" />
-          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Value" type="xs:string" />
-          <xs:element minOccurs="1" maxOccurs="1" nillable="true" name="OptionalValue"
-              type="xs:string" />
+          <xs:element minOccurs="0" name="Version" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
-      -->
-
-      <!-- ===================================================================================== -->
-      <!-- Service(s) Operation Types                                                            -->
-      <!-- ===================================================================================== -->
-      <!--
-      <xs:element name="GetSampleData">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="param1" type="xs:string" />
-            <xs:element name="param2" type="xs:dateTime" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-
-      <xs:element name="GetSampleDataOutput">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="SampleData" maxOccurs="unbounded" type="interface:SampleData" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      -->
-
-      <xs:element name="GetVersion">
-        <xs:complexType>
-          <xs:sequence/>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="GetVersionOutput">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="out" type="xs:string">
-              <xs:annotation>
-                <xs:documentation xml:lang="en">
-                  The version of the service.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-
+      <xs:complexType name="TestExceptionHandling">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="TestExceptionHandlingResponse">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:element name="SampleServiceFault" nillable="true" type="tns:FaultInfo"/>
     </xs:schema>
-
   </wsdl:types>
-
-  <!-- ========================================================================================= -->
-  <!-- Service(s) Fault Messages                                                                 -->
-  <!-- ========================================================================================= -->
-  <wsdl:message name="InvalidArgumentFault">
-    <wsdl:part element="interface:InvalidArgumentFaultInfo" name="fault"/>
+  <wsdl:message name="GetVersionResponse">
+    <wsdl:part element="tns:GetVersionResponse" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-
-  <wsdl:message name="ServiceUnavailableFault">
-    <wsdl:part element="interface:ServiceUnavailableFaultInfo" name="fault"/>
+  <wsdl:message name="TestExceptionHandling">
+    <wsdl:part element="tns:TestExceptionHandling" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-
-  <!-- ========================================================================================= -->
-  <!-- Service(s) Operation Messages                                                             -->
-  <!-- ========================================================================================= -->
-  <!--
-  <wsdl:message name="GetSampleDataInputMessage">
-    <wsdl:part name="parameters" element="interface:GetSampleData" />
+  <wsdl:message name="GetDataResponse">
+    <wsdl:part element="tns:GetDataResponse" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetSampleDataOutputMessage">
-    <wsdl:part name="parameters" element="interface:GetSampleDataOutput" />
+  <wsdl:message name="SampleServiceException">
+    <wsdl:part element="tns:SampleServiceFault" name="SampleServiceException">
+    </wsdl:part>
   </wsdl:message>
-  -->
-
-  <wsdl:message name="GetVersionInputMessage">
-    <wsdl:part name="parameters" element="interface:GetVersion" />
+  <wsdl:message name="GetData">
+    <wsdl:part element="tns:GetData" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetVersionOutputMessage">
-    <wsdl:part name="parameters" element="interface:GetVersionOutput" />
+  <wsdl:message name="GetVersion">
+    <wsdl:part element="tns:GetVersion" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-
-  <!-- ========================================================================================= -->
-  <!-- Service(s) Port(s)                                                                        -->
-  <!-- ========================================================================================= -->
+  <wsdl:message name="TestExceptionHandlingResponse">
+    <wsdl:part element="tns:TestExceptionHandlingResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:portType name="ISampleService">
-
-    <wsdl:documentation>The Sample Service.</wsdl:documentation>
-
-    <!--
-    <wsdl:operation name="GetSampleData">
-      <wsdl:input message="interface:GetSampleDataInputMessage" />
-      <wsdl:output message="interface:GetSampleDataOutputMessage" />
-      <wsdl:fault name="ServiceUnavailableFault" message="interface:ServiceUnavailableFault" />
+    <wsdl:operation name="GetData">
+      <wsdl:input message="tns:GetData" name="GetData">
+      </wsdl:input>
+      <wsdl:output message="tns:GetDataResponse" name="GetDataResponse">
+      </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+      </wsdl:fault>
     </wsdl:operation>
-    -->
-
     <wsdl:operation name="GetVersion">
-      <wsdl:input message="interface:GetVersionInputMessage" />
-      <wsdl:output message="interface:GetVersionOutputMessage" />
-      <wsdl:fault name="ServiceUnavailableFault" message="interface:ServiceUnavailableFault" />
+      <wsdl:input message="tns:GetVersion" name="GetVersion">
+      </wsdl:input>
+      <wsdl:output message="tns:GetVersionResponse" name="GetVersionResponse">
+      </wsdl:output>
     </wsdl:operation>
-
+    <wsdl:operation name="TestExceptionHandling">
+      <wsdl:input message="tns:TestExceptionHandling" name="TestExceptionHandling">
+      </wsdl:input>
+      <wsdl:output message="tns:TestExceptionHandlingResponse" name="TestExceptionHandlingResponse">
+      </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+      </wsdl:fault>
+    </wsdl:operation>
   </wsdl:portType>
-
-  <!-- ========================================================================================= -->
-  <!-- Service(s) Binding(s)                                                                     -->
-  <!-- ========================================================================================= -->
-  <wsdl:binding name="SampleService" type="interface:ISampleService">
+  <wsdl:binding name="SampleServiceSoapBinding" type="tns:ISampleService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-
-    <!--
-    <wsdl:operation name="GetSampleData">
-      <soap:operation soapAction="http://ws.sample.mmp.guru/ISampleService/GetSampleData"/>
-      <wsdl:input>
+    <wsdl:operation name="GetData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetData">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output>
+      <wsdl:output name="GetDataResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="ServiceUnavailableFault">
-        <soap:fault name="ServiceUnavailableFault" use="literal"/>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
-    -->
-
     <wsdl:operation name="GetVersion">
-      <soap:operation soapAction="http://ws.sample.mmp.guru/ISampleService/GetVersion"/>
-      <wsdl:input>
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetVersion">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output>
+      <wsdl:output name="GetVersionResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-      <wsdl:fault name="ServiceUnavailableFault">
-        <soap:fault name="ServiceUnavailableFault" use="literal"/>
+    </wsdl:operation>
+    <wsdl:operation name="TestExceptionHandling">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="TestExceptionHandling">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TestExceptionHandlingResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
-
   </wsdl:binding>
-
-  <!-- ========================================================================================= -->
-  <!-- Service(s)                                                                                -->
-  <!-- ========================================================================================= -->
   <wsdl:service name="SampleService">
-    <wsdl:port name="SampleService" binding="interface:SampleService">
+    <wsdl:port binding="tns:SampleServiceSoapBinding" name="ISampleServicePort">
       <soap:address location="http://localhost:8080/service/SampleService"/>
     </wsdl:port>
   </wsdl:service>
-
 </wsdl:definitions>

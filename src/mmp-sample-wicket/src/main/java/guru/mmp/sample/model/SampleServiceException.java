@@ -16,6 +16,18 @@
 
 package guru.mmp.sample.model;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.ws.ServiceException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
+
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>SampleServiceException</code> exception is thrown to indicate an error condition when
  * working with the Sample Service.
@@ -25,7 +37,12 @@ package guru.mmp.sample.model;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SampleServiceException extends Exception
+@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
+    reason = "An error has occurred and the service is unable to process the request at this time")
+@WebFault(name = "SampleServiceFault", targetNamespace = "http://sample.service.mmp.guru",
+    faultBean = "mmp.guru.application.ws.FaultInfo")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class SampleServiceException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 

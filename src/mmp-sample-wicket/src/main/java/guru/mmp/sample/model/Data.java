@@ -18,10 +18,19 @@ package guru.mmp.sample.model;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import guru.mmp.common.ws.LocalDateAdapter;
+import guru.mmp.common.ws.LocalDateTimeAdapter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,6 +40,11 @@ import java.time.LocalDateTime;
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "Data")
+@JsonPropertyOrder({ "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
+@XmlType(name = "Data", namespace = "http://sample.service.mmp.guru",
+  propOrder = { "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "SAMPLE", name = "DATA")
 public class Data
@@ -41,6 +55,9 @@ public class Data
   /**
    * The ID used to uniquely identify the data.
    */
+  @ApiModelProperty(value = "The ID used to uniquely identify the data", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   @Id
   @Column(name = "ID", nullable = false)
   private long id;
@@ -48,30 +65,49 @@ public class Data
   /**
    * The name for the data.
    */
+  @ApiModelProperty(value = "The name for the data", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   @Column(name = "NAME", nullable = false)
   private String name;
 
   /**
    * The string string value for the data.
    */
+  @ApiModelProperty(value = "The string string value for the data")
+  @JsonProperty
+  @XmlElement(name = "StringValue")
   @Column(name = "STRING_VALUE")
   private String stringValue;
 
   /**
    * The integer value for the data.
    */
+  @ApiModelProperty(value = "The integer value for the data")
+  @JsonProperty
+  @XmlElement(name = "IntegerValue")
   @Column(name = "INTEGER_VALUE")
   private Integer integerValue;
 
   /**
    * The date value for the data.
    */
+  @ApiModelProperty(value = "The date value for the data")
+  @JsonProperty
+  @XmlElement(name = "DateValue")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name="date")
   @Column(name = "DATE_VALUE")
   private LocalDate dateValue;
 
   /**
    * The timestamp value for the data.
    */
+  @ApiModelProperty(value = "The timestamp value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimestampValue")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name="dateTime")
   @Column(name = "TIMESTAMP_VALUE")
   public LocalDateTime timestampValue;
 

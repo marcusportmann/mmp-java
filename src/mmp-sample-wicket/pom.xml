@@ -102,45 +102,6 @@
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>generate-ws-bindings</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.jvnet.jax-ws-commons</groupId>
-            <artifactId>jaxws-maven-plugin</artifactId>
-            <version>2.3</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>wsimport</goal>
-                </goals>
-                <configuration>
-                  <bindingFiles>
-                    <bindingFile>${basedir}/src/main/resources/META-INF/wsdl/mmp-bindings.xjb</bindingFile>
-                  </bindingFiles>
-                  <wsdlFiles>
-                    <wsdlFile>${basedir}/src/main/resources/META-INF/wsdl/SampleService.wsdl</wsdlFile>
-                  </wsdlFiles>
-                  <keep>true</keep>
-                  <sourceDestDir>src/main/java</sourceDestDir>
-                  <vmArgs>
-                    <vmArg>-Djavax.xml.accessExternalDTD=all</vmArg>
-                    <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-                  </vmArgs>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
 </project>
 
 

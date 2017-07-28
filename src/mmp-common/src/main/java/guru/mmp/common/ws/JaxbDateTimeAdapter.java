@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 
 /**
  * The <code>JaxbDateTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert between
- * <code>String</code> and <code>Calendar</code> types.
+ * <code>String</code> and <code>LocalDateTime</code> types.
  * <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
