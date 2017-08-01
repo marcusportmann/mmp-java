@@ -68,6 +68,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.xnio.Options;
 import org.xnio.SslClientAuthMode;
 
@@ -110,6 +111,7 @@ import java.util.concurrent.Executor;
 @EnableScheduling
 @EnableTransactionManagement
 @SpringBootApplication
+@ControllerAdvice
 public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
 {
   /* Logger */

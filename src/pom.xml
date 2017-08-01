@@ -34,6 +34,9 @@
     <mssql-jdbc.version>6.1.7.jre8-preview</mssql-jdbc.version>
     <slf4j.version>1.7.25</slf4j.version>
     <spring-web.version>4.3.9.RELEASE</spring-web.version>
+    <springfox-swagger2.version>2.7.0</springfox-swagger2.version>
+    <springfox-swagger-ui.version>2.7.0</springfox-swagger-ui.version>
+    <swagger-annotations.version>1.5.16</swagger-annotations.version>
     <wicket.version>7.7.0</wicket.version>
     <wss4j.version>1.6.19</wss4j.version>
     <woodstox-core-asl.version>4.4.1</woodstox-core-asl.version>
@@ -70,6 +73,21 @@
         <groupId>com.microsoft.sqlserver</groupId>
         <artifactId>mssql-jdbc</artifactId>
         <version>${mssql-jdbc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>${springfox-swagger2.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>${springfox-swagger-ui.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>${swagger-annotations.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>

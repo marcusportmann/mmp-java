@@ -18,6 +18,7 @@ package guru.mmp.sample.model;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import guru.mmp.common.ws.LocalDateAdapter;
@@ -94,6 +95,7 @@ public class Data
    */
   @ApiModelProperty(value = "The date value for the data")
   @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateValue")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name="date")

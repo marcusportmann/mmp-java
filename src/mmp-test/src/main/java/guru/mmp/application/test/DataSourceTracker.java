@@ -68,9 +68,26 @@ public class DataSourceTracker
       {
         case "getConnection":
         {
+          boolean include = true;
+
           Connection connection = new ConnectionProxy((Connection) proxy.invokeSuper(obj, args));
 
-          getActiveDatabaseConnections().put(connection, Thread.currentThread().getStackTrace());
+          StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+          for (int i = 0; i < stackTrace.length; i++)
+          {
+            StackTraceElement stackTraceElement = stackTrace[i];
+
+            if (stackTraceElement.getClassName().contains("NonContextualJdbcConnectionAccess"))
+            {
+              include = false;
+            }
+          }
+
+          if (include)
+          {
+            getActiveDatabaseConnections().put(connection, stackTrace);
+          }
 
           return connection;
         }
