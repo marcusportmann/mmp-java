@@ -39,7 +39,7 @@ import javax.xml.ws.WebFault;
 @SuppressWarnings("unused")
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
     reason = "An error has occurred and the service is unable to process the request at this time")
-@WebFault(name = "SampleServiceFault", targetNamespace = "http://sample.service.mmp.guru",
+@WebFault(name = "SampleServiceFault", targetNamespace = "http://sample.mmp.guru",
     faultBean = "mmp.guru.application.ws.FaultInfo")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class SampleServiceException extends ServiceException

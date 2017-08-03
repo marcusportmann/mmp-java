@@ -57,7 +57,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>guru.mmp.sample.client.SampleClient</mainClass>
+              <mainClass>guru.mmp.client.SampleClient</mainClass>
             </manifest>
           </archive>
         </configuration>

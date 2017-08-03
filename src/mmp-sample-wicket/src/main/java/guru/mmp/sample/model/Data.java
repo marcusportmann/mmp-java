@@ -44,7 +44,7 @@ import java.time.LocalDateTime;
  */
 @ApiModel(value = "Data")
 @JsonPropertyOrder({ "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
-@XmlType(name = "Data", namespace = "http://sample.service.mmp.guru",
+@XmlType(name = "Data", namespace = "http://sample.mmp.guru",
   propOrder = { "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
