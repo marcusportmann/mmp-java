@@ -1,36 +1,23 @@
-<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://sample.mmp.guru" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="SampleService" targetNamespace="http://sample.mmp.guru">
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://sample.service.mmp.guru" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="SampleService" targetNamespace="http://sample.service.mmp.guru">
   <wsdl:types>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://sample.mmp.guru" xmlns:sample="http://sample.mmp.guru" xmlns:mmp="http://application.mmp.guru" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://sample.mmp.guru">
-      <xs:import namespace="http://application.mmp.guru"/>
-      <xs:element name="GetAllData" type="tns:GetAllData"/>
-      <xs:element name="GetAllDataResponse" type="tns:GetAllDataResponse"/>
-      <xs:element name="GetData" type="tns:GetData"/>
-      <xs:element name="GetDataResponse" type="tns:GetDataResponse"/>
-      <xs:element name="GetVersion" type="tns:GetVersion"/>
-      <xs:element name="GetVersionResponse" type="tns:GetVersionResponse"/>
-      <xs:element name="TestExceptionHandling" type="tns:TestExceptionHandling"/>
-      <xs:element name="TestExceptionHandlingResponse" type="tns:TestExceptionHandlingResponse"/>
-      <xs:element name="Validate" type="tns:Validate"/>
-      <xs:element name="ValidateResponse" type="tns:ValidateResponse"/>
-      <xs:complexType name="TestExceptionHandling">
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://sample.service.mmp.guru" xmlns:service="http://sample.service.mmp.guru" xmlns:mmp="http://application.model.mmp.guru" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://sample.service.mmp.guru">
+      <xs:import namespace="http://application.model.mmp.guru"/>
+      <xs:element name="GetAllData" type="service:GetAllData"/>
+      <xs:element name="GetAllDataResponse" type="service:GetAllDataResponse"/>
+      <xs:element name="GetData" type="service:GetData"/>
+      <xs:element name="GetDataResponse" type="service:GetDataResponse"/>
+      <xs:element name="GetVersion" type="service:GetVersion"/>
+      <xs:element name="GetVersionResponse" type="service:GetVersionResponse"/>
+      <xs:element name="TestExceptionHandling" type="service:TestExceptionHandling"/>
+      <xs:element name="TestExceptionHandlingResponse" type="service:TestExceptionHandlingResponse"/>
+      <xs:element name="Validate" type="service:Validate"/>
+      <xs:element name="ValidateResponse" type="service:ValidateResponse"/>
+      <xs:complexType name="GetAllData">
         <xs:sequence/>
       </xs:complexType>
-      <xs:complexType name="TestExceptionHandlingResponse">
-        <xs:sequence/>
-      </xs:complexType>
-      <xs:complexType name="FaultInfo">
+      <xs:complexType name="GetAllDataResponse">
         <xs:sequence>
-          <xs:element name="When" type="xs:dateTime"/>
-          <xs:element name="Message" type="xs:string"/>
-          <xs:element name="Detail" type="xs:string"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="GetData">
-        <xs:sequence/>
-      </xs:complexType>
-      <xs:complexType name="GetDataResponse">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Data" type="tns:Data"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="Data" type="service:Data"/>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="Data">
@@ -43,6 +30,31 @@
           <xs:element minOccurs="0" name="TimestampValue" type="xs:dateTime"/>
         </xs:sequence>
       </xs:complexType>
+      <xs:complexType name="FaultInfo">
+        <xs:sequence>
+          <xs:element name="When" type="xs:dateTime"/>
+          <xs:element name="Message" type="xs:string"/>
+          <xs:element name="Detail" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Validate">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="data" type="service:Data"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ValidateResponse">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationError" type="mmp:ValidationError"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetData">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="GetDataResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Data" type="service:Data"/>
+        </xs:sequence>
+      </xs:complexType>
       <xs:complexType name="GetVersion">
         <xs:sequence/>
       </xs:complexType>
@@ -51,27 +63,15 @@
           <xs:element minOccurs="0" name="Version" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="GetAllData">
+      <xs:complexType name="TestExceptionHandling">
         <xs:sequence/>
       </xs:complexType>
-      <xs:complexType name="GetAllDataResponse">
-        <xs:sequence>
-          <xs:element maxOccurs="unbounded" minOccurs="0" name="Data" type="tns:Data"/>
-        </xs:sequence>
+      <xs:complexType name="TestExceptionHandlingResponse">
+        <xs:sequence/>
       </xs:complexType>
-      <xs:complexType name="Validate">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="data" type="tns:Data"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="ValidateResponse">
-        <xs:sequence>
-          <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationError" type="mmp:ValidationError"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:element name="SampleServiceFault" nillable="true" type="tns:FaultInfo"/>
+      <xs:element name="SampleServiceFault" nillable="true" type="service:FaultInfo"/>
     </xs:schema>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://application.mmp.guru" xmlns:mmp="http://application.mmp.guru" elementFormDefault="unqualified" targetNamespace="http://application.mmp.guru" version="1.0">
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://application.model.mmp.guru" xmlns:mmp="http://application.model.mmp.guru" elementFormDefault="unqualified" targetNamespace="http://application.model.mmp.guru" version="1.0">
 
       <xs:complexType name="ValidationError">
         <xs:sequence>
@@ -90,20 +90,24 @@
 
     </xs:schema>
   </wsdl:types>
-  <wsdl:message name="TestExceptionHandlingResponse">
-    <wsdl:part element="tns:TestExceptionHandlingResponse" name="parameters">
+  <wsdl:message name="GetAllData">
+    <wsdl:part element="tns:GetAllData" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="ValidateResponse">
-    <wsdl:part element="tns:ValidateResponse" name="parameters">
+  <wsdl:message name="GetVersionResponse">
+    <wsdl:part element="tns:GetVersionResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetData">
-    <wsdl:part element="tns:GetData" name="parameters">
+  <wsdl:message name="TestExceptionHandling">
+    <wsdl:part element="tns:TestExceptionHandling" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetVersion">
-    <wsdl:part element="tns:GetVersion" name="parameters">
+  <wsdl:message name="GetAllDataResponse">
+    <wsdl:part element="tns:GetAllDataResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetDataResponse">
+    <wsdl:part element="tns:GetDataResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="SampleServiceException">
@@ -114,31 +118,35 @@
     <wsdl:part element="tns:Validate" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="TestExceptionHandling">
-    <wsdl:part element="tns:TestExceptionHandling" name="parameters">
+  <wsdl:message name="GetData">
+    <wsdl:part element="tns:GetData" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetDataResponse">
-    <wsdl:part element="tns:GetDataResponse" name="parameters">
+  <wsdl:message name="GetVersion">
+    <wsdl:part element="tns:GetVersion" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetAllDataResponse">
-    <wsdl:part element="tns:GetAllDataResponse" name="parameters">
+  <wsdl:message name="ValidateResponse">
+    <wsdl:part element="tns:ValidateResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetVersionResponse">
-    <wsdl:part element="tns:GetVersionResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="GetAllData">
-    <wsdl:part element="tns:GetAllData" name="parameters">
+  <wsdl:message name="TestExceptionHandlingResponse">
+    <wsdl:part element="tns:TestExceptionHandlingResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="ISampleService">
-    <wsdl:operation name="TestExceptionHandling">
-      <wsdl:input message="tns:TestExceptionHandling" name="TestExceptionHandling">
+    <wsdl:operation name="GetAllData">
+      <wsdl:input message="tns:GetAllData" name="GetAllData">
       </wsdl:input>
-      <wsdl:output message="tns:TestExceptionHandlingResponse" name="TestExceptionHandlingResponse">
+      <wsdl:output message="tns:GetAllDataResponse" name="GetAllDataResponse">
+      </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <wsdl:input message="tns:Validate" name="Validate">
+      </wsdl:input>
+      <wsdl:output message="tns:ValidateResponse" name="ValidateResponse">
       </wsdl:output>
       <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
       </wsdl:fault>
@@ -157,18 +165,10 @@
       <wsdl:output message="tns:GetVersionResponse" name="GetVersionResponse">
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetAllData">
-      <wsdl:input message="tns:GetAllData" name="GetAllData">
+    <wsdl:operation name="TestExceptionHandling">
+      <wsdl:input message="tns:TestExceptionHandling" name="TestExceptionHandling">
       </wsdl:input>
-      <wsdl:output message="tns:GetAllDataResponse" name="GetAllDataResponse">
-      </wsdl:output>
-      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="Validate">
-      <wsdl:input message="tns:Validate" name="Validate">
-      </wsdl:input>
-      <wsdl:output message="tns:ValidateResponse" name="ValidateResponse">
+      <wsdl:output message="tns:TestExceptionHandlingResponse" name="TestExceptionHandlingResponse">
       </wsdl:output>
       <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
       </wsdl:fault>
@@ -176,12 +176,24 @@
   </wsdl:portType>
   <wsdl:binding name="SampleServiceSoapBinding" type="tns:ISampleService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="TestExceptionHandling">
+    <wsdl:operation name="GetAllData">
       <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="TestExceptionHandling">
+      <wsdl:input name="GetAllData">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output name="TestExceptionHandlingResponse">
+      <wsdl:output name="GetAllDataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="Validate">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ValidateResponse">
         <soap:body use="literal"/>
       </wsdl:output>
       <wsdl:fault name="SampleServiceException">
@@ -209,24 +221,12 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetAllData">
+    <wsdl:operation name="TestExceptionHandling">
       <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="GetAllData">
+      <wsdl:input name="TestExceptionHandling">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output name="GetAllDataResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="SampleServiceException">
-        <soap:fault name="SampleServiceException" use="literal"/>
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="Validate">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="Validate">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="ValidateResponse">
+      <wsdl:output name="TestExceptionHandlingResponse">
         <soap:body use="literal"/>
       </wsdl:output>
       <wsdl:fault name="SampleServiceException">

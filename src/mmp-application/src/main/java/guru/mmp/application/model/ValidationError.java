@@ -44,7 +44,7 @@ import java.util.Map;
  */
 @ApiModel(value = "ValidationError")
 @JsonPropertyOrder({ "property", "message", "attributes" })
-@XmlType(name = "ValidationError", namespace = "http://application.mmp.guru",
+@XmlType(name = "ValidationError", namespace = "http://application.model.mmp.guru",
     propOrder = { "property", "message", "attributes" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ValidationError

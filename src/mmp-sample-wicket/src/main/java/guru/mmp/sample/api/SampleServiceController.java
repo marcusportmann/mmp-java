@@ -51,7 +51,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api")
 @WebService(serviceName = "SampleService", name = "ISampleService",
-    targetNamespace = "http://sample.mmp.guru")
+    targetNamespace = "http://sample.service.mmp.guru")
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
     parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
 public class SampleServiceController
