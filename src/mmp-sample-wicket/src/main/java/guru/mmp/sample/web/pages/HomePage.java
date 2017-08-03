@@ -70,7 +70,7 @@ public class HomePage extends TemplateWebPage
         {
           try
           {
-            for (Data data : sampleService.getData())
+            for (Data data : sampleService.getAllData())
             {
               logger.info(data.toString());
             }

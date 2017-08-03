@@ -70,7 +70,7 @@ public class SampleServiceTest
   public void rollbackTransactionTest()
     throws Exception
   {
-    List<Data> beforeAddRetrievedData = sampleService.getData();
+    List<Data> beforeAddRetrievedData = sampleService.getAllData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
@@ -79,7 +79,7 @@ public class SampleServiceTest
 
     transactionManager.rollback(transactionStatus);
 
-    List<Data> afterAddRetrievedData = sampleService.getData();
+    List<Data> afterAddRetrievedData = sampleService.getAllData();
 
     assertEquals("The correct number of data objects was not retrieved",
         beforeAddRetrievedData.size(), afterAddRetrievedData.size());
@@ -94,21 +94,21 @@ public class SampleServiceTest
   public void successfulTransactionTest()
     throws Exception
   {
-    List<Data> beforeAddRetrievedData = sampleService.getData();
+    List<Data> beforeAddRetrievedData = sampleService.getAllData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
 
     sampleService.addData();
 
-    List<Data> afterAddRetrievedData = sampleService.getData();
+    List<Data> afterAddRetrievedData = sampleService.getAllData();
 
     assertEquals("The correct number of data objects was not retrieved",
         beforeAddRetrievedData.size() + 1, afterAddRetrievedData.size());
 
     transactionManager.commit(transactionStatus);
 
-    afterAddRetrievedData = sampleService.getData();
+    afterAddRetrievedData = sampleService.getAllData();
 
     assertEquals("The correct number of data objects was not retrieved",
         beforeAddRetrievedData.size() + 1, afterAddRetrievedData.size());
