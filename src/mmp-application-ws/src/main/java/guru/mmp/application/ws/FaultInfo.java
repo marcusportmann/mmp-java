@@ -18,7 +18,7 @@ package guru.mmp.application.ws;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import guru.mmp.common.ws.LocalDateTimeAdapter;
+import guru.mmp.common.xml.LocalDateTimeAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;

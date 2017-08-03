@@ -18,11 +18,11 @@ package guru.mmp.sample.model;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import guru.mmp.common.xml.LocalDateAdapter;
+import guru.mmp.common.xml.LocalDateTimeAdapter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import guru.mmp.common.ws.LocalDateAdapter;
-import guru.mmp.common.ws.LocalDateTimeAdapter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -30,6 +30,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
@@ -60,6 +61,7 @@ public class Data
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @Id
+  @NotNull
   @Column(name = "ID", nullable = false)
   private long id;
 
@@ -69,6 +71,7 @@ public class Data
   @ApiModelProperty(value = "The name for the data", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
+  @NotNull
   @Column(name = "NAME", nullable = false)
   private String name;
 
@@ -131,7 +134,7 @@ public class Data
    * @param timestampValue the timestamp value for the data
    */
   public Data(long id, String name, Integer integerValue, String stringValue, LocalDate dateValue,
-      LocalDateTime timestampValue)
+    LocalDateTime timestampValue)
   {
     this.id = id;
     this.name = name;
@@ -270,7 +273,7 @@ public class Data
   public String toString()
   {
     return "Data {id=\"" + id + "\", name=\"" + name + "\", integerValue=\"" + integerValue
-        + "\", stringValue=\"" + stringValue + "\", dateValue=\"" + dateValue
-        + "\", timestampValue=\"" + timestampValue + "\"}";
+      + "\", stringValue=\"" + stringValue + "\", dateValue=\"" + dateValue
+      + "\", timestampValue=\"" + timestampValue + "\"}";
   }
 }

@@ -18,6 +18,7 @@ package guru.mmp.sample.model;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.model.ValidationError;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +26,13 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -108,7 +112,7 @@ public class SampleService
    * @throws SampleServiceException
    */
   @Transactional
-  public List<Data> getData()
+  public List<Data> getAllData()
     throws SampleServiceException
   {
     try
@@ -176,5 +180,25 @@ public class SampleService
   public void testMethod()
   {
     System.out.println("[DEBUG] Hello world from the test method!!!");
+  }
+
+  /**
+   * Validate the data.
+   *
+   * @return the validation errors
+   */
+  public List<ValidationError> validate(Data data)
+    throws SampleServiceException
+  {
+    Set<ConstraintViolation<Data>> constraintViolations = validator.validate(data);
+
+    List<ValidationError> errors = new ArrayList<>();
+
+    for (ConstraintViolation<Data> constraintViolation : constraintViolations)
+    {
+      errors.add(new ValidationError(constraintViolation));
+    }
+
+    return errors;
   }
 }

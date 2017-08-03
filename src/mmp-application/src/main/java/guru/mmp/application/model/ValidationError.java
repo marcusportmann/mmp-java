@@ -29,7 +29,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.HashMap;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -41,12 +43,15 @@ import java.util.Map;
  * @author Marcus Portmann
  */
 @ApiModel(value = "ValidationError")
-@JsonPropertyOrder({ "property", "message", "value" })
+@JsonPropertyOrder({ "property", "message", "attributes" })
 @XmlType(name = "ValidationError", namespace = "http://model.application.mmp.guru",
-    propOrder = { "property", "message", "value" })
+    propOrder = { "property", "message", "attributes" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ValidationError
+  implements Serializable
 {
+  private static final long serialVersionUID = 1000000;
+
   /**
    * The path for the property that resulted in the validation error.
    */
@@ -67,51 +72,27 @@ public class ValidationError
   private String message;
 
   /**
-   * The error message template for the validation error.
+   * The attributes associated with the validation error.
    */
-  @ApiModelProperty(value = "The error message template for the validation error")
-
-  @JsonProperty
-  @XmlElement(name = "Template")
-  @NotNull
-  private String template;
-
-  /**
-   * The attributes applied to the error message template associated with the validation error.
-   */
-  @ApiModelProperty(
-      value = "The attributes applied to the error message template associated with the validation error")
+  @ApiModelProperty(value = "The attributes associated with the validation error")
   @JsonProperty
   @XmlElement(name = "Attributes")
   @NotNull
-  private Map<String, String> attributes;
+  private List<ValidationErrorAttribute> attributes;
 
-  /**
-   * The invalid value for the property that resulted in the validation error.
-   */
-  @ApiModelProperty(
-      value = "The invalid value for the property that resulted in the validation error",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Value")
-  @NotNull
-  private String value;
+  ValidationError() {}
 
   /**
    * Constructs a new <code>ValidationError</code>.
    *
-   * @param constraintViolation
+   * @param constraintViolation the constraint violation
    */
   public ValidationError(ConstraintViolation<?> constraintViolation)
   {
     this.property = constraintViolation.getPropertyPath().toString();
     this.message = constraintViolation.getMessage();
-    this.template = constraintViolation.getMessageTemplate();
-    this.value = (constraintViolation.getInvalidValue() == null)
-        ? "null"
-        : constraintViolation.getInvalidValue().toString();
 
-    this.attributes = new HashMap<>();
+    this.attributes = new ArrayList<>();
 
     Map<String, Object> attributes = constraintViolation.getConstraintDescriptor().getAttributes();
 
@@ -119,7 +100,10 @@ public class ValidationError
     {
       Object attributeValue = attributes.get(attributeName);
 
-      this.attributes.put(attributeName, attributeValue.toString());
+      if (!(attributeValue instanceof Class[]))
+      {
+        this.attributes.add(new ValidationErrorAttribute(attributeName, attributeValue.toString()));
+      }
     }
   }
 
@@ -128,13 +112,35 @@ public class ValidationError
    *
    * @param property the path for the property that resulted in the validation error
    * @param message  the error message for the validation error
-   * @param value    the invalid value for the property that resulted in the validation error
    */
-  public ValidationError(String property, String message, String value)
+  public ValidationError(String property, String message)
   {
     this.property = property;
     this.message = message;
-    this.value = value;
+  }
+
+  /**
+   * Constructs a new <code>ValidationError</code>.
+   *
+   * @param property   the path for the property that resulted in the validation error
+   * @param message    the error message for the validation error
+   * @param attributes the attributes associated with the validation error
+   */
+  public ValidationError(String property, String message, List<ValidationErrorAttribute> attributes)
+  {
+    this.property = property;
+    this.message = message;
+    this.attributes = attributes;
+  }
+
+  /**
+   * Returns the attributes associated with the validation error.
+   *
+   * @return the attributes associated with the validation error
+   */
+  public List<ValidationErrorAttribute> getAttributes()
+  {
+    return attributes;
   }
 
   /**
@@ -158,13 +164,13 @@ public class ValidationError
   }
 
   /**
-   * Returns the invalid value for the property that resulted in the validation error.
+   * Set the attributes associated with the validation error.
    *
-   * @return the invalid value for the property that resulted in the validation error
+   * @param attributes the attributes associated with the validation error
    */
-  public String getValue()
+  public void setAttributes(List<ValidationErrorAttribute> attributes)
   {
-    return value;
+    this.attributes = attributes;
   }
 
   /**
@@ -185,16 +191,5 @@ public class ValidationError
   public void setProperty(String property)
   {
     this.property = property;
-  }
-
-  /**
-   * Set the invalid value for the property that resulted in the validation error.
-   *
-   * @param value the invalid value for the property that resulted in the validation error
-   */
-  public void setValue(String value)
-  {
-    this.value = value;
-
   }
 }

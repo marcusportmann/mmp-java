@@ -44,6 +44,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
@@ -516,9 +517,27 @@ public abstract class Application
    * @return the local validator factory bean that provides support for JSR 303 Bean Validation
    */
   @Bean
+  @DependsOn({ "messageSource" })
   public javax.validation.Validator localValidatorFactoryBean()
   {
-    return new LocalValidatorFactoryBean();
+    final LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+    localValidatorFactoryBean.setValidationMessageSource(messageSource());
+
+    return localValidatorFactoryBean;
+  }
+
+  /**
+   * Returns the application message source.
+   *
+   * @return the application message source
+   */
+  @Bean
+  public MessageSource messageSource()
+  {
+    ApplicationMessageSource messageSource = new ApplicationMessageSource();
+    messageSource.setBasename("classpath*:messages");
+
+    return messageSource;
   }
 
   /**

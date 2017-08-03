@@ -16,9 +16,13 @@
 
 package guru.mmp.sample.model;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.model.ValidationError;
 
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ISampleService</code> interface defines the functionality that must be provided by
@@ -53,7 +57,7 @@ public interface ISampleService
    *
    * @throws SampleServiceException
    */
-  List<Data> getData()
+  List<Data> getAllData()
     throws SampleServiceException;
 
   /**
@@ -79,4 +83,12 @@ public interface ISampleService
    * The test method.
    */
   void testMethod();
+
+  /**
+   * Validate the data.
+   *
+   * @return the validation errors
+   */
+  List<ValidationError> validate(Data data)
+    throws SampleServiceException;
 }

@@ -18,20 +18,28 @@ package guru.mmp.sample.api;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.model.ValidationError;
 import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
 import guru.mmp.sample.model.SampleServiceException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -50,6 +58,20 @@ public class SampleServiceController
 {
   @Inject
   private ISampleService sampleService;
+
+  /**
+   * Returns all the data.
+   *
+   * @return all the data
+   */
+  @RequestMapping(value = "/allData", method = RequestMethod.GET, produces = "application/json")
+  @WebMethod(operationName = "GetAllData")
+  @WebResult(name = "Data")
+  public List<Data> allData()
+    throws SampleServiceException
+  {
+    return sampleService.getAllData();
+  }
 
   /**
    * The data RESTful web service.
@@ -85,6 +107,24 @@ public class SampleServiceController
     throws SampleServiceException
   {
     throw new SampleServiceException("Testing 1.. 2.. 3..");
+  }
+
+  /**
+   * Validate the data.
+   */
+  @ApiOperation(value = "Validate the data", notes = "Validate the data")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ValidationError.class,
+      responseContainer = "List") })
+  @RequestMapping(value = "/validate", method = RequestMethod.POST, produces = "application/json")
+  @WebMethod(operationName = "Validate")
+  @WebResult(name = "ValidationError")
+  public List<ValidationError> validate(@ApiParam(name = "data", value = "The data",
+      required = true)
+  @RequestBody
+  @WebParam(name = "data") Data data)
+    throws SampleServiceException
+  {
+    return sampleService.validate(data);
   }
 
   /**
