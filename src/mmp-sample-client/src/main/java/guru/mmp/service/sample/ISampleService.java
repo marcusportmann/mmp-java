@@ -9,7 +9,7 @@ import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
-import guru.mmp.model.application.ValidationError;
+import guru.mmp.model.validation.ValidationError;
 
 
 /**
@@ -20,7 +20,7 @@ import guru.mmp.model.application.ValidationError;
  */
 @WebService(name = "ISampleService", targetNamespace = "http://sample.service.mmp.guru")
 @XmlSeeAlso({
-    guru.mmp.model.application.ObjectFactory.class,
+    guru.mmp.model.validation.ObjectFactory.class,
     guru.mmp.service.sample.ObjectFactory.class
 })
 public interface ISampleService {
@@ -44,7 +44,7 @@ public interface ISampleService {
      * 
      * @param data
      * @return
-     *     returns java.util.List<guru.mmp.model.application.ValidationError>
+     *     returns java.util.List<guru.mmp.model.validation.ValidationError>
      * @throws SampleServiceException
      */
     @WebMethod(operationName = "Validate")
