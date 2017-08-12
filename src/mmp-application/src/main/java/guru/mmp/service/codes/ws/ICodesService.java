@@ -41,11 +41,11 @@ public interface ICodesService {
     @RequestWrapper(localName = "GetCodeCategory", targetNamespace = "http://ws.codes.service.mmp.guru", className = "guru.mmp.service.codes.ws.GetCodeCategory")
     @ResponseWrapper(localName = "GetCodeCategoryResponse", targetNamespace = "http://ws.codes.service.mmp.guru", className = "guru.mmp.service.codes.ws.GetCodeCategoryResponse")
     public CodeCategory getCodeCategory(
-        @WebParam(name = "id", targetNamespace = "http://ws.codes.service.mmp.guru")
+        @WebParam(name = "Id", targetNamespace = "http://ws.codes.service.mmp.guru")
         String id,
-        @WebParam(name = "lastRetrieved", targetNamespace = "http://ws.codes.service.mmp.guru")
+        @WebParam(name = "LastRetrieved", targetNamespace = "http://ws.codes.service.mmp.guru")
         LocalDateTime lastRetrieved,
-        @WebParam(name = "returnCodesIfCurrent", targetNamespace = "http://ws.codes.service.mmp.guru")
+        @WebParam(name = "ReturnCodesIfCurrent", targetNamespace = "http://ws.codes.service.mmp.guru")
         boolean returnCodesIfCurrent)
         throws CodesServiceFault
     ;
@@ -65,13 +65,13 @@ public interface ICodesService {
     @RequestWrapper(localName = "GetCodeCategoryWithParameters", targetNamespace = "http://ws.codes.service.mmp.guru", className = "guru.mmp.service.codes.ws.GetCodeCategoryWithParameters")
     @ResponseWrapper(localName = "GetCodeCategoryWithParametersResponse", targetNamespace = "http://ws.codes.service.mmp.guru", className = "guru.mmp.service.codes.ws.GetCodeCategoryWithParametersResponse")
     public CodeCategory getCodeCategoryWithParameters(
-        @WebParam(name = "id", targetNamespace = "http://ws.codes.service.mmp.guru")
+        @WebParam(name = "Id", targetNamespace = "http://ws.codes.service.mmp.guru")
         String id,
-        @WebParam(name = "parameters", targetNamespace = "http://ws.codes.service.mmp.guru")
+        @WebParam(name = "Parameters", targetNamespace = "http://ws.codes.service.mmp.guru")
         List<Parameter> parameters,
-        @WebParam(name = "lastRetrieved", targetNamespace = "http://ws.codes.service.mmp.guru")
+        @WebParam(name = "LastRetrieved", targetNamespace = "http://ws.codes.service.mmp.guru")
         LocalDateTime lastRetrieved,
-        @WebParam(name = "returnCodesIfCurrent", targetNamespace = "http://ws.codes.service.mmp.guru")
+        @WebParam(name = "ReturnCodesIfCurrent", targetNamespace = "http://ws.codes.service.mmp.guru")
         boolean returnCodesIfCurrent)
         throws CodesServiceFault
     ;

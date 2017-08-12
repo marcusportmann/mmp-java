@@ -140,19 +140,19 @@
       <xs:element name="GetCodeCategory">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="id" type="xs:string">
+            <xs:element name="Id" type="xs:string">
               <xs:annotation>
                 <xs:documentation>The Universally Unique Identifier (UUID) uniquely identifying the code category to
                   retrieve.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="lastRetrieved" type="xs:dateTime">
+            <xs:element name="LastRetrieved" type="xs:dateTime">
               <xs:annotation>
                 <xs:documentation>The date and time the code category was last retrieved.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="returnCodesIfCurrent" type="xs:boolean">
+            <xs:element name="ReturnCodesIfCurrent" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>Should the codes and/or code data for the code category be returned if the code
                   category is current?
@@ -173,7 +173,7 @@
       <xs:element name="GetCodeCategoryWithParameters">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="id" type="xs:string">
+            <xs:element name="Id" type="xs:string">
               <xs:annotation>
                 <xs:documentation>The Universally Unique Identifier (UUID) uniquely identifying the code category to
                   retrieve.
@@ -181,18 +181,18 @@
               </xs:annotation>
             </xs:element>
             <xs:sequence>
-              <xs:element name="parameters" maxOccurs="unbounded" type="interface:Parameter">
+              <xs:element name="Parameters" maxOccurs="unbounded" type="interface:Parameter">
                 <xs:annotation>
                   <xs:documentation>The parameters.</xs:documentation>
                 </xs:annotation>
               </xs:element>
             </xs:sequence>
-            <xs:element name="lastRetrieved" type="xs:dateTime">
+            <xs:element name="LastRetrieved" type="xs:dateTime">
               <xs:annotation>
                 <xs:documentation>The date and time the code category was last retrieved.</xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="returnCodesIfCurrent" type="xs:boolean">
+            <xs:element name="ReturnCodesIfCurrent" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>Should the codes and/or code data for the code category be returned if the code
                   category is current?

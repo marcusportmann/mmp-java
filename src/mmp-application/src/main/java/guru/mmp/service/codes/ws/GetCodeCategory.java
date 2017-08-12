@@ -23,9 +23,9 @@ import org.w3._2001.xmlschema.Adapter1;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="lastRetrieved" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="returnCodesIfCurrent" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="Id" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="LastRetrieved" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
+ *         &lt;element name="ReturnCodesIfCurrent" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -46,12 +46,13 @@ public class GetCodeCategory
 {
 
     private final static long serialVersionUID = 1000000L;
-    @XmlElement(required = true)
+    @XmlElement(name = "Id", required = true)
     protected String id;
-    @XmlElement(required = true, type = String.class)
+    @XmlElement(name = "LastRetrieved", required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
     protected LocalDateTime lastRetrieved;
+    @XmlElement(name = "ReturnCodesIfCurrent")
     protected boolean returnCodesIfCurrent;
 
     /**
