@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Data" type="{http://sample.service.mmp.guru}Data" minOccurs="0"/>
+ *         &lt;element name="Data" type="{http://sample.service.mmp.guru}Data"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,7 +36,7 @@ public class Validate
 {
 
     private final static long serialVersionUID = 1000000L;
-    @XmlElement(name = "Data")
+    @XmlElement(name = "Data", required = true)
     protected Data data;
 
     /**

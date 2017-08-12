@@ -37,6 +37,7 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+import javax.xml.bind.annotation.XmlElement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -121,7 +122,8 @@ public class SampleServiceController
   public List<ValidationError> validate(@ApiParam(name = "data", value = "The data",
       required = true)
   @RequestBody
-  @WebParam(name = "Data") Data data)
+  @WebParam(name = "Data")
+  @XmlElement(required = true) Data data)
     throws SampleServiceException
   {
     return sampleService.validate(data);

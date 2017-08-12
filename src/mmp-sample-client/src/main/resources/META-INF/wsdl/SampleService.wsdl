@@ -32,7 +32,7 @@
       </xs:complexType>
       <xs:complexType name="Validate">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Data" type="service:Data"/>
+          <xs:element name="Data" type="service:Data"/>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="ValidateResponse">
