@@ -81,10 +81,10 @@ public class ApplicationConfiguration
   }
 
   /**
-   * Returns whether mutual SSL has been enable and web services and RESTful web services should be
+   * Returns whether mutual SSL has been enabled and web services and RESTful web services should be
    * invoked securely.
    *
-   * @return <code>true</code> if mutual SSL has been enable and web services and RESTful web
+   * @return <code>true</code> if mutual SSL has been enabled and web services and RESTful web
    *         services should be invoked securely or <code>false</code> otherwise
    */
   public boolean isMutualSSLEnabled()

@@ -37,7 +37,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ValidationErrorAttribute")
 @JsonPropertyOrder({ "name", "value" })
-@XmlType(name = "ValidationErrorAttribute", namespace = "http://validation.model.mmp.guru",
+@XmlType(name = "ValidationErrorAttribute", namespace = "http://application.model.mmp.guru",
     propOrder = { "name", "value" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ValidationErrorAttribute

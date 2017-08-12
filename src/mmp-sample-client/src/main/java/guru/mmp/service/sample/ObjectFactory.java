@@ -5,6 +5,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
+import guru.mmp.model.application.ServiceError;
 
 
 /**
@@ -29,8 +30,8 @@ public class ObjectFactory {
     private final static QName _TestExceptionHandling_QNAME = new QName("http://sample.service.mmp.guru", "TestExceptionHandling");
     private final static QName _GetAllDataResponse_QNAME = new QName("http://sample.service.mmp.guru", "GetAllDataResponse");
     private final static QName _GetDataResponse_QNAME = new QName("http://sample.service.mmp.guru", "GetDataResponse");
-    private final static QName _SampleServiceFault_QNAME = new QName("http://sample.service.mmp.guru", "SampleServiceFault");
     private final static QName _Validate_QNAME = new QName("http://sample.service.mmp.guru", "Validate");
+    private final static QName _SampleServiceException_QNAME = new QName("http://sample.service.mmp.guru", "SampleServiceException");
     private final static QName _GetData_QNAME = new QName("http://sample.service.mmp.guru", "GetData");
     private final static QName _GetVersion_QNAME = new QName("http://sample.service.mmp.guru", "GetVersion");
     private final static QName _ValidateResponse_QNAME = new QName("http://sample.service.mmp.guru", "ValidateResponse");
@@ -108,14 +109,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FaultInfo }
-     * 
-     */
-    public FaultInfo createFaultInfo() {
-        return new FaultInfo();
-    }
-
-    /**
      * Create an instance of {@link GetAllData }
      * 
      */
@@ -185,21 +178,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link FaultInfo }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://sample.service.mmp.guru", name = "SampleServiceFault")
-    public JAXBElement<FaultInfo> createSampleServiceFault(FaultInfo value) {
-        return new JAXBElement<FaultInfo>(_SampleServiceFault_QNAME, FaultInfo.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Validate }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://sample.service.mmp.guru", name = "Validate")
     public JAXBElement<Validate> createValidate(Validate value) {
         return new JAXBElement<Validate>(_Validate_QNAME, Validate.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ServiceError }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://sample.service.mmp.guru", name = "SampleServiceException")
+    public JAXBElement<ServiceError> createSampleServiceException(ServiceError value) {
+        return new JAXBElement<ServiceError>(_SampleServiceException_QNAME, ServiceError.class, null, value);
     }
 
     /**

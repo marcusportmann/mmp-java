@@ -18,7 +18,7 @@ package guru.mmp.sample.model;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.ws.ServiceException;
+import guru.mmp.application.model.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -39,8 +39,8 @@ import javax.xml.ws.WebFault;
 @SuppressWarnings("unused")
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
     reason = "An error has occurred and the service is unable to process the request at this time")
-@WebFault(name = "SampleServiceFault", targetNamespace = "http://sample.service.mmp.guru",
-    faultBean = "mmp.guru.application.ws.FaultInfo")
+@WebFault(name = "SampleServiceException", targetNamespace = "http://sample.service.mmp.guru",
+    faultBean = "mmp.guru.application.model.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class SampleServiceException extends ServiceException
 {

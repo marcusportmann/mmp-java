@@ -33,6 +33,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -44,7 +45,7 @@ import java.util.Map;
  */
 @ApiModel(value = "ValidationError")
 @JsonPropertyOrder({ "property", "message", "attributes" })
-@XmlType(name = "ValidationError", namespace = "http://validation.model.mmp.guru",
+@XmlType(name = "ValidationError", namespace = "http://application.model.mmp.guru",
     propOrder = { "property", "message", "attributes" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ValidationError
@@ -131,6 +132,27 @@ public class ValidationError
     this.property = property;
     this.message = message;
     this.attributes = attributes;
+  }
+
+  /**
+   * Helper method to convert a list of JSR 303 constraint violations to a list of validation
+   * errors.
+   *
+   * @param  constraintViolations the list of JSR 303 constraint violations to convert
+   *
+   * @return the list of validation errors
+   */
+  public static <T> List<ValidationError> toValidationErrors(
+      Set<ConstraintViolation<T>> constraintViolations)
+  {
+    List<ValidationError> validationErrors = new ArrayList<>();
+
+    for (ConstraintViolation<T> constraintViolation : constraintViolations)
+    {
+      validationErrors.add(new ValidationError(constraintViolation));
+    }
+
+    return validationErrors;
   }
 
   /**

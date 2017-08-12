@@ -49,7 +49,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/v1/sample")
 @WebService(serviceName = "SampleService", name = "ISampleService",
     targetNamespace = "http://sample.service.mmp.guru")
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
@@ -121,7 +121,7 @@ public class SampleServiceController
   public List<ValidationError> validate(@ApiParam(name = "data", value = "The data",
       required = true)
   @RequestBody
-  @WebParam(name = "data") Data data)
+  @WebParam(name = "Data") Data data)
     throws SampleServiceException
   {
     return sampleService.validate(data);

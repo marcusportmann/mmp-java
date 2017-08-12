@@ -113,7 +113,6 @@ import java.util.concurrent.Executor;
 @EnableScheduling
 @EnableTransactionManagement
 @SpringBootApplication
-@ControllerAdvice
 public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
 {
   /* Logger */
@@ -135,9 +134,9 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   Map<String, Map> caches = new ConcurrentHashMap<>();
 
   /**
-   * The paths for the unsecured web services.
+   * The paths for the unsecured resources.
    */
-  private List<String> unsecuredWebServices = new ArrayList<>();
+  private List<String> unsecuredResources = new ArrayList<>();
 
   /**
    * The Spring application context.
@@ -189,16 +188,16 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
             {
               @Override
               public void handleRequest(HttpServerExchange httpServerExchange)
-                  throws Exception
+                throws Exception
               {
                 if (configuration.isMutualSSLEnabled())
                 {
                   String requestPath = httpServerExchange.getRequestPath();
 
-                  // Check if this is an unsecured web service
-                  for (String unsecuredWebService : unsecuredWebServices)
+                  // Check if this is an unsecured resource
+                  for (String unsecuredResource : unsecuredResources)
                   {
-                    if (requestPath.startsWith(unsecuredWebService))
+                    if (requestPath.startsWith(unsecuredResource))
                     {
                       wrappedHttpHandler.handleRequest(httpServerExchange);
 
@@ -206,62 +205,40 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
                     }
                   }
 
-                  if ((configuration.getMutualSSL().getSecureAPIs() && requestPath.startsWith(
-                      "/api/"))
-                      || (configuration.getMutualSSL().getSecureWebServices()
-                          && requestPath.startsWith("/service/")))
+                  SSLSessionInfo sslSessionInfo = httpServerExchange.getConnection()
+                    .getSslSessionInfo();
+
+                  if (sslSessionInfo == null)
                   {
-                    SSLSessionInfo sslSessionInfo = httpServerExchange.getConnection()
-                        .getSslSessionInfo();
+                    logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
+                      + ") is attempting to access the secure resource (" + requestPath
+                      + ") insecurely");
 
-                    if (sslSessionInfo == null)
+                    httpServerExchange.setStatusCode(403);
+                    httpServerExchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                    httpServerExchange.getResponseSender().send("Access Denied");
+                  }
+                  else
+                  {
+                    if (logger.isDebugEnabled())
                     {
-                      if (requestPath.startsWith("/api/"))
-                      {
-                        logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
-                            + ") is attempting to access the secure API (" + requestPath
-                            + ") insecurely");
-                      }
-                      else if (requestPath.startsWith("/service/"))
-                      {
-                        logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
-                            + ") is attempting to access the secure web service (" + requestPath
-                            + ") insecurely");
-                      }
+                      javax.security.cert.X509Certificate[] certificates =
+                        sslSessionInfo.getPeerCertificateChain();
 
-                      httpServerExchange.setStatusCode(403);
-                      httpServerExchange.getResponseHeaders().put(Headers.CONTENT_TYPE,
-                          "text/plain");
-                      httpServerExchange.getResponseSender().send("Access Denied");
-                    }
-                    else
-                    {
-                      if (logger.isDebugEnabled())
+                      if ((certificates != null) && (certificates.length > 0))
                       {
-                        javax.security.cert.X509Certificate[] certificates =
-                            sslSessionInfo.getPeerCertificateChain();
-
-                        if ((certificates != null) && (certificates.length > 0))
+                        if (logger.isDebugEnabled())
                         {
-                          if (requestPath.startsWith("/api/"))
-                          {
-                            logger.debug("The remote client ("
-                                + httpServerExchange.getSourceAddress() + ") with certificate ("
-                                + certificates[0].getSubjectDN()
-                                + ") is attempting to access the secure API (" + requestPath + ")");
-                          }
-                          else if (requestPath.startsWith("/service/"))
-                          {
-                            logger.debug("The remote client ("
-                                + httpServerExchange.getSourceAddress() + ") with certificate ("
-                                + certificates[0].getSubjectDN()
-                                + ") is attempting to access the secure web service ("
-                                + requestPath + ")");
-                          }
+                          logger.debug("The remote client ("
+                            + httpServerExchange.getSourceAddress() + ") with certificate ("
+                            + certificates[0].getSubjectDN()
+                            + ") is attempting to access the secure resource (" + requestPath
+                            + ")");
                         }
                       }
                     }
                   }
+
                 }
 
                 wrappedHttpHandler.handleRequest(httpServerExchange);
@@ -766,7 +743,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
 
       if (!isSecured)
       {
-        unsecuredWebServices.add("/service/" + name);
+        unsecuredResources.add("/service/" + name);
       }
 
       return endpoint;

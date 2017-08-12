@@ -18,8 +18,11 @@ package guru.mmp.application;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import guru.mmp.application.model.InvalidArgumentException;
+import guru.mmp.application.model.ValidationError;
 import guru.mmp.common.util.StringUtil;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -38,7 +42,9 @@ import java.time.LocalDateTime;
  *
  * @author Marcus Portmann
  */
-@JsonPropertyOrder({ "path", "timestamp", "status", "message", "exception", "stackTrace" })
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "path", "timestamp", "status", "message", "exception", "stackTrace", "name",
+    "validationErrors" })
 public class ApplicationError
   implements Serializable
 {
@@ -81,6 +87,18 @@ public class ApplicationError
   private String stackTrace;
 
   /**
+   * The name of the entity associated with the error e.g. the name of the argument or parameter.
+   */
+  @JsonProperty
+  private String name;
+
+  /**
+   * The validation errors associated with the error.
+   */
+  @JsonProperty
+  private List<ValidationError> validationErrors;
+
+  /**
    * Constructs a new <code>ApplicationError</code>.
    *
    * @param cause the exception
@@ -110,6 +128,18 @@ public class ApplicationError
     else
     {
       this.message = cause.getMessage();
+    }
+
+    if (cause instanceof InvalidArgumentException)
+    {
+      InvalidArgumentException exception = (InvalidArgumentException) cause;
+
+      this.name = exception.getName();
+
+      if (exception.getValidationErrors() != null)
+      {
+        this.validationErrors = exception.getValidationErrors();
+      }
     }
 
     this.status = responseStatus.getReasonPhrase() + " (" + responseStatus.value() + ")";

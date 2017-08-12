@@ -1,25 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://sample.service.mmp.guru" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="SampleService" targetNamespace="http://sample.service.mmp.guru">
   <wsdl:types>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://validation.model.mmp.guru" targetNamespace="http://validation.model.mmp.guru" version="1.0">
-
-      <xs:complexType name="ValidationError">
-        <xs:sequence>
-          <xs:element name="Property" type="xs:string"/>
-          <xs:element name="Message" type="xs:string"/>
-          <xs:element maxOccurs="unbounded" minOccurs="0" name="Attributes" type="tns:ValidationErrorAttribute"/>
-        </xs:sequence>
-      </xs:complexType>
-
-      <xs:complexType name="ValidationErrorAttribute">
-        <xs:sequence>
-          <xs:element name="Name" type="xs:string"/>
-          <xs:element minOccurs="0" name="Value" type="xs:string"/>
-        </xs:sequence>
-      </xs:complexType>
-
-    </xs:schema>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:validation="http://validation.model.mmp.guru" xmlns:tns="http://sample.service.mmp.guru" xmlns:service="http://sample.service.mmp.guru" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://sample.service.mmp.guru">
-      <xs:import namespace="http://validation.model.mmp.guru"/>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://sample.service.mmp.guru" xmlns:service="http://sample.service.mmp.guru" xmlns:application="http://application.model.mmp.guru" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://sample.service.mmp.guru">
+      <xs:import namespace="http://application.model.mmp.guru"/>
       <xs:element name="GetAllData" type="service:GetAllData"/>
       <xs:element name="GetAllDataResponse" type="service:GetAllDataResponse"/>
       <xs:element name="GetData" type="service:GetData"/>
@@ -48,21 +30,14 @@
           <xs:element minOccurs="0" name="TimestampValue" type="xs:dateTime"/>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="FaultInfo">
-        <xs:sequence>
-          <xs:element name="When" type="xs:dateTime"/>
-          <xs:element name="Message" type="xs:string"/>
-          <xs:element name="Detail" type="xs:string"/>
-        </xs:sequence>
-      </xs:complexType>
       <xs:complexType name="Validate">
         <xs:sequence>
-          <xs:element minOccurs="0" name="data" type="service:Data"/>
+          <xs:element minOccurs="0" name="Data" type="service:Data"/>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="ValidateResponse">
         <xs:sequence>
-          <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationError" type="validation:ValidationError"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationError" type="application:ValidationError"/>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="GetData">
@@ -87,7 +62,33 @@
       <xs:complexType name="TestExceptionHandlingResponse">
         <xs:sequence/>
       </xs:complexType>
-      <xs:element name="SampleServiceFault" nillable="true" type="service:FaultInfo"/>
+      <xs:element name="SampleServiceException" nillable="true" type="application:ServiceError"/>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://application.model.mmp.guru" targetNamespace="http://application.model.mmp.guru" version="1.0">
+
+      <xs:complexType name="ServiceError">
+        <xs:sequence>
+          <xs:element name="When" type="xs:dateTime"/>
+          <xs:element name="Message" type="xs:string"/>
+          <xs:element name="Detail" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="ValidationError">
+        <xs:sequence>
+          <xs:element name="Property" type="xs:string"/>
+          <xs:element name="Message" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="Attributes" type="tns:ValidationErrorAttribute"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="ValidationErrorAttribute">
+        <xs:sequence>
+          <xs:element name="Name" type="xs:string"/>
+          <xs:element minOccurs="0" name="Value" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+
     </xs:schema>
   </wsdl:types>
   <wsdl:message name="GetAllData">
@@ -111,7 +112,7 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="SampleServiceException">
-    <wsdl:part element="tns:SampleServiceFault" name="SampleServiceException">
+    <wsdl:part element="tns:SampleServiceException" name="SampleServiceException">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="Validate">

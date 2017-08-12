@@ -18,6 +18,7 @@ package guru.mmp.sample.model;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import guru.mmp.common.xml.LocalDateAdapter;
 import guru.mmp.common.xml.LocalDateTimeAdapter;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -43,6 +44,7 @@ import java.time.LocalDateTime;
  * @author Marcus Portmann
  */
 @ApiModel(value = "Data")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
 @XmlType(name = "Data", namespace = "http://sample.service.mmp.guru",
   propOrder = { "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })

@@ -16,8 +16,8 @@
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://sample.service.mmp.guru",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
-    xmlns = { @javax.xml.bind.annotation.XmlNs(prefix = "validation",
-        namespaceURI = "http://validation.model.mmp.guru") ,
+    xmlns = { @javax.xml.bind.annotation.XmlNs(prefix = "application",
+        namespaceURI = "http://application.model.mmp.guru") ,
         @javax.xml.bind.annotation.XmlNs(prefix = "service",
             namespaceURI = "http://sample.service.mmp.guru") , })
 package guru.mmp.sample.api;

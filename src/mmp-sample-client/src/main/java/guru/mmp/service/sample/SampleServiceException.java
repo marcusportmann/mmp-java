@@ -2,6 +2,7 @@
 package guru.mmp.service.sample;
 
 import javax.xml.ws.WebFault;
+import guru.mmp.model.application.ServiceError;
 
 
 /**
@@ -10,7 +11,7 @@ import javax.xml.ws.WebFault;
  * Generated source version: 2.2
  * 
  */
-@WebFault(name = "SampleServiceFault", targetNamespace = "http://sample.service.mmp.guru")
+@WebFault(name = "SampleServiceException", targetNamespace = "http://sample.service.mmp.guru")
 public class SampleServiceException
     extends Exception
 {
@@ -19,14 +20,14 @@ public class SampleServiceException
      * Java type that goes as soapenv:Fault detail element.
      * 
      */
-    private FaultInfo faultInfo;
+    private ServiceError faultInfo;
 
     /**
      * 
      * @param faultInfo
      * @param message
      */
-    public SampleServiceException(String message, FaultInfo faultInfo) {
+    public SampleServiceException(String message, ServiceError faultInfo) {
         super(message);
         this.faultInfo = faultInfo;
     }
@@ -37,7 +38,7 @@ public class SampleServiceException
      * @param cause
      * @param message
      */
-    public SampleServiceException(String message, FaultInfo faultInfo, Throwable cause) {
+    public SampleServiceException(String message, ServiceError faultInfo, Throwable cause) {
         super(message, cause);
         this.faultInfo = faultInfo;
     }
@@ -45,9 +46,9 @@ public class SampleServiceException
     /**
      * 
      * @return
-     *     returns fault bean: guru.mmp.service.sample.FaultInfo
+     *     returns fault bean: guru.mmp.model.application.ServiceError
      */
-    public FaultInfo getFaultInfo() {
+    public ServiceError getFaultInfo() {
         return faultInfo;
     }
 

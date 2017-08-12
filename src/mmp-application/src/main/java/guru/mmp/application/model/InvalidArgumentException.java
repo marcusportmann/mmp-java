@@ -16,8 +16,17 @@
 
 package guru.mmp.application.model;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
+import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InvalidArgumentException</code> exception is thrown to indicate an error condition
@@ -29,7 +38,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @SuppressWarnings("unused")
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid argument")
-public class InvalidArgumentException extends Exception
+@WebFault(name = "InvalidArgumentException", targetNamespace = "http://application.model.mmp.guru",
+    faultBean = "guru.mmp.application.model.ServiceError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class InvalidArgumentException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 
@@ -37,6 +49,11 @@ public class InvalidArgumentException extends Exception
    * The name of the invalid argument.
    */
   private String name;
+
+  /**
+   * The validation errors associated with the invalid argument.
+   */
+  private List<ValidationError> validationErrors;
 
   /**
    * Constructs a new <code>InvalidArgumentException</code> with <code>null</code> as its
@@ -49,6 +66,21 @@ public class InvalidArgumentException extends Exception
     super();
 
     this.name = name;
+  }
+
+  /**
+   * Constructs a new <code>InvalidArgumentException</code> with <code>null</code> as its
+   * message.
+   *
+   * @param name               the name of the invalid argument
+   * @param validationErrors   the validation errors associated with the invalid argument
+   */
+  public InvalidArgumentException(String name, List<ValidationError> validationErrors)
+  {
+    super();
+
+    this.name = name;
+    this.validationErrors = validationErrors;
   }
 
   /**
@@ -81,6 +113,23 @@ public class InvalidArgumentException extends Exception
   }
 
   /**
+   * Constructs a new <code>InvalidArgumentException</code> with the specified message.
+   *
+   * @param name             the name of the invalid argument
+   * @param message          The message saved for later retrieval by the <code>getMessage()</code>
+   *                         method.
+   * @param validationErrors the validation errors associated with the invalid argument
+   */
+  public InvalidArgumentException(String name, String message,
+      List<ValidationError> validationErrors)
+  {
+    super(message);
+
+    this.name = name;
+    this.validationErrors = validationErrors;
+  }
+
+  /**
    * Constructs a new <code>InvalidArgumentException</code> with the specified message and cause.
    *
    * @param name    the name of the invalid argument
@@ -103,5 +152,15 @@ public class InvalidArgumentException extends Exception
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Returns the validation errors associated with the invalid argument.
+   *
+   * @return the validation errors associated with the invalid argument
+   */
+  public List<ValidationError> getValidationErrors()
+  {
+    return validationErrors;
   }
 }

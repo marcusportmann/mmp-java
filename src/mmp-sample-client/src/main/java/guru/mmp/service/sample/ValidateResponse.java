@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import guru.mmp.model.validation.ValidationError;
+import guru.mmp.model.application.ValidationError;
 
 
 /**
@@ -21,7 +21,7 @@ import guru.mmp.model.validation.ValidationError;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="ValidationError" type="{http://validation.model.mmp.guru}ValidationError" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="ValidationError" type="{http://application.model.mmp.guru}ValidationError" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
