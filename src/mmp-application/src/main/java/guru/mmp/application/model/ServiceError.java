@@ -68,7 +68,9 @@ public class ServiceError
   public ServiceError(Throwable cause)
   {
     this.when = LocalDateTime.now();
-    this.message = cause.getMessage();
+    this.message = (cause.getMessage() != null)
+      ? cause.getMessage()
+      : cause.getClass().getSimpleName();
 
     try
     {

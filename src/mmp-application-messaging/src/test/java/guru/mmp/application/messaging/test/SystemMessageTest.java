@@ -303,7 +303,7 @@ public class SystemMessageTest
 
       GetCodeCategoryWithParametersRequestData requestData =
           new GetCodeCategoryWithParametersRequestData(testStandardCodeCategory.getId(),
-          ISO8601.toLocalDateTime("2017-06-27T07:34:59Z"), parameters, true);
+          LocalDateTime.now(), parameters, true);
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 

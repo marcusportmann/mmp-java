@@ -21,6 +21,9 @@ package guru.mmp.common.util;
 import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 
 /**
  * The <code>ISO8601</code> class provides a helper class for handling ISO 8601 strings of the
@@ -31,32 +34,33 @@ import java.time.format.DateTimeFormatter;
 public final class ISO8601
 {
   private static final ThreadLocal<DateTimeFormatter> threadLocalDateTimeFormatter =
-      new ThreadLocal<DateTimeFormatter>()
-  {
-    @Override
-    protected DateTimeFormatter initialValue()
+    new ThreadLocal<DateTimeFormatter>()
     {
-      return DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"));
-    }
-  };
+      @Override
+      protected DateTimeFormatter initialValue()
+      {
+        return new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
+          .parseLenient().optionalStart().appendOffset("+HH:MM", "Z").optionalEnd().toFormatter();
+      }
+    };
   private static final ThreadLocal<DateTimeFormatter> threadLocalDateFormatter =
-      new ThreadLocal<DateTimeFormatter>()
-  {
-    @Override
-    protected DateTimeFormatter initialValue()
+    new ThreadLocal<DateTimeFormatter>()
     {
-      return DateTimeFormatter.ISO_DATE;
-    }
-  };
+      @Override
+      protected DateTimeFormatter initialValue()
+      {
+        return DateTimeFormatter.ISO_DATE;
+      }
+    };
   private static final ThreadLocal<DateTimeFormatter> threadLocalTimeFormatter =
-      new ThreadLocal<DateTimeFormatter>()
-  {
-    @Override
-    protected DateTimeFormatter initialValue()
+    new ThreadLocal<DateTimeFormatter>()
     {
-      return DateTimeFormatter.ISO_TIME;
-    }
-  };
+      @Override
+      protected DateTimeFormatter initialValue()
+      {
+        return DateTimeFormatter.ISO_TIME;
+      }
+    };
 
   /**
    * Transform the <code>LocalDate</code> instance into an ISO 8601 string.
@@ -92,6 +96,40 @@ public final class ISO8601
   public static String fromLocalTime(LocalTime localTime)
   {
     return localTime.format(threadLocalTimeFormatter.get());
+  }
+
+  /**
+   * Transform the <code>ZonedDateTime</code> instance into an ISO 8601 string.
+   *
+   * @param zonedDateTime the <code>ZonedDateTime</code> instance to transform into an ISO 8601 string
+   *
+   * @return the ISO 8601 string for the <code>ZonedDateTime</code> instance
+   */
+  public static String fromZoneDateTime(ZonedDateTime zonedDateTime)
+  {
+    return zonedDateTime.format(threadLocalDateTimeFormatter.get());
+  }
+
+  /**
+   * Main.
+   *
+   * @param args the command line arguments
+   *
+   * @throws Exception
+   */
+  public static void main(String[] args)
+    throws Exception
+  {
+    System.out.println(fromLocalDateTime(LocalDateTime.now()));
+
+    System.out.println(fromZoneDateTime(ZonedDateTime.now(ZoneId.of("UTC"))));
+
+    System.out.println("2017-08-14T19:14:53.120Z = " + toLocalDateTime("2017-08-14T19:14:53.120Z"));
+
+    System.out.println("2017-08-14T22:14:53.120+02:00 = " + toLocalDateTime(
+      "2017-08-14T22:14:53.120+02:00"));
+
+    System.out.println("2017-08-14T19:14:53.120 = " + toLocalDateTime("2017-08-14T19:14:53.120"));
   }
 
   /**
@@ -131,8 +169,17 @@ public final class ISO8601
   public static LocalDateTime toLocalDateTime(String iso8601string)
     throws ParseException
   {
-    return ZonedDateTime.parse(iso8601string, threadLocalDateTimeFormatter.get())
+    TemporalAccessor temporalAccessor = threadLocalDateTimeFormatter.get().parse(iso8601string);
+
+    if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS))
+    {
+      return ZonedDateTime.parse(iso8601string, threadLocalDateTimeFormatter.get())
         .withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+    }
+    else
+    {
+      return LocalDateTime.parse(iso8601string, threadLocalDateTimeFormatter.get());
+    }
   }
 
   /**
