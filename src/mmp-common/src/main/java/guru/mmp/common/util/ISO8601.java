@@ -34,33 +34,34 @@ import java.time.temporal.TemporalAccessor;
 public final class ISO8601
 {
   private static final ThreadLocal<DateTimeFormatter> threadLocalDateTimeFormatter =
-    new ThreadLocal<DateTimeFormatter>()
+      new ThreadLocal<DateTimeFormatter>()
+  {
+    @Override
+    protected DateTimeFormatter initialValue()
     {
-      @Override
-      protected DateTimeFormatter initialValue()
-      {
-        return new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
-          .parseLenient().optionalStart().appendOffset("+HH:MM", "Z").optionalEnd().toFormatter();
-      }
-    };
+      return (new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd'T'HH:mm:ss").parseLenient()
+          .optionalStart().appendPattern(".SSS").optionalEnd().optionalStart().appendOffset(
+          "+HH:MM", "Z").optionalEnd().toFormatter());
+    }
+  };
   private static final ThreadLocal<DateTimeFormatter> threadLocalDateFormatter =
-    new ThreadLocal<DateTimeFormatter>()
+      new ThreadLocal<DateTimeFormatter>()
+  {
+    @Override
+    protected DateTimeFormatter initialValue()
     {
-      @Override
-      protected DateTimeFormatter initialValue()
-      {
-        return DateTimeFormatter.ISO_DATE;
-      }
-    };
+      return DateTimeFormatter.ISO_DATE;
+    }
+  };
   private static final ThreadLocal<DateTimeFormatter> threadLocalTimeFormatter =
-    new ThreadLocal<DateTimeFormatter>()
+      new ThreadLocal<DateTimeFormatter>()
+  {
+    @Override
+    protected DateTimeFormatter initialValue()
     {
-      @Override
-      protected DateTimeFormatter initialValue()
-      {
-        return DateTimeFormatter.ISO_TIME;
-      }
-    };
+      return DateTimeFormatter.ISO_TIME;
+    }
+  };
 
   /**
    * Transform the <code>LocalDate</code> instance into an ISO 8601 string.
@@ -127,9 +128,11 @@ public final class ISO8601
     System.out.println("2017-08-14T19:14:53.120Z = " + toLocalDateTime("2017-08-14T19:14:53.120Z"));
 
     System.out.println("2017-08-14T22:14:53.120+02:00 = " + toLocalDateTime(
-      "2017-08-14T22:14:53.120+02:00"));
+        "2017-08-14T22:14:53.120+02:00"));
 
     System.out.println("2017-08-14T19:14:53.120 = " + toLocalDateTime("2017-08-14T19:14:53.120"));
+
+    System.out.println("2017-08-14T19:14:53 = " + toLocalDateTime("2017-08-14T19:14:53"));
   }
 
   /**
@@ -174,7 +177,7 @@ public final class ISO8601
     if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS))
     {
       return ZonedDateTime.parse(iso8601string, threadLocalDateTimeFormatter.get())
-        .withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+          .withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
     else
     {
