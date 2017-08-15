@@ -25,14 +25,30 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _CodesServiceFaultInfo_QNAME = new QName("http://ws.codes.service.mmp.guru", "CodesServiceFaultInfo");
-    private final static QName _CodesServiceFaultInfoMessage_QNAME = new QName("http://ws.codes.service.mmp.guru", "Message");
     private final static QName _CodesServiceFaultInfoDetail_QNAME = new QName("http://ws.codes.service.mmp.guru", "Detail");
+    private final static QName _CodesServiceFaultInfoMessage_QNAME = new QName("http://ws.codes.service.mmp.guru", "Message");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: guru.mmp.service.codes.ws
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link CodesServiceFaultInfo }
+     * 
+     */
+    public CodesServiceFaultInfo createCodesServiceFaultInfo() {
+        return new CodesServiceFaultInfo();
+    }
+
+    /**
+     * Create an instance of {@link GetCodeCategory }
+     * 
+     */
+    public GetCodeCategory createGetCodeCategory() {
+        return new GetCodeCategory();
     }
 
     /**
@@ -52,30 +68,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetCodeCategoryWithParametersResponse }
-     * 
-     */
-    public GetCodeCategoryWithParametersResponse createGetCodeCategoryWithParametersResponse() {
-        return new GetCodeCategoryWithParametersResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetVersion }
-     * 
-     */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
-    }
-
-    /**
-     * Create an instance of {@link CodesServiceFaultInfo }
-     * 
-     */
-    public CodesServiceFaultInfo createCodesServiceFaultInfo() {
-        return new CodesServiceFaultInfo();
-    }
-
-    /**
      * Create an instance of {@link GetCodeCategoryWithParameters }
      * 
      */
@@ -92,19 +84,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetCodeCategoryWithParametersResponse }
+     * 
+     */
+    public GetCodeCategoryWithParametersResponse createGetCodeCategoryWithParametersResponse() {
+        return new GetCodeCategoryWithParametersResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetVersion }
+     * 
+     */
+    public GetVersion createGetVersion() {
+        return new GetVersion();
+    }
+
+    /**
      * Create an instance of {@link GetVersionResponse }
      * 
      */
     public GetVersionResponse createGetVersionResponse() {
         return new GetVersionResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetCodeCategory }
-     * 
-     */
-    public GetCodeCategory createGetCodeCategory() {
-        return new GetCodeCategory();
     }
 
     /**
@@ -128,18 +128,18 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.codes.service.mmp.guru", name = "Message", scope = CodesServiceFaultInfo.class)
-    public JAXBElement<String> createCodesServiceFaultInfoMessage(String value) {
-        return new JAXBElement<String>(_CodesServiceFaultInfoMessage_QNAME, String.class, CodesServiceFaultInfo.class, value);
+    @XmlElementDecl(namespace = "http://ws.codes.service.mmp.guru", name = "Detail", scope = CodesServiceFaultInfo.class)
+    public JAXBElement<String> createCodesServiceFaultInfoDetail(String value) {
+        return new JAXBElement<String>(_CodesServiceFaultInfoDetail_QNAME, String.class, CodesServiceFaultInfo.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.codes.service.mmp.guru", name = "Detail", scope = CodesServiceFaultInfo.class)
-    public JAXBElement<String> createCodesServiceFaultInfoDetail(String value) {
-        return new JAXBElement<String>(_CodesServiceFaultInfoDetail_QNAME, String.class, CodesServiceFaultInfo.class, value);
+    @XmlElementDecl(namespace = "http://ws.codes.service.mmp.guru", name = "Message", scope = CodesServiceFaultInfo.class)
+    public JAXBElement<String> createCodesServiceFaultInfoMessage(String value) {
+        return new JAXBElement<String>(_CodesServiceFaultInfoMessage_QNAME, String.class, CodesServiceFaultInfo.class, value);
     }
 
 }

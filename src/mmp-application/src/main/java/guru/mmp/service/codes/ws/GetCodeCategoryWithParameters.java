@@ -21,20 +21,18 @@ import org.w3._2001.xmlschema.Adapter1;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="Id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;sequence>
- *           &lt;element name="Parameters" type="{http://ws.codes.service.mmp.guru}Parameter" maxOccurs="unbounded"/>
- *         &lt;/sequence>
- *         &lt;element name="LastRetrieved" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="ReturnCodesIfCurrent" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="Id" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="Parameters" type="{http://ws.codes.service.mmp.guru}Parameter" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="LastRetrieved" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
+ *         &lt;element name="ReturnCodesIfCurrent" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -47,14 +45,13 @@ import org.w3._2001.xmlschema.Adapter1;
     "returnCodesIfCurrent"
 })
 @XmlRootElement(name = "GetCodeCategoryWithParameters")
-public class GetCodeCategoryWithParameters
-    implements Serializable
+public class GetCodeCategoryWithParameters implements Serializable
 {
 
     private final static long serialVersionUID = 1000000L;
     @XmlElement(name = "Id", required = true)
     protected String id;
-    @XmlElement(name = "Parameters", required = true)
+    @XmlElement(name = "Parameters")
     protected List<Parameter> parameters;
     @XmlElement(name = "LastRetrieved", required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)

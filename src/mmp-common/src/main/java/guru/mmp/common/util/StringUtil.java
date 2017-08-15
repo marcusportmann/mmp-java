@@ -19,6 +19,7 @@ package guru.mmp.common.util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -145,6 +146,60 @@ public final class StringUtil
     else
     {
       return String.valueOf(Character.toUpperCase(value.charAt(0)));
+    }
+  }
+
+  /**
+   * Capitalize each word in the string.
+   *
+   * @param str the string
+   *
+   * @return the capitalized string
+   */
+  public static String capitalize(String str)
+  {
+    if (StringUtil.isNullOrEmpty(str))
+    {
+      return str;
+    }
+
+    StringReader reader = new StringReader(str);
+
+    try
+    {
+      StringBuilder buffer = new StringBuilder();
+
+      boolean capitilizeNextCharacter = true;
+
+      int c;
+      while ((c = reader.read()) != -1)
+      {
+        char character = (char) c;
+
+        if (capitilizeNextCharacter)
+        {
+          buffer.append(Character.toUpperCase(character));
+        }
+        else
+        {
+          buffer.append(character);
+        }
+
+        if ((character == '.') || (character == ' '))
+        {
+          capitilizeNextCharacter = true;
+        }
+        else
+        {
+          capitilizeNextCharacter = false;
+        }
+      }
+
+      return buffer.toString();
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to capitalize the string (" + str + ")", e);
     }
   }
 

@@ -15,15 +15,15 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="out" type="{http://ws.codes.service.mmp.guru}CodeCategory"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="out" type="{http://ws.codes.service.mmp.guru}CodeCategory"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -33,8 +33,7 @@ import javax.xml.bind.annotation.XmlType;
     "out"
 })
 @XmlRootElement(name = "GetCodeCategoryResponse")
-public class GetCodeCategoryResponse
-    implements Serializable
+public class GetCodeCategoryResponse implements Serializable
 {
 
     private final static long serialVersionUID = 1000000L;

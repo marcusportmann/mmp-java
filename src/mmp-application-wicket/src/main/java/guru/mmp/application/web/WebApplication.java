@@ -23,6 +23,10 @@ import guru.mmp.application.ApplicationConfiguration;
 import guru.mmp.application.ApplicationMessageSource;
 import guru.mmp.application.Debug;
 import guru.mmp.common.crypto.CryptoUtils;
+import guru.mmp.common.json.LocalDateTimeDeserializer;
+import guru.mmp.common.json.LocalDateTimeSerializer;
+import guru.mmp.common.json.ZonedDateTimeDeserializer;
+import guru.mmp.common.json.ZonedDateTimeSerializer;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.StringUtil;
 import io.undertow.Undertow;
@@ -70,7 +74,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.xnio.Options;
 import org.xnio.SslClientAuthMode;
 
@@ -95,6 +98,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
@@ -188,7 +193,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
             {
               @Override
               public void handleRequest(HttpServerExchange httpServerExchange)
-                throws Exception
+                  throws Exception
               {
                 if (configuration.isMutualSSLEnabled())
                 {
@@ -206,13 +211,13 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
                   }
 
                   SSLSessionInfo sslSessionInfo = httpServerExchange.getConnection()
-                    .getSslSessionInfo();
+                      .getSslSessionInfo();
 
                   if (sslSessionInfo == null)
                   {
                     logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
-                      + ") is attempting to access the secure resource (" + requestPath
-                      + ") insecurely");
+                        + ") is attempting to access the secure resource (" + requestPath
+                        + ") insecurely");
 
                     httpServerExchange.setStatusCode(403);
                     httpServerExchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
@@ -223,17 +228,17 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
                     if (logger.isDebugEnabled())
                     {
                       javax.security.cert.X509Certificate[] certificates =
-                        sslSessionInfo.getPeerCertificateChain();
+                          sslSessionInfo.getPeerCertificateChain();
 
                       if ((certificates != null) && (certificates.length > 0))
                       {
                         if (logger.isDebugEnabled())
                         {
                           logger.debug("The remote client ("
-                            + httpServerExchange.getSourceAddress() + ") with certificate ("
-                            + certificates[0].getSubjectDN()
-                            + ") is attempting to access the secure resource (" + requestPath
-                            + ")");
+                              + httpServerExchange.getSourceAddress() + ") with certificate ("
+                              + certificates[0].getSubjectDN()
+                              + ") is attempting to access the secure resource (" + requestPath
+                              + ")");
                         }
                       }
                     }
@@ -530,6 +535,14 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
     jackson2ObjectMapperBuilder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+    jackson2ObjectMapperBuilder.serializerByType(LocalDateTime.class,
+        new LocalDateTimeSerializer());
+    jackson2ObjectMapperBuilder.deserializerByType(LocalDateTime.class,
+        new LocalDateTimeDeserializer());
+    jackson2ObjectMapperBuilder.serializerByType(ZonedDateTime.class,
+        new ZonedDateTimeSerializer());
+    jackson2ObjectMapperBuilder.deserializerByType(ZonedDateTime.class,
+        new ZonedDateTimeDeserializer());
 
     return jackson2ObjectMapperBuilder;
   }

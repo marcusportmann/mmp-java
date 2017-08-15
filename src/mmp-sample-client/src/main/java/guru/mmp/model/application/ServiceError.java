@@ -18,17 +18,17 @@ import org.w3._2001.xmlschema.Adapter1;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ServiceError">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="When" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="Message" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Detail" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="ServiceError"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="When" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
+ *         &lt;element name="Message" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="Detail" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -39,8 +39,7 @@ import org.w3._2001.xmlschema.Adapter1;
     "message",
     "detail"
 })
-public class ServiceError
-    implements Serializable
+public class ServiceError implements Serializable
 {
 
     private final static long serialVersionUID = 1000000L;

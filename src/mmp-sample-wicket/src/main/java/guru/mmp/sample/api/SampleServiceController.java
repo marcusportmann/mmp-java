@@ -19,6 +19,8 @@ package guru.mmp.sample.api;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.model.ValidationError;
+import guru.mmp.common.xml.LocalDateTimeAdapter;
+import guru.mmp.common.xml.ZonedDateTimeAdapter;
 import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
 import guru.mmp.sample.model.SampleServiceException;
@@ -26,10 +28,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.jws.WebMethod;
@@ -38,8 +37,10 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -108,6 +109,64 @@ public class SampleServiceController
     throws SampleServiceException
   {
     throw new SampleServiceException("Testing 1.. 2.. 3..");
+  }
+
+  /**
+   * Test the local date time mapping.
+   *
+   * @param localDateTime the local date time
+   */
+  @ApiOperation(value = "Test the local date time serialization",
+      notes = "Test the local date time serialization")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
+  @RequestMapping(value = "/testLocalDateTime", method = RequestMethod.GET,
+      produces = "application/json")
+  @WebMethod(operationName = "TestLocalDateTime")
+  public LocalDateTime testLocalDateTime(@ApiParam(name = "localDateTime",
+      value = "The local date time", required = true)
+  @RequestParam("localDateTime")
+  @WebParam(name = "LocalDateTime")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlElement(required = true) LocalDateTime localDateTime)
+    throws SampleServiceException
+  {
+    if (false)
+    {
+      throw new SampleServiceException("Testing 1.. 2.. 3...");
+    }
+
+    System.out.println("localDateTime = " + localDateTime);
+
+    return localDateTime;
+  }
+
+  /**
+   * Test the zoned date time mapping.
+   *
+   * @param zonedDateTime the zoned date time
+   */
+  @ApiOperation(value = "Test the zoned date time serialization",
+      notes = "Test the zoned date time serialization")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
+  @RequestMapping(value = "/testZonedDateTime", method = RequestMethod.GET,
+      produces = "application/json")
+  @WebMethod(operationName = "TestZonedDateTime")
+  public ZonedDateTime testZonedDateTime(@ApiParam(name = "zonedDateTime",
+      value = "The zoned date time", required = true)
+  @RequestParam("zonedDateTime")
+  @WebParam(name = "ZonedDateTime")
+  @XmlJavaTypeAdapter(ZonedDateTimeAdapter.class)
+  @XmlElement(required = true) ZonedDateTime zonedDateTime)
+    throws SampleServiceException
+  {
+    if (false)
+    {
+      throw new SampleServiceException("Testing 1.. 2.. 3...");
+    }
+
+    System.out.println("zonedDateTime = " + zonedDateTime);
+
+    return zonedDateTime;
   }
 
   /**

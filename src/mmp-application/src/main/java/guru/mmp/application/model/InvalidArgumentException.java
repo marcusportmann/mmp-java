@@ -38,12 +38,18 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid argument")
-@WebFault(name = "InvalidArgumentException", targetNamespace = "http://application.model.mmp.guru",
-    faultBean = "guru.mmp.application.model.ServiceError")
+@WebFault(name = "InvalidArgumentException",
+    targetNamespace = "http://application.model.mmp.guru",
+    faultBean = "guru.mmp.application.model.InvalidArgumentError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class InvalidArgumentException extends ServiceException
+public class InvalidArgumentException extends Exception
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The invalid argument error information.
+   */
+  private InvalidArgumentError invalidArgumentError;
 
   /**
    * The name of the invalid argument.
@@ -66,6 +72,7 @@ public class InvalidArgumentException extends ServiceException
     super();
 
     this.name = name;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -81,6 +88,7 @@ public class InvalidArgumentException extends ServiceException
 
     this.name = name;
     this.validationErrors = validationErrors;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -94,6 +102,7 @@ public class InvalidArgumentException extends ServiceException
     super(message);
 
     this.name = name;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -110,6 +119,7 @@ public class InvalidArgumentException extends ServiceException
     super(cause);
 
     this.name = name;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -127,6 +137,7 @@ public class InvalidArgumentException extends ServiceException
 
     this.name = name;
     this.validationErrors = validationErrors;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -142,6 +153,27 @@ public class InvalidArgumentException extends ServiceException
     super(message, cause);
 
     this.name = name;
+    this.invalidArgumentError = new InvalidArgumentError(this);
+  }
+
+  /**
+   * Returns the fault info.
+   *
+   * @return the fault info
+   */
+  public InvalidArgumentError getFaultInfo()
+  {
+    return invalidArgumentError;
+  }
+
+  /**
+   * Returns the invalid argument error info.
+   *
+   * @return the invalid argument error info
+   */
+  public InvalidArgumentError getInvalidArgumentError()
+  {
+    return invalidArgumentError;
   }
 
   /**

@@ -10,6 +10,10 @@
       <xs:element name="GetVersionResponse" type="service:GetVersionResponse"/>
       <xs:element name="TestExceptionHandling" type="service:TestExceptionHandling"/>
       <xs:element name="TestExceptionHandlingResponse" type="service:TestExceptionHandlingResponse"/>
+      <xs:element name="TestLocalDateTime" type="service:TestLocalDateTime"/>
+      <xs:element name="TestLocalDateTimeResponse" type="service:TestLocalDateTimeResponse"/>
+      <xs:element name="TestZonedDateTime" type="service:TestZonedDateTime"/>
+      <xs:element name="TestZonedDateTimeResponse" type="service:TestZonedDateTimeResponse"/>
       <xs:element name="Validate" type="service:Validate"/>
       <xs:element name="ValidateResponse" type="service:ValidateResponse"/>
       <xs:complexType name="GetAllData">
@@ -29,6 +33,38 @@
           <xs:element minOccurs="0" name="DateValue" type="xs:date"/>
           <xs:element minOccurs="0" name="TimestampValue" type="xs:dateTime"/>
         </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TestZonedDateTime">
+        <xs:sequence>
+          <xs:element name="ZonedDateTime" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TestZonedDateTimeResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="service:zonedDateTime"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType final="extension restriction" name="zonedDateTime">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="TestExceptionHandling">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="TestExceptionHandlingResponse">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="TestLocalDateTime">
+        <xs:sequence>
+          <xs:element name="LocalDateTime" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TestLocalDateTimeResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="service:localDateTime"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType final="extension restriction" name="localDateTime">
+        <xs:sequence/>
       </xs:complexType>
       <xs:complexType name="Validate">
         <xs:sequence>
@@ -55,12 +91,6 @@
         <xs:sequence>
           <xs:element minOccurs="0" name="Version" type="xs:string"/>
         </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="TestExceptionHandling">
-        <xs:sequence/>
-      </xs:complexType>
-      <xs:complexType name="TestExceptionHandlingResponse">
-        <xs:sequence/>
       </xs:complexType>
       <xs:element name="SampleServiceException" nillable="true" type="application:ServiceError"/>
     </xs:schema>
@@ -107,12 +137,32 @@
     <wsdl:part element="tns:GetAllDataResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetDataResponse">
-    <wsdl:part element="tns:GetDataResponse" name="parameters">
+  <wsdl:message name="TestZonedDateTimeResponse">
+    <wsdl:part element="tns:TestZonedDateTimeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TestLocalDateTime">
+    <wsdl:part element="tns:TestLocalDateTime" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="SampleServiceException">
     <wsdl:part element="tns:SampleServiceException" name="SampleServiceException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ValidateResponse">
+    <wsdl:part element="tns:ValidateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TestZonedDateTime">
+    <wsdl:part element="tns:TestZonedDateTime" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetDataResponse">
+    <wsdl:part element="tns:GetDataResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TestLocalDateTimeResponse">
+    <wsdl:part element="tns:TestLocalDateTimeResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="Validate">
@@ -127,10 +177,6 @@
     <wsdl:part element="tns:GetVersion" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="ValidateResponse">
-    <wsdl:part element="tns:ValidateResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="TestExceptionHandlingResponse">
     <wsdl:part element="tns:TestExceptionHandlingResponse" name="parameters">
     </wsdl:part>
@@ -140,6 +186,30 @@
       <wsdl:input message="tns:GetAllData" name="GetAllData">
       </wsdl:input>
       <wsdl:output message="tns:GetAllDataResponse" name="GetAllDataResponse">
+      </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestZonedDateTime">
+      <wsdl:input message="tns:TestZonedDateTime" name="TestZonedDateTime">
+      </wsdl:input>
+      <wsdl:output message="tns:TestZonedDateTimeResponse" name="TestZonedDateTimeResponse">
+      </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestExceptionHandling">
+      <wsdl:input message="tns:TestExceptionHandling" name="TestExceptionHandling">
+      </wsdl:input>
+      <wsdl:output message="tns:TestExceptionHandlingResponse" name="TestExceptionHandlingResponse">
+      </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestLocalDateTime">
+      <wsdl:input message="tns:TestLocalDateTime" name="TestLocalDateTime">
+      </wsdl:input>
+      <wsdl:output message="tns:TestLocalDateTimeResponse" name="TestLocalDateTimeResponse">
       </wsdl:output>
       <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
       </wsdl:fault>
@@ -166,14 +236,6 @@
       <wsdl:output message="tns:GetVersionResponse" name="GetVersionResponse">
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="TestExceptionHandling">
-      <wsdl:input message="tns:TestExceptionHandling" name="TestExceptionHandling">
-      </wsdl:input>
-      <wsdl:output message="tns:TestExceptionHandlingResponse" name="TestExceptionHandlingResponse">
-      </wsdl:output>
-      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
-      </wsdl:fault>
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="SampleServiceSoapBinding" type="tns:ISampleService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -183,6 +245,42 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="GetAllDataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestZonedDateTime">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="TestZonedDateTime">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TestZonedDateTimeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestExceptionHandling">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="TestExceptionHandling">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TestExceptionHandlingResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestLocalDateTime">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="TestLocalDateTime">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TestLocalDateTimeResponse">
         <soap:body use="literal"/>
       </wsdl:output>
       <wsdl:fault name="SampleServiceException">
@@ -221,18 +319,6 @@
       <wsdl:output name="GetVersionResponse">
         <soap:body use="literal"/>
       </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="TestExceptionHandling">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="TestExceptionHandling">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="TestExceptionHandlingResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="SampleServiceException">
-        <soap:fault name="SampleServiceException" use="literal"/>
-      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="SampleService">

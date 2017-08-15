@@ -24,22 +24,22 @@ import org.w3._2001.xmlschema.Adapter1;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="CodeCategory">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="Id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="CodeDataType" type="{http://ws.codes.service.mmp.guru}CodeDataType"/>
- *         &lt;element name="LastUpdated" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;sequence>
- *           &lt;element name="Codes" type="{http://ws.codes.service.mmp.guru}Code" maxOccurs="unbounded"/>
- *         &lt;/sequence>
- *         &lt;element name="CodeData" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="CodeCategory"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="Id" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="Name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="CodeDataType" type="{http://ws.codes.service.mmp.guru}CodeDataType"/&gt;
+ *         &lt;element name="LastUpdated" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
+ *         &lt;sequence&gt;
+ *           &lt;element name="Codes" type="{http://ws.codes.service.mmp.guru}Code" maxOccurs="unbounded"/&gt;
+ *         &lt;/sequence&gt;
+ *         &lt;element name="CodeData" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -53,8 +53,7 @@ import org.w3._2001.xmlschema.Adapter1;
     "codes",
     "codeData"
 })
-public class CodeCategory
-    implements Serializable
+public class CodeCategory implements Serializable
 {
 
     private final static long serialVersionUID = 1000000L;
@@ -63,6 +62,7 @@ public class CodeCategory
     @XmlElement(name = "Name", required = true)
     protected String name;
     @XmlElement(name = "CodeDataType", required = true)
+    @XmlSchemaType(name = "string")
     protected CodeDataType codeDataType;
     @XmlElement(name = "LastUpdated", required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)

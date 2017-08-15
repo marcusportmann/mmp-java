@@ -17,15 +17,15 @@ import guru.mmp.model.application.ValidationError;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ValidateResponse">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="ValidationError" type="{http://application.model.mmp.guru}ValidationError" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="ValidateResponse"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="ValidationError" type="{http://application.model.mmp.guru}ValidationError" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -34,8 +34,7 @@ import guru.mmp.model.application.ValidationError;
 @XmlType(name = "ValidateResponse", propOrder = {
     "validationError"
 })
-public class ValidateResponse
-    implements Serializable
+public class ValidateResponse implements Serializable
 {
 
     private final static long serialVersionUID = 1000000L;
