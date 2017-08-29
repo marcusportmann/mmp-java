@@ -304,8 +304,8 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'IDGENERATOR', @level1type=N'TABLE', @level1name=N'IDGENERATOR', @level2type=N'COLUMN', @level2name=N'CURRENT';
 GO
 
-  
-  
+
+
 CREATE TABLE "MESSAGING"."MESSAGE_TYPES" (
   ID    UNIQUEIDENTIFIER NOT NULL,
   NAME  NVARCHAR(256) NOT NULL,
@@ -502,83 +502,83 @@ CREATE INDEX MESSAGE_PARTS_LOCK_NAME_IX
   ON "MESSAGING"."MESSAGE_PARTS"
   (LOCK_NAME);
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the message part' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'ID';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The number of the message part in the set of message parts for the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'PART_NO';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The total number of parts in the set of message parts for the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'TOTAL_PARTS';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The number of times that the sending of the message part was attempted' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'SEND_ATTEMPTS';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The number of times that an attempt was made to download the message part' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'DOWNLOAD_ATTEMPTS';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The message part status e.g. Initialised, QueuedForSending, etc' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'STATUS';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time the message part was persisted' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'PERSISTED';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time the message part was last updated' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'UPDATED';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_ID';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The username identifying the user associated with the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_USERNAME';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_DEVICE_ID';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_TYPE_ID';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to correlate the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_CORRELATION_ID';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The priority for the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_PRIORITY';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time the original message was created' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_CREATED';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The hash of the unencrypted data for the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_DATA_HASH';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The base-64 encoded initialisation vector for the encryption scheme for the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_ENCRYPTION_IV';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The checksum for the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_CHECKSUM';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The name of the entity that has locked the message part for processing' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'LOCK_NAME';
 
-EXEC sys.sp_addextendedproperty 
+EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The data for the message part' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'DATA';
 GO
@@ -1129,16 +1129,44 @@ CREATE TRIGGER INTERNAL_GROUPS_ON_DELETE_INTERNAL_USER_TO_INTERNAL_GROUP_MAP_TRI
     ON "SECURITY"."INTERNAL_GROUPS"
     FOR DELETE
 AS
-    DELETE FROM "SECURITY"."INTERNAL_USER_TO_INTERNAL_GROUP_MAP"
-    WHERE INTERNAL_GROUP_ID IN(SELECT DELETED.ID FROM DELETED)
+BEGIN
+  DECLARE @ID UNIQUEIDENTIFIER
+  DECLARE C CURSOR FOR SELECT DELETED.ID FROM DELETED
+
+  OPEN C
+  FETCH NEXT FROM C INTO @ID
+   WHILE @@FETCH_STATUS = 0
+    BEGIN
+      DELETE FROM "SECURITY"."INTERNAL_USER_TO_INTERNAL_GROUP_MAP" WHERE INTERNAL_GROUP_ID = @ID
+
+      FETCH NEXT FROM C INTO @ID
+    END
+
+  CLOSE C
+  DEALLOCATE C
+END
 GO
 
 CREATE TRIGGER INTERNAL_USERS_ON_DELETE_INTERNAL_USER_TO_INTERNAL_GROUP_MAP_TRIGGER
     ON "SECURITY"."INTERNAL_USERS"
     FOR DELETE
 AS
-    DELETE FROM "SECURITY"."INTERNAL_USER_TO_INTERNAL_GROUP_MAP"
-    WHERE INTERNAL_USER_ID IN(SELECT DELETED.ID FROM DELETED)
+BEGIN
+  DECLARE @ID UNIQUEIDENTIFIER
+  DECLARE C CURSOR FOR SELECT DELETED.ID FROM DELETED
+
+  OPEN C
+  FETCH NEXT FROM C INTO @ID
+   WHILE @@FETCH_STATUS = 0
+    BEGIN
+      DELETE FROM "SECURITY"."INTERNAL_USER_TO_INTERNAL_GROUP_MAP" WHERE INTERNAL_USER_ID = @ID
+
+      FETCH NEXT FROM C INTO @ID
+    END
+
+  CLOSE C
+  DEALLOCATE C
+END
 GO
 
 
@@ -1257,16 +1285,44 @@ CREATE TRIGGER FUNCTIONS_ON_DELETE_FUNCTION_TO_ROLE_MAP_TRIGGER
     ON "SECURITY"."FUNCTIONS"
     FOR DELETE
 AS
-    DELETE FROM "SECURITY"."FUNCTION_TO_ROLE_MAP"
-    WHERE FUNCTION_ID IN(SELECT DELETED.ID FROM DELETED)
+BEGIN
+  DECLARE @ID UNIQUEIDENTIFIER
+  DECLARE C CURSOR FOR SELECT DELETED.ID FROM DELETED
+
+  OPEN C
+  FETCH NEXT FROM C INTO @ID
+   WHILE @@FETCH_STATUS = 0
+    BEGIN
+      DELETE FROM "SECURITY"."FUNCTION_TO_ROLE_MAP" WHERE FUNCTION_ID = @ID
+
+      FETCH NEXT FROM C INTO @ID
+    END
+
+  CLOSE C
+  DEALLOCATE C
+END
 GO
 
 CREATE TRIGGER ROLES_ON_DELETE_FUNCTION_TO_ROLE_MAP_TRIGGER
     ON "SECURITY"."ROLES"
     FOR DELETE
 AS
-    DELETE FROM "SECURITY"."FUNCTION_TO_ROLE_MAP"
-    WHERE ROLE_ID IN(SELECT DELETED.ID FROM DELETED)
+BEGIN
+  DECLARE @ID UNIQUEIDENTIFIER
+  DECLARE C CURSOR FOR SELECT DELETED.ID FROM DELETED
+
+  OPEN C
+  FETCH NEXT FROM C INTO @ID
+   WHILE @@FETCH_STATUS = 0
+    BEGIN
+      DELETE FROM "SECURITY"."FUNCTION_TO_ROLE_MAP" WHERE ROLE_ID = @ID
+
+      FETCH NEXT FROM C INTO @ID
+    END
+
+  CLOSE C
+  DEALLOCATE C
+END
 GO
 
 
@@ -1299,16 +1355,44 @@ CREATE TRIGGER ROLES_ON_DELETE_ROLE_TO_GROUP_MAP_TRIGGER
     ON "SECURITY"."ROLES"
     FOR DELETE
 AS
-    DELETE FROM "SECURITY"."ROLE_TO_GROUP_MAP"
-    WHERE ROLE_ID IN(SELECT DELETED.ID FROM DELETED)
+BEGIN
+  DECLARE @ID UNIQUEIDENTIFIER
+  DECLARE C CURSOR FOR SELECT DELETED.ID FROM DELETED
+
+  OPEN C
+  FETCH NEXT FROM C INTO @ID
+   WHILE @@FETCH_STATUS = 0
+    BEGIN
+      DELETE FROM "SECURITY"."ROLE_TO_GROUP_MAP" WHERE ROLE_ID = @ID
+
+      FETCH NEXT FROM C INTO @ID
+    END
+
+  CLOSE C
+  DEALLOCATE C
+END
 GO
 
 CREATE TRIGGER GROUPS_ON_DELETE_ROLE_TO_GROUP_MAP_TRIGGER
     ON "SECURITY"."GROUPS"
     FOR DELETE
 AS
-    DELETE FROM "SECURITY"."ROLE_TO_GROUP_MAP"
-    WHERE GROUP_ID IN(SELECT DELETED.ID FROM DELETED)
+BEGIN
+  DECLARE @ID UNIQUEIDENTIFIER
+  DECLARE C CURSOR FOR SELECT DELETED.ID FROM DELETED
+
+  OPEN C
+  FETCH NEXT FROM C INTO @ID
+   WHILE @@FETCH_STATUS = 0
+    BEGIN
+      DELETE FROM "SECURITY"."ROLE_TO_GROUP_MAP" WHERE GROUP_ID = @ID
+
+      FETCH NEXT FROM C INTO @ID
+    END
+
+  CLOSE C
+  DEALLOCATE C
+END
 GO
 
 

@@ -41,7 +41,7 @@ import java.io.Serializable;
     propOrder = { "name", "value" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ValidationErrorAttribute
-  implements Serializable
+  implements Serializable, Cloneable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -109,5 +109,12 @@ public class ValidationErrorAttribute
   public void setValue(String value)
   {
     this.value = value;
+  }
+
+  @Override
+  protected Object clone()
+    throws CloneNotSupportedException
+  {
+    return new ValidationErrorAttribute(name, value);
   }
 }

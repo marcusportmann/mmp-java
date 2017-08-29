@@ -20,6 +20,7 @@ package guru.mmp.application.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import guru.mmp.common.util.StringUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -49,7 +50,7 @@ import java.util.Set;
     propOrder = { "property", "message", "attributes" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ValidationError
-  implements Serializable
+  implements Serializable, Cloneable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -118,6 +119,7 @@ public class ValidationError
   {
     this.property = property;
     this.message = message;
+    this.attributes = new ArrayList<>();
   }
 
   /**
@@ -135,21 +137,61 @@ public class ValidationError
   }
 
   /**
+   * Capitalize the property names for the validation errors.
+   *
+   * @param validationErrors the validation errors
+   */
+  public static void capitalizePropertyNames(List<ValidationError> validationErrors)
+  {
+    if (validationErrors == null)
+    {
+      return;
+    }
+
+    for (ValidationError validationError : validationErrors)
+    {
+      validationError.setProperty(StringUtil.capitalize(validationError.getProperty()));
+    }
+  }
+
+  /**
    * Helper method to convert a list of JSR 303 constraint violations to a list of validation
    * errors.
    *
-   * @param  constraintViolations the list of JSR 303 constraint violations to convert
+   * @param constraintViolations the list of JSR 303 constraint violations to convert
    *
    * @return the list of validation errors
    */
   public static <T> List<ValidationError> toValidationErrors(
       Set<ConstraintViolation<T>> constraintViolations)
   {
+    return toValidationErrors(constraintViolations, false);
+  }
+
+  /**
+   * Helper method to convert a list of JSR 303 constraint violations to a list of validation
+   * errors.
+   *
+   * @param constraintViolations    the list of JSR 303 constraint violations to convert
+   * @param capitalizePropertyNames should the property names be capitilized
+   *
+   * @return the list of validation errors
+   */
+  public static <T> List<ValidationError> toValidationErrors(
+      Set<ConstraintViolation<T>> constraintViolations, boolean capitalizePropertyNames)
+  {
     List<ValidationError> validationErrors = new ArrayList<>();
 
     for (ConstraintViolation<T> constraintViolation : constraintViolations)
     {
-      validationErrors.add(new ValidationError(constraintViolation));
+      ValidationError validationError = new ValidationError(constraintViolation);
+
+      if (capitalizePropertyNames)
+      {
+        validationError.setProperty(StringUtil.capitalize(validationError.getProperty()));
+      }
+
+      validationErrors.add(validationError);
     }
 
     return validationErrors;
@@ -213,5 +255,20 @@ public class ValidationError
   public void setProperty(String property)
   {
     this.property = property;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  protected Object clone()
+    throws CloneNotSupportedException
+  {
+    List<ValidationErrorAttribute> attributes = new ArrayList<>();
+
+    for (ValidationErrorAttribute attribute : this.attributes)
+    {
+      attributes.add((ValidationErrorAttribute) attribute.clone());
+    }
+
+    return new ValidationError(property, message, attributes);
   }
 }

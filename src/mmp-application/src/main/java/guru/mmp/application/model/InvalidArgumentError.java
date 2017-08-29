@@ -86,7 +86,7 @@ public class InvalidArgumentError
         ? cause.getMessage()
         : "Invalid Argument";
     this.name = (!StringUtil.isNullOrEmpty(cause.getName()))
-        ? StringUtil.capitalise(cause.getName())
+        ? StringUtil.capitalize(cause.getName())
         : "Unknown";
 
     try
@@ -105,6 +105,20 @@ public class InvalidArgumentError
       this.detail = "Failed to dump the stack for the exception (" + cause + "): " + e.getMessage();
     }
 
-    this.validationErrors = cause.getValidationErrors();
+    try
+    {
+      for (ValidationError validationError : cause.getValidationErrors())
+      {
+        ValidationError newValidationError = (ValidationError) validationError.clone();
+
+        newValidationError.setProperty(StringUtil.capitalize(newValidationError.getProperty()));
+
+        this.validationErrors.add(newValidationError);
+      }
+    }
+    catch (Throwable e)
+    {
+      this.validationErrors = cause.getValidationErrors();
+    }
   }
 }

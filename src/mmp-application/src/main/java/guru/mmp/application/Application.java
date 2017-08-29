@@ -21,10 +21,7 @@ package guru.mmp.application;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.common.crypto.CryptoUtils;
-import guru.mmp.common.json.LocalDateTimeDeserializer;
-import guru.mmp.common.json.LocalDateTimeSerializer;
-import guru.mmp.common.json.ZonedDateTimeDeserializer;
-import guru.mmp.common.json.ZonedDateTimeSerializer;
+import guru.mmp.common.json.*;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.StringUtil;
 import io.undertow.Undertow;
@@ -93,6 +90,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -491,6 +489,8 @@ public abstract class Application
   {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
     jackson2ObjectMapperBuilder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+    jackson2ObjectMapperBuilder.serializerByType(LocalDate.class, new LocalDateSerializer());
+    jackson2ObjectMapperBuilder.deserializerByType(LocalDate.class, new LocalDateDeserializer());
     jackson2ObjectMapperBuilder.serializerByType(LocalDateTime.class,
         new LocalDateTimeSerializer());
     jackson2ObjectMapperBuilder.deserializerByType(LocalDateTime.class,

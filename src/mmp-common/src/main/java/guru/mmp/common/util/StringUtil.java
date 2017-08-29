@@ -126,30 +126,6 @@ public final class StringUtil
   }
 
   /**
-   * Capitalise the string.
-   *
-   * @param value the string to capitalise
-   *
-   * @return the capitalised string
-   */
-  public static String capitalise(String value)
-  {
-    if ((value == null) || (value.length() == 0))
-    {
-      return value;
-    }
-
-    if (value.length() > 1)
-    {
-      return String.valueOf(Character.toUpperCase(value.charAt(0))) + value.substring(1);
-    }
-    else
-    {
-      return String.valueOf(Character.toUpperCase(value.charAt(0)));
-    }
-  }
-
-  /**
    * Capitalize each word in the string.
    *
    * @param str the string

@@ -23,10 +23,7 @@ import guru.mmp.application.ApplicationConfiguration;
 import guru.mmp.application.ApplicationMessageSource;
 import guru.mmp.application.Debug;
 import guru.mmp.common.crypto.CryptoUtils;
-import guru.mmp.common.json.LocalDateTimeDeserializer;
-import guru.mmp.common.json.LocalDateTimeSerializer;
-import guru.mmp.common.json.ZonedDateTimeDeserializer;
-import guru.mmp.common.json.ZonedDateTimeSerializer;
+import guru.mmp.common.json.*;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.StringUtil;
 import io.undertow.Undertow;
@@ -98,6 +95,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -535,6 +533,8 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
     jackson2ObjectMapperBuilder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+    jackson2ObjectMapperBuilder.serializerByType(LocalDate.class, new LocalDateSerializer());
+    jackson2ObjectMapperBuilder.deserializerByType(LocalDate.class, new LocalDateDeserializer());
     jackson2ObjectMapperBuilder.serializerByType(LocalDateTime.class,
         new LocalDateTimeSerializer());
     jackson2ObjectMapperBuilder.deserializerByType(LocalDateTime.class,
