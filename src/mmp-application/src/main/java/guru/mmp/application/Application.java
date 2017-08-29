@@ -92,6 +92,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -491,6 +492,8 @@ public abstract class Application
     jackson2ObjectMapperBuilder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
     jackson2ObjectMapperBuilder.serializerByType(LocalDate.class, new LocalDateSerializer());
     jackson2ObjectMapperBuilder.deserializerByType(LocalDate.class, new LocalDateDeserializer());
+    jackson2ObjectMapperBuilder.serializerByType(LocalTime.class, new LocalTimeSerializer());
+    jackson2ObjectMapperBuilder.deserializerByType(LocalTime.class, new LocalTimeDeserializer());
     jackson2ObjectMapperBuilder.serializerByType(LocalDateTime.class,
         new LocalDateTimeSerializer());
     jackson2ObjectMapperBuilder.deserializerByType(LocalDateTime.class,
