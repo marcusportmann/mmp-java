@@ -16,20 +16,17 @@
 
 package guru.mmp.application.security;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Organisation</code> class stores the information for an organisation.
  *
  * @author Marcus Portmann
  */
-@Entity
-@Table(schema = "SECURITY", name = "ORGANISATIONS")
 public class Organisation
   implements java.io.Serializable
 {
@@ -38,22 +35,16 @@ public class Organisation
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    */
-  @Id
-  @Column(name = "ID", nullable = false)
-  @Type(type = "uuid-char")
   private UUID id;
 
   /**
    * The name of the organisation.
    */
-  @Column(name = "NAME", nullable = false, length = 100)
   private String name;
 
   /**
    * The status for the organisation.
    */
-  @Column(name = "STATUS", nullable = false)
-  @Convert(converter = OrganisationStatusConverter.class)
   private OrganisationStatus status;
 
   /**

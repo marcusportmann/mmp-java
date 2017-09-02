@@ -18,8 +18,6 @@ package guru.mmp.application.persistence;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -41,8 +39,7 @@ public class VersionedId
    * The Universally Unique Identifier (UUID) component of the versioned ID.
    */
   @Column(name = "ID", nullable = false)
-  @Type(type = "uuid-char")
-  private UUID id;
+  private String id;
 
   /**
    * The version component of the versioned ID.
@@ -55,7 +52,7 @@ public class VersionedId
    */
   public VersionedId()
   {
-    this.id = UUID.randomUUID();
+    this.id = UUID.randomUUID().toString();
     this.version = 1;
   }
 
@@ -65,7 +62,7 @@ public class VersionedId
    * @param id      the Universally Unique Identifier (UUID) component of the versioned ID
    * @param version the version component of the versioned ID
    */
-  public VersionedId(UUID id, int version)
+  public VersionedId(String id, int version)
   {
     this.id = id;
     this.version = version;
@@ -124,7 +121,7 @@ public class VersionedId
    *
    * @return the Universally Unique Identifier (UUID) component of the versioned ID
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -148,8 +145,8 @@ public class VersionedId
   public int hashCode()
   {
     return ((id == null)
-      ? 0
-      : id.hashCode()) + version;
+        ? 0
+        : id.hashCode()) + version;
   }
 
   /**
@@ -157,7 +154,7 @@ public class VersionedId
    *
    * @param id the Universally Unique Identifier (UUID) component of the versioned ID
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

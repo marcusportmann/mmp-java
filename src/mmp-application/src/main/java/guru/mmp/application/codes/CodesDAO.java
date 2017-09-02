@@ -980,7 +980,7 @@ public class CodesDAO
         2)), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getBoolean(6),
         cacheExpiryIsNull
         ? null
-        : cacheExpiry, rs.getTimestamp(8).toLocalDateTime());
+        : cacheExpiry, rs.getTimestamp(8) == null ? null : rs.getTimestamp(8).toLocalDateTime());
   }
 
   private List<Code> getCodesForCodeCategory(Connection connection, UUID id)
