@@ -41,9 +41,9 @@ import java.util.UUID;
  */
 @ApiModel(value = "Event")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "type", "version", "reference", "system", "timestamp", "data" })
+@JsonPropertyOrder({ "id", "topic", "type", "version", "reference", "system", "timestamp", "data" })
 @XmlType(name = "Event", namespace = "http://application.model.mmp.guru",
-  propOrder = { "id", "type", "version", "reference", "system", "timestamp" })
+    propOrder = { "id", "topic", "type", "version", "reference", "system", "timestamp" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Event
 {
@@ -51,19 +51,31 @@ public class Event
    * The Universally Unique Identifier (UUID) used to uniquely identify the event.
    */
   @ApiModelProperty(
-    value = "The Universally Unique Identifier (UUID) used to uniquely identify the event",
-    required = true)
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the event",
+      required = true)
   @JsonProperty(required = true)
   @XmlAttribute(name = "id", required = true)
   @NotNull
   private UUID id;
 
   /**
-   * The OID that identifies the event type under the 1.3.6.1.4.1.50603.2 OID prefix.
+   * The OID that identifies the event topic under the 1.3.6.1.4.1.46985.2 OID prefix.
    */
   @ApiModelProperty(
-    value = "The OID that identifies the event type under the 1.3.6.1.4.1.50603.2 prefix",
-    required = true)
+      value = "The OID that identifies the event topic under the 1.3.6.1.4.1.46985.2 prefix",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlAttribute(name = "topic", required = true)
+  @NotNull
+  @Pattern(message = "invalid event topic OID", regexp = "^1\\.3\\.6\\.1\\.4\\.1\\..+$")
+  private String topic;
+
+  /**
+   * The OID that identifies the event type under the 1.3.6.1.4.1.46985.2 OID prefix.
+   */
+  @ApiModelProperty(
+      value = "The OID that identifies the event type under the 1.3.6.1.4.1.46985.2 prefix",
+      required = true)
   @JsonProperty(required = true)
   @XmlAttribute(name = "type", required = true)
   @NotNull
@@ -84,17 +96,17 @@ public class Event
    * associated with.
    */
   @ApiModelProperty(
-    value = "The optional reference to the business transaction or business event that this event is associated with")
+      value = "The optional reference to the business transaction or business event that this event is associated with")
   @JsonProperty
   @XmlAttribute(name = "reference")
   private String reference;
 
   /**
-   * The OID that identifies the originating system under the 1.3.6.1.4.1.50603.3 OID prefix.
+   * The OID that identifies the originating system under the 1.3.6.1.4.1.46985.3 OID prefix.
    */
   @ApiModelProperty(
-    value = "The OID that identifies the originating system under the 1.3.6.1.4.1.50603.3 OID prefix",
-    required = true)
+      value = "The OID that identifies the originating system under the 1.3.6.1.4.1.46985.3 OID prefix",
+      required = true)
   @JsonProperty(required = true)
   @XmlAttribute(name = "system", required = true)
   @NotNull
@@ -130,20 +142,23 @@ public class Event
    * Constructs a new <code>Event</code>.
    *
    * @param id        the Universally Unique Identifier (UUID) used to uniquely identify the event
-   * @param type      the OID that identifies the event type under the 1.3.6.1.4.1.50603.2 OID
+   * @param topic     the OID that identifies the event topic under the 1.3.6.1.4.1.46985.2 OID
+   *                  prefix
+   * @param type      the OID that identifies the event type under the 1.3.6.1.4.1.46985.2 OID
    *                  prefix
    * @param version   the version of the event type
    * @param reference the optional reference to the business transaction or business event that this
    *                  event is associated with
-   * @param system    the OID that identifies the originating system under the 1.3.6.1.4.1.50603.3
+   * @param system    the OID that identifies the originating system under the 1.3.6.1.4.1.46985.3
    *                  OID prefix
    * @param timestamp the date and time the event occurred
    * @param data      the XML, JSON or base64 encoded binary event data
    */
-  public Event(UUID id, String type, int version, String reference, String system,
-    LocalDateTime timestamp, String data)
+  public Event(UUID id, String topic, String type, int version, String reference, String system,
+      LocalDateTime timestamp, String data)
   {
     this.id = id;
+    this.topic = topic;
     this.type = type;
     this.version = version;
     this.reference = reference;
@@ -185,10 +200,10 @@ public class Event
   }
 
   /**
-   * Returns the OID that identifies the originating system under the 1.3.6.1.4.1.50603.3 OID
+   * Returns the OID that identifies the originating system under the 1.3.6.1.4.1.46985.3 OID
    * prefix.
    *
-   * @return the OID that identifies the originating system under the 1.3.6.1.4.1.50603.3 OID prefix
+   * @return the OID that identifies the originating system under the 1.3.6.1.4.1.46985.3 OID prefix
    */
   public String getSystem()
   {
@@ -206,9 +221,19 @@ public class Event
   }
 
   /**
-   * Returns the OID that identifies the event type under the 1.3.6.1.4.1.50603.2 OID prefix.
+   * Returns the OID that identifies the event topic under the 1.3.6.1.4.1.46985.2 OID prefix.
    *
-   * @return the OID that identifies the event type under the 1.3.6.1.4.1.50603.2 OID prefix
+   * @return the OID that identifies the event topic under the 1.3.6.1.4.1.46985.2 OID prefix
+   */
+  public String getTopic()
+  {
+    return topic;
+  }
+
+  /**
+   * Returns the OID that identifies the event type under the 1.3.6.1.4.1.46985.2 OID prefix.
+   *
+   * @return the OID that identifies the event type under the 1.3.6.1.4.1.46985.2 OID prefix
    */
   public String getType()
   {
@@ -258,9 +283,9 @@ public class Event
   }
 
   /**
-   * Set the OID that identifies the originating system under the 1.3.6.1.4.1.50603.3 OID prefix.
+   * Set the OID that identifies the originating system under the 1.3.6.1.4.1.46985.3 OID prefix.
    *
-   * @param system the OID that identifies the originating system under the 1.3.6.1.4.1.50603.3 OID
+   * @param system the OID that identifies the originating system under the 1.3.6.1.4.1.46985.3 OID
    *               prefix
    */
   public void setSystem(String system)
@@ -279,9 +304,19 @@ public class Event
   }
 
   /**
-   * Set the OID that identifies the event type under the 1.3.6.1.4.1.50603.2 OID prefix.
+   * Set the OID that identifies the event topic under the 1.3.6.1.4.1.46985.2 OID prefix.
    *
-   * @param type the OID that identifies the event type under the 1.3.6.1.4.1.50603.2 OID prefix
+   * @param topic the OID that identifies the event topic under the 1.3.6.1.4.1.46985.2 OID prefix
+   */
+  public void setTopic(String topic)
+  {
+    this.topic = topic;
+  }
+
+  /**
+   * Set the OID that identifies the event type under the 1.3.6.1.4.1.46985.2 OID prefix.
+   *
+   * @param type the OID that identifies the event type under the 1.3.6.1.4.1.46985.2 OID prefix
    */
   public void setType(String type)
   {
