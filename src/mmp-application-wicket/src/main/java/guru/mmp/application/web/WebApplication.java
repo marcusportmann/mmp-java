@@ -74,6 +74,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.xnio.Options;
 import org.xnio.SslClientAuthMode;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -85,10 +86,8 @@ import javax.xml.ws.handler.Handler;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.security.GeneralSecurityException;
-import java.security.Key;
 import java.security.KeyStore;
 import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -155,14 +154,9 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   private ApplicationConfiguration configuration;
 
   /**
-   * The private key for the application retrieved from the application's key store.
+   * The application data source.
    */
-  private Key privateKey;
-
-  /**
-   * The certificate for the application retrieved from the application's key store.
-   */
-  private X509Certificate certificate;
+  private DataSource dataSource;
 
   /**
    * Constructs a new <code>WebApplication</code>.
@@ -460,16 +454,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   }
 
   /**
-   * Returns the certificate for the application retrieved from the application's key store.
-   *
-   * @return the certificate for the application retrieved from the application's key store
-   */
-  public X509Certificate getCertificate()
-  {
-    return certificate;
-  }
-
-  /**
    * Returns the runtime configuration type for the Wicket web application.
    *
    * @return the runtime configuration type for the Wicket web application
@@ -503,16 +487,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    * @return the page that will log a user out of the application
    */
   public abstract Class<? extends Page> getLogoutPage();
-
-  /**
-   * Returns the private key for the application retrieved from the application's key store.
-   *
-   * @return the private key for the application retrieved from the application's key store
-   */
-  public Key getPrivateKey()
-  {
-    return privateKey;
-  }
 
   /**
    * Returns the page that users will be redirected to once they have logged into the application.
@@ -800,8 +774,8 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
       Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
           .loadClass(configuration.getDatabase().getDataSource()).asSubclass(DataSource.class);
 
-      DataSource dataSource = DataSourceBuilder.create().type(dataSourceClass).url(
-          configuration.getDatabase().getUrl()).build();
+      dataSource = DataSourceBuilder.create().type(dataSourceClass).url(configuration.getDatabase()
+          .getUrl()).build();
 
       Database databaseVendor = Database.DEFAULT;
 
@@ -835,25 +809,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
 
       if (databaseVendor == Database.H2)
       {
-        Runtime.getRuntime().addShutdownHook(new Thread(() ->
-            {
-              try
-              {
-                try (Connection connection = dataSource.getConnection();
-                  Statement statement = connection.createStatement())
-
-                {
-                  statement.executeUpdate("SHUTDOWN");
-                }
-              }
-              catch (Throwable e)
-              {
-                throw new RuntimeException("Failed to shutdown the in-memory application database",
-                    e);
-              }
-            }
-            ));
-
         /*
          * Initialise the in-memory database using the SQL statements contained in the file with
          * the specified resource path.
@@ -1025,5 +980,45 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
         });
 
     return converterLocator;
+  }
+
+  /**
+   * Shutdown the in-memory application database if required.
+   */
+  @PreDestroy
+  protected void shutdownInMemoryApplicationDatabase()
+  {
+    if (dataSource != null)
+    {
+      try
+      {
+        try (Connection connection = dataSource.getConnection();
+          Statement statement = connection.createStatement())
+
+        {
+          DatabaseMetaData metaData = connection.getMetaData();
+
+          switch (metaData.getDatabaseProductName())
+          {
+            case "H2":
+
+              logger.info("Shutting down the in-memory " + metaData.getDatabaseProductName()
+                  + " application database with version " + metaData.getDatabaseProductVersion());
+
+              statement.executeUpdate("SHUTDOWN");
+
+              break;
+
+            default:
+
+              break;
+          }
+        }
+      }
+      catch (Throwable e)
+      {
+        logger.error("Failed to shutdown the in-memory application database", e);
+      }
+    }
   }
 }

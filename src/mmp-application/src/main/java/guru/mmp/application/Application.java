@@ -18,9 +18,9 @@ package guru.mmp.application;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.common.persistence.DAOUtil;
-import com.atomikos.jdbc.AtomikosDataSourceBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
@@ -45,6 +45,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
@@ -97,6 +98,11 @@ public abstract class Application extends ApplicationBase
    */
   @Inject
   private ApplicationConfiguration configuration;
+
+  /**
+   * The application data source.
+   */
+  private DataSource dataSource;
 
   /**
    * Constructs a new <code>Application</code>.
@@ -252,8 +258,8 @@ public abstract class Application extends ApplicationBase
       Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
           .loadClass(configuration.getDatabase().getDataSource()).asSubclass(DataSource.class);
 
-      DataSource dataSource = DataSourceBuilder.create().type(dataSourceClass).url(
-          configuration.getDatabase().getUrl()).build();
+      dataSource = DataSourceBuilder.create().type(dataSourceClass).url(configuration.getDatabase()
+          .getUrl()).build();
 
       Database databaseVendor = Database.DEFAULT;
 
@@ -287,25 +293,6 @@ public abstract class Application extends ApplicationBase
 
       if (databaseVendor == Database.H2)
       {
-        Runtime.getRuntime().addShutdownHook(new Thread(() ->
-            {
-              try
-              {
-                try (Connection connection = dataSource.getConnection();
-                  Statement statement = connection.createStatement())
-
-                {
-                  statement.executeUpdate("SHUTDOWN");
-                }
-              }
-              catch (Throwable e)
-              {
-                throw new RuntimeException("Failed to shutdown the in-memory application database",
-                    e);
-              }
-            }
-            ));
-
         /*
          * Initialise the in-memory database using the SQL statements contained in the file with
          * the specified resource path.
@@ -417,5 +404,45 @@ public abstract class Application extends ApplicationBase
     packagesToScan.add("guru.mmp.application");
 
     return packagesToScan;
+  }
+
+  /**
+   * Shutdown the in-memory application database if required.
+   */
+  @PreDestroy
+  protected void shutdownInMemoryApplicationDatabase()
+  {
+    if (dataSource != null)
+    {
+      try
+      {
+        try (Connection connection = dataSource.getConnection();
+          Statement statement = connection.createStatement())
+
+        {
+          DatabaseMetaData metaData = connection.getMetaData();
+
+          switch (metaData.getDatabaseProductName())
+          {
+            case "H2":
+
+              logger.info("Shutting down the in-memory " + metaData.getDatabaseProductName()
+                  + " application database with version " + metaData.getDatabaseProductVersion());
+
+              statement.executeUpdate("SHUTDOWN");
+
+              break;
+
+            default:
+
+              break;
+          }
+        }
+      }
+      catch (Throwable e)
+      {
+        logger.error("Failed to shutdown the in-memory application database", e);
+      }
+    }
   }
 }
