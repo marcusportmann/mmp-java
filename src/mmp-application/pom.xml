@@ -127,7 +127,7 @@
                   </extraargs>
                 </wsdlOption>
               </wsdlOptions>
-              <sourceRoot>${basedir}/src/main/java</sourceRoot>
+              <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
             </configuration>
             <goals>
               <goal>wsdl2java</goal>
