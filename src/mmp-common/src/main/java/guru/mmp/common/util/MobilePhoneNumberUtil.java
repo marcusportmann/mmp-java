@@ -16,6 +16,10 @@
 
 package guru.mmp.common.util;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.regex.Pattern;
+
 /**
  * The <code>MobilePhoneNumberUtil</code> class is a utility class which provides methods for
  * working with mobile phone numbers.
@@ -24,6 +28,28 @@ package guru.mmp.common.util;
  */
 public final class MobilePhoneNumberUtil
 {
+  /**
+   * The regular expression used to validate an MSISDN.
+   */
+  public static final String MSISDN_VALIDATION_REGEX =
+      "(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]"
+      + "|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$";
+  private static final Pattern msisdnPattern = Pattern.compile(MSISDN_VALIDATION_REGEX);
+
+  /**
+   * Check whether the specified MSISDN is valid.
+   *
+   * @param msisdn the MSISDN
+   *
+   * @return <code>true</code> if the MSISDN is valid or <code>false</code> otherwise
+   */
+  public static boolean isValidMSISDN(String msisdn)
+  {
+    java.util.regex.Matcher matcher = msisdnPattern.matcher(msisdn);
+
+    return matcher.matches();
+  }
+
   /**
    * Main.
    *
@@ -58,6 +84,39 @@ public final class MobilePhoneNumberUtil
 
     System.out.println("+1-202-555-0197     = " + mobilePhoneNumberToMSISDN("+1-202-555-0197",
         "27"));
+
+    System.out.println("+27 (0) 83 276 3107 = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "+27 (0) 83 276 3107", "27")));
+
+    System.out.println("0832763107          = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "0832763107", "27")));
+
+    System.out.println("083 276 3107        = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "083 276 3107", "27")));
+
+    System.out.println("083-276-3107        = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "083-276-3107", "27")));
+
+    System.out.println("+27832763107        = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "+27832763107", "27")));
+
+    System.out.println("+27 83 276 3107     = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "+27 83 276 3107", "27")));
+
+    System.out.println("27832763107         = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "27832763107", "27")));
+
+    System.out.println("+36 55 002 709      = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "+36 55 002 709", "27")));
+
+    System.out.println("+353 20 910 6402    = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "+353 20 910 6402", "27")));
+
+    System.out.println("+1-202-555-0197     = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "+1-202-555-0197", "27")));
+
+    System.out.println("+1-202-555-0197     = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+        "+1-202-555-0197", "27")));
   }
 
   /**
