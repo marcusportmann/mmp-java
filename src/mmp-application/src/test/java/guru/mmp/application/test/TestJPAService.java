@@ -64,6 +64,8 @@ public class TestJPAService
       if (!entityManager.contains(testData))
       {
         testData = entityManager.merge(testData);
+        entityManager.flush();
+        entityManager.detach(testData);
       }
     }
     catch (Throwable e)
@@ -87,6 +89,8 @@ public class TestJPAService
       if (!entityManager.contains(testData))
       {
         testData = entityManager.merge(testData);
+        entityManager.flush();
+        entityManager.detach(testData);
       }
     }
     catch (Throwable e)
