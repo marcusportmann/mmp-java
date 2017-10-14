@@ -38,11 +38,11 @@ public class MMPModule
   extends SimpleModule
 {
   /**
-   * Constructs a new <code>DiscoveryBankModule</code>.
+   * Constructs a new <code>MMPModule</code>.
    */
   public MMPModule()
   {
-    super("DiscoveryBankModule", new Version(1, 0, 0, null, null, null));
+    super("MMPModule", new Version(1, 0, 0, null, null, null));
 
     addSerializer(LocalDate.class, new LocalDateSerializer());
     addDeserializer(LocalDate.class, new LocalDateDeserializer());

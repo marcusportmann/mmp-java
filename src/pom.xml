@@ -18,7 +18,28 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+
+    <mmp-common.version>3.0.0-SNAPSHOT</mmp-common.version>
+    <mmp-common-ws.version>3.0.0-SNAPSHOT</mmp-common-ws.version>
+    <mmp-application.version>3.0.0-SNAPSHOT</mmp-application.version>
+    <mmp-application-cache.version>3.0.0-SNAPSHOT</mmp-application-cache.version>
+    <mmp-application-kafka.version>3.0.0-SNAPSHOT</mmp-application-kafka.version>
+    <mmp-application-messaging.version>3.0.0-SNAPSHOT</mmp-application-messaging.version>
+    <mmp-application-reporting.version>3.0.0-SNAPSHOT</mmp-application-reporting.version>
+    <mmp-application-scheduler.version>3.0.0-SNAPSHOT</mmp-application-scheduler.version>
+    <mmp-application-rs.version>3.0.0-SNAPSHOT</mmp-application-rs.version>
+    <mmp-application-ws.version>3.0.0-SNAPSHOT</mmp-application-ws.version>
+    <mmp-application-wicket.version>3.0.0-SNAPSHOT</mmp-application-wicket.version>
+    <mmp-application-messaging-wicket.version>3.0.0-SNAPSHOT</mmp-application-messaging-wicket.version>
+    <mmp-application-reporting-wicket.version>3.0.0-SNAPSHOT</mmp-application-reporting-wicket.version>
+    <mmp-application-scheduler-wicket.version>3.0.0-SNAPSHOT</mmp-application-scheduler-wicket.version>
+    <mmp-test.version>3.0.0-SNAPSHOT</mmp-test.version>
+    <mmp-sample-client.version>3.0.0-SNAPSHOT</mmp-sample-client.version>
+    <mmp-sample-wicket.version>3.0.0-SNAPSHOT</mmp-sample-wicket.version>
+
     <atomikos.version>4.0.4</atomikos.version>
+    <apache-avro.version>1.8.2</apache-avro.version>
     <cglib.version>3.2.5</cglib.version>
     <cxf.version>3.2.0</cxf.version>
     <groovy.version>2.4.12</groovy.version>
@@ -29,9 +50,10 @@
     <hibernate-validator.version>5.4.1.Final</hibernate-validator.version>
     <jackson.version>2.8.10</jackson.version>
     <jasperreports.version>6.4.1</jasperreports.version>
-    <java.version>1.8</java.version>
     <jaxb-xew-plugin.version>1.9</jaxb-xew-plugin.version>
     <junit.version>4.12</junit.version>
+    <kafka.version>0.11.0.1</kafka.version>
+    <kafka-clients.version>0.11.0.1</kafka-clients.version>
     <mssql-jdbc.version>6.1.7.jre8-preview</mssql-jdbc.version>
     <slf4j.version>1.7.25</slf4j.version>
     <spring-web.version>4.3.11.RELEASE</spring-web.version>
@@ -89,6 +111,11 @@
         <groupId>io.swagger</groupId>
         <artifactId>swagger-annotations</artifactId>
         <version>${swagger-annotations.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro</artifactId>
+        <version>${apache-avro.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>
@@ -153,6 +180,92 @@
         <artifactId>spring-webmvc</artifactId>
         <version>${spring-web.version}</version>
       </dependency>
+
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-common</artifactId>
+        <version>${mmp-common.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-common-ws</artifactId>
+        <version>${mmp-common-ws.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application</artifactId>
+        <version>${mmp-application.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-cache</artifactId>
+        <version>${mmp-application-cache.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-kafka</artifactId>
+        <version>${mmp-application-kafka.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-messaging</artifactId>
+        <version>${mmp-application-messaging.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-reporting</artifactId>
+        <version>${mmp-application-reporting.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-scheduler</artifactId>
+        <version>${mmp-application-scheduler.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-rs</artifactId>
+        <version>${mmp-application-rs.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-ws</artifactId>
+        <version>${mmp-application-ws.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-wicket</artifactId>
+        <version>${mmp-application-wicket.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-messaging-wicket</artifactId>
+        <version>${mmp-application-messaging-wicket.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-reporting-wicket</artifactId>
+        <version>${mmp-application-reporting-wicket.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-application-scheduler-wicket</artifactId>
+        <version>${mmp-application-scheduler-wicket.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-test</artifactId>
+        <version>${mmp-test.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-sample-client</artifactId>
+        <version>${mmp-sample-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>guru.mmp</groupId>
+        <artifactId>mmp-sample-wicket</artifactId>
+        <version>${mmp-sample-wicket.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -162,11 +275,12 @@
 
     <module>mmp-application</module>
     <module>mmp-application-cache</module>
+    <module>mmp-application-kafka</module>
     <module>mmp-application-messaging</module>
     <module>mmp-application-reporting</module>
+    <module>mmp-application-rs</module>
     <module>mmp-application-scheduler</module>
     <module>mmp-application-sms</module>
-    <module>mmp-application-rs</module>
     <module>mmp-application-ws</module>
 
     <module>mmp-application-wicket</module>

@@ -1,0 +1,16 @@
+{
+  "namespace": "guru.mmp.avro.event",
+  "type": "record",
+  "name": "Event",
+  "fields": [
+    {"name": "id", "type": "string"},
+    {"name": "type", "type": "string"},
+    {"name": "version", "type": "int"},
+    {"name": "reference", "type": ["string", "null"]},
+    {"name": "system", "type": "string"},
+    {"name": "timestamp", "type": "long"},
+    {"name": "data", "type": "bytes"}
+  ]
+}
+
+
