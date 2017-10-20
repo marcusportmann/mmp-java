@@ -26,3 +26,4 @@ gradlew.bat
 .settings/
 /**/.factorypath
 /**/*.epoch
+*.lck
