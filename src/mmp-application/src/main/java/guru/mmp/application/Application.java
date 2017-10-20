@@ -128,7 +128,6 @@ public abstract class Application extends ApplicationBase
 
       HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
       jpaVendorAdapter.setGenerateDdl(false);
-      jpaVendorAdapter.setShowSql(true);
 
       try (Connection connection = dataSource.getConnection())
       {
@@ -139,6 +138,7 @@ public abstract class Application extends ApplicationBase
           case "H2":
 
             jpaVendorAdapter.setDatabase(Database.H2);
+            jpaVendorAdapter.setShowSql(true);
 
             break;
 
@@ -146,12 +146,14 @@ public abstract class Application extends ApplicationBase
 
             jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
             jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
+            jpaVendorAdapter.setShowSql(false);
 
             break;
 
           default:
 
             jpaVendorAdapter.setDatabase(Database.DEFAULT);
+            jpaVendorAdapter.setShowSql(false);
 
             break;
         }

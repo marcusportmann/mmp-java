@@ -50,48 +50,48 @@ public abstract class Processor<K, V extends SpecificRecordBase> extends Thread
   /**
    * The default timeout when polling for records from the Apache Kafka topic.
    */
-  public static final long DEFAULT_POLL_TIMEOUT = 30000L;
+  public static final int DEFAULT_POLL_TIMEOUT = 30000;
 
   /**
    * The default amount of time in milliseconds the processor will pause when the processor or one
    * of its dependencies is temporarily unavailable.
    */
-  public static final long DEFAULT_TEMPORARILY_UNAVAILABLE_PAUSE = 5000L;
+  public static final int DEFAULT_TEMPORARILY_UNAVAILABLE_PAUSE = 5000;
 
   /**
    * The default amount of time in milliseconds the processor will pause when a critical error
    * is encountered while processing a record.
    */
-  public static final long DEFAULT_CRITICAL_ERROR_PAUSE = 60000L;
+  public static final int DEFAULT_CRITICAL_ERROR_PAUSE = 30000;
 
   /**
    * The default amount of time in milliseconds the processor will pause after failing to commit a
    * processed record.
    */
-  public static final long DEFAULT_COMMIT_FAILURE_PAUSE = 5000L;
+  public static final int DEFAULT_COMMIT_FAILURE_PAUSE = 5000;
 
   /**
    * The timeout when polling for records from the Apache Kafka topic.
    */
-  private long pollTimeout = DEFAULT_POLL_TIMEOUT;
+  private int pollTimeout = DEFAULT_POLL_TIMEOUT;
 
   /**
    * The amount of time in milliseconds the processor will pause when the processor or one of its
    * dependencies is temporarily unavailable.
    */
-  private long temporarilyUnavailablePause = DEFAULT_TEMPORARILY_UNAVAILABLE_PAUSE;
+  private int temporarilyUnavailablePause = DEFAULT_TEMPORARILY_UNAVAILABLE_PAUSE;
 
   /**
    * The amount of time in milliseconds the processor will pause when a critical error is
    * encountered while processing a record.
    */
-  private long criticalErrorPause = DEFAULT_CRITICAL_ERROR_PAUSE;
+  private int criticalErrorPause = DEFAULT_CRITICAL_ERROR_PAUSE;
 
   /**
    * The amount of time in milliseconds the processor will pause after failing to commit a
    * processed record.
    */
-  private long commitFailurePause = DEFAULT_COMMIT_FAILURE_PAUSE;
+  private int commitFailurePause = DEFAULT_COMMIT_FAILURE_PAUSE;
 
   /**
    *  Is the processor active?
@@ -151,8 +151,8 @@ public abstract class Processor<K, V extends SpecificRecordBase> extends Thread
    *                                    pause after failing to commit a processed record
    */
   public Processor(KafkaConfiguration configuration, Deserializer<K> keyDeserializer,
-      Deserializer<V> valueDeserializer, long pollTimeout, long temporarilyUnavailablePause,
-      long criticalErrorPause, long commitFailurePause)
+      Deserializer<V> valueDeserializer, int pollTimeout, int temporarilyUnavailablePause,
+      int criticalErrorPause, int commitFailurePause)
   {
     this.configuration = configuration;
     this.keyDeserializer = keyDeserializer;
@@ -189,8 +189,9 @@ public abstract class Processor<K, V extends SpecificRecordBase> extends Thread
       }
       else
       {
-        properties.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, Long.max(commitFailurePause,
-            Long.max(temporarilyUnavailablePause, criticalErrorPause)) + 5000L);
+        properties.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, Integer.min(Integer.max(
+            commitFailurePause, Integer.max(temporarilyUnavailablePause, criticalErrorPause))
+            + 5000, 60000));
       }
 
       DefaultKafkaConsumerFactory<K, V> consumerFactory = new DefaultKafkaConsumerFactory<>(

@@ -409,6 +409,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
           case "H2":
 
             jpaVendorAdapter.setDatabase(Database.H2);
+            jpaVendorAdapter.setShowSql(true);
 
             break;
 
@@ -416,12 +417,14 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
 
             jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
             jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
+            jpaVendorAdapter.setShowSql(false);
 
             break;
 
           default:
 
             jpaVendorAdapter.setDatabase(Database.DEFAULT);
+            jpaVendorAdapter.setShowSql(false);
 
             break;
         }
