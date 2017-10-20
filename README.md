@@ -7,10 +7,12 @@ The mmp-java project provides the following Open Source Java libraries:
 
 - **mmp-application** - contains the Java classes and resources used to develop Spring Boot applications.
 - **mmp-application-cache** - contains the Java classes and resources that provide distributed in-memory caching capabilities based on Hazelcast.
+- **mmp-application-kafka** - contains the Java classes and resources that support developing applications that make use of Apache Kafka.
 - **mmp-application-messaging** - contains the Java classes and resources that provide mobile messaging capabilities.
 - **mmp-application-messaging-wicket** - contains the Java classes and resources that add Wicket-based UI capabilities to the mobile messaging capabilities provided by the mmp-application-messaging project.
 - **mmp-application-reporting** - contains the Java classes and resources that provide reporting capabilities based on Jasper Reports.
 - **mmp-application-reporting-wicket** - contains the Java classes and resources that add Wicket-based UI capabilities to the reporting capabilities provided by the mmp-application-reporting project.
+- **mmp-application-rs** - contains the Java classes and resources that support the development of RESTful web services.
 - **mmp-application-scheduler** - contains the Java classes and resources that provide job scheduling capabilities.
 - **mmp-application-scheduler-wicket** - contains the Java classes and resources that add Wicket-based UI capabilities to the job scheduling capabilities provided by the mmp-application-scheduler project.
 - **mmp-application-sms** - contains the Java classes and resources that provide SMS capabilities.
