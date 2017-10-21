@@ -5,7 +5,7 @@
 
   <groupId>guru.mmp</groupId>
   <artifactId>mmp-java</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0-RELEASE</version>
   <name>mmp-java</name>
 
   <packaging>pom</packaging>
@@ -20,23 +20,23 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
 
-    <mmp-common.version>3.0.0-SNAPSHOT</mmp-common.version>
-    <mmp-common-ws.version>3.0.0-SNAPSHOT</mmp-common-ws.version>
-    <mmp-application.version>3.0.0-SNAPSHOT</mmp-application.version>
-    <mmp-application-cache.version>3.0.0-SNAPSHOT</mmp-application-cache.version>
-    <mmp-application-kafka.version>3.0.0-SNAPSHOT</mmp-application-kafka.version>
-    <mmp-application-messaging.version>3.0.0-SNAPSHOT</mmp-application-messaging.version>
-    <mmp-application-reporting.version>3.0.0-SNAPSHOT</mmp-application-reporting.version>
-    <mmp-application-scheduler.version>3.0.0-SNAPSHOT</mmp-application-scheduler.version>
-    <mmp-application-rs.version>3.0.0-SNAPSHOT</mmp-application-rs.version>
-    <mmp-application-ws.version>3.0.0-SNAPSHOT</mmp-application-ws.version>
-    <mmp-application-wicket.version>3.0.0-SNAPSHOT</mmp-application-wicket.version>
-    <mmp-application-messaging-wicket.version>3.0.0-SNAPSHOT</mmp-application-messaging-wicket.version>
-    <mmp-application-reporting-wicket.version>3.0.0-SNAPSHOT</mmp-application-reporting-wicket.version>
-    <mmp-application-scheduler-wicket.version>3.0.0-SNAPSHOT</mmp-application-scheduler-wicket.version>
-    <mmp-test.version>3.0.0-SNAPSHOT</mmp-test.version>
-    <mmp-sample-client.version>3.0.0-SNAPSHOT</mmp-sample-client.version>
-    <mmp-sample-wicket.version>3.0.0-SNAPSHOT</mmp-sample-wicket.version>
+    <mmp-common.version>3.0.0-RELEASE</mmp-common.version>
+    <mmp-common-ws.version>3.0.0-RELEASE</mmp-common-ws.version>
+    <mmp-application.version>3.0.0-RELEASE</mmp-application.version>
+    <mmp-application-cache.version>3.0.0-RELEASE</mmp-application-cache.version>
+    <mmp-application-kafka.version>3.0.0-RELEASE</mmp-application-kafka.version>
+    <mmp-application-messaging.version>3.0.0-RELEASE</mmp-application-messaging.version>
+    <mmp-application-reporting.version>3.0.0-RELEASE</mmp-application-reporting.version>
+    <mmp-application-scheduler.version>3.0.0-RELEASE</mmp-application-scheduler.version>
+    <mmp-application-rs.version>3.0.0-RELEASE</mmp-application-rs.version>
+    <mmp-application-ws.version>3.0.0-RELEASE</mmp-application-ws.version>
+    <mmp-application-wicket.version>3.0.0-RELEASE</mmp-application-wicket.version>
+    <mmp-application-messaging-wicket.version>3.0.0-RELEASE</mmp-application-messaging-wicket.version>
+    <mmp-application-reporting-wicket.version>3.0.0-RELEASE</mmp-application-reporting-wicket.version>
+    <mmp-application-scheduler-wicket.version>3.0.0-RELEASE</mmp-application-scheduler-wicket.version>
+    <mmp-test.version>3.0.0-RELEASE</mmp-test.version>
+    <mmp-sample-client.version>3.0.0-RELEASE</mmp-sample-client.version>
+    <mmp-sample-wicket.version>3.0.0-RELEASE</mmp-sample-wicket.version>
 
     <atomikos.version>4.0.4</atomikos.version>
     <apache-avro.version>1.8.2</apache-avro.version>

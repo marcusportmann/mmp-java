@@ -12,13 +12,13 @@
 
   <groupId>guru.mmp</groupId>
   <artifactId>mmp-sample-wicket</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0-RELEASE</version>
   <name>mmp-sample-wicket</name>
 
   <parent>
     <groupId>guru.mmp</groupId>
     <artifactId>mmp-java</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0-RELEASE</version>
   </parent>
 
   <dependencies>
@@ -26,37 +26,37 @@
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-cache</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0-RELEASE</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-wicket</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0-RELEASE</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-messaging-wicket</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0-RELEASE</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-reporting-wicket</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0-RELEASE</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-scheduler-wicket</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0-RELEASE</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-sms</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0-RELEASE</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-ws</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0-RELEASE</version>
     </dependency>
 
     <dependency>
@@ -80,7 +80,7 @@
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-test</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0-RELEASE</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
