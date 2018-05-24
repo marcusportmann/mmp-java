@@ -5,13 +5,13 @@
 
   <groupId>guru.mmp</groupId>
   <artifactId>mmp-application-reporting-wicket</artifactId>
-  <version>3.0.0-RELEASE</version>
+  <version>3.1.0-SNAPSHOT</version>
   <name>mmp-application-reporting-wicket</name>
 
   <parent>
     <groupId>guru.mmp</groupId>
     <artifactId>mmp-java</artifactId>
-    <version>3.0.0-RELEASE</version>
+    <version>3.1.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
@@ -19,12 +19,12 @@
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-wicket</artifactId>
-      <version>3.0.0-RELEASE</version>
+      <version>3.1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-reporting</artifactId>
-      <version>3.0.0-RELEASE</version>
+      <version>3.1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>

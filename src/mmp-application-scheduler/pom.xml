@@ -5,13 +5,13 @@
 
   <groupId>guru.mmp</groupId>
   <artifactId>mmp-application-scheduler</artifactId>
-  <version>3.0.0-RELEASE</version>
+  <version>3.1.0-SNAPSHOT</version>
   <name>mmp-application-scheduler</name>
 
   <parent>
     <groupId>guru.mmp</groupId>
     <artifactId>mmp-java</artifactId>
-    <version>3.0.0-RELEASE</version>
+    <version>3.1.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
@@ -19,14 +19,14 @@
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application</artifactId>
-      <version>3.0.0-RELEASE</version>
+      <version>3.1.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Test Dependencies -->
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-test</artifactId>
-      <version>3.0.0-RELEASE</version>
+      <version>3.1.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
