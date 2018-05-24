@@ -13,7 +13,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.8.RELEASE</version>
+    <version>1.5.13.RELEASE</version>
   </parent>
 
   <properties>
@@ -52,7 +52,7 @@
     <jasperreports.version>6.5.1</jasperreports.version>
     <jaxb-xew-plugin.version>1.9</jaxb-xew-plugin.version>
     <junit.version>4.12</junit.version>
-    <kafka.version>0.11.0.1</kafka.version>
+    <kafka.version>1.1.0</kafka.version>
     <kafka-clients.version>0.11.0.1</kafka-clients.version>
     <mssql-jdbc.version>6.2.2.jre8</mssql-jdbc.version>
     <slf4j.version>1.7.25</slf4j.version>
